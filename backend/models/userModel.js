@@ -3,11 +3,34 @@ import bcrypt from 'bcryptjs';
 
 const userSchema = mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
       pattern: '^[a-zA-Z0-9_]*$',
+    },
+    email: {
+      type: String,
+      required: true,
       unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    isSeller: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    profilePic: {
+      type: String,
+      default:
+        'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80',
     },
     firstName: {
       type: String,
@@ -19,28 +42,47 @@ const userSchema = mongoose.Schema(
       pattern: '^[a-zA-Z]*$',
       default: '',
     },
-    email: {
+    phone: {
       type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    profilePic: {
-      type: String,
-      default:
-        'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80',
-    },
-    role: {
-      type: String,
-      enum: ['regular', 'contributor', 'moderator', 'admin'],
-      default: 'regular',
-    },
-    request: {
-      type: String,
+      pattern: '^[0-9]*$',
       default: '',
+    },
+    shippingInfo: {
+      number: {
+        type: String,
+        pattern: '^[a-zA-Z0-9/-]*$',
+        default: '',
+      },
+      line1: {
+        type: String,
+        pattern: '^[a-zA-Z]*$',
+        default: '',
+      },
+      line2: {
+        type: String,
+        pattern: '^[a-zA-Z]*$',
+        default: '',
+      },
+      city: {
+        type: String,
+        pattern: '^[a-zA-Z]*$',
+        default: '',
+      },
+      state: {
+        type: String,
+        pattern: '^[a-zA-Z]*$',
+        default: '',
+      },
+      country: {
+        type: String,
+        pattern: '^[a-zA-Z]*$',
+        default: '',
+      },
+      zip: {
+        type: String,
+        pattern: '^[0-9]*$',
+        default: '',
+      },
     },
   },
   {

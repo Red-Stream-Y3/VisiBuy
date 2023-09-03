@@ -7,19 +7,25 @@ import asyncHandler from 'express-async-handler';
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-
   const user = await User.findOne({ email });
-
   if (user && (await user.matchPassword(password))) {
     res.json({
       _id: user._id,
-      username: user.username,
+      name: user.name,
       email: user.email,
+      isAdmin: user.isAdmin,
+      isSeller: user.isSeller,
+      profilePic: user.profilePic,
       firstName: user.firstName,
       lastName: user.lastName,
-      profilePic: user.profilePic,
-      role: user.role,
-      request: user.request,
+      phone: user.phone,
+      number: user.shippingInfo.number,
+      line1: user.shippingInfo.line1,
+      line2: user.shippingInfo.line2,
+      city: user.shippingInfo.city,
+      state: user.shippingInfo.state,
+      zip: user.shippingInfo.zip,
+      country: user.shippingInfo.country,
       token: generateToken(user._id),
     });
   } else {
@@ -33,7 +39,7 @@ const authUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, firstName, lastName, email, password } = req.body;
+  const { name, email, password } = req.body;
 
   const userExists = await User.findOne({ email });
 
@@ -43,9 +49,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 
   const user = await User.create({
-    username,
-    firstName,
-    lastName,
+    name,
     email,
     password,
   });
@@ -53,144 +57,26 @@ const registerUser = asyncHandler(async (req, res) => {
   if (user) {
     res.status(201).json({
       _id: user._id,
-      username: user.username,
+      name: user.name,
       email: user.email,
+      isAdmin: user.isAdmin,
+      isSeller: user.isSeller,
+      profilePic: user.profilePic,
       firstName: user.firstName,
       lastName: user.lastName,
-      profilePic: user.profilePic,
-      role: user.role,
-      request: user.request,
+      phone: user.phone,
+      number: user.shippingInfo.number,
+      line1: user.shippingInfo.line1,
+      line2: user.shippingInfo.line2,
+      city: user.shippingInfo.city,
+      state: user.shippingInfo.state,
+      zip: user.shippingInfo.zip,
+      country: user.shippingInfo.country,
       token: generateToken(user._id),
     });
   } else {
     res.status(400);
     throw new Error('Invalid user data');
-  }
-});
-
-// @desc    Get user profile
-// @route   GET /api/users/profile
-// @access  Private
-const getUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
-  if (user) {
-    res.json({
-      _id: user._id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profilePic: user.profilePic,
-      role: user.role,
-      request: user.request,
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
-// @desc    Update user profile
-// @route   PUT /api/users/profile
-// @access  Private
-const updateUserProfile = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-
-  if (user) {
-    user.username = req.body.username || user.username;
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.email = req.body.email || user.email;
-    user.profilePic = req.body.profilePic || user.profilePic;
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      username: user.username,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      profilePic: user.profilePic,
-      role: user.role,
-      request: user.request,
-      token: generateToken(updatedUser._id),
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
-// @desc    Update user role
-// @route   PUT /api/users/:id
-// @access  Private/Admin
-const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-
-  if (user) {
-    user.role = req.body.role || user.role;
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      profilePic: updatedUser.profilePic,
-      role: updatedUser.role,
-      request: user.request,
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
-// @desc    Request user role
-// @route   PUT /api/user/:id/request
-// @access  Private
-const requestRole = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
-
-  if (user) {
-    user.request = req.body.request || user.request;
-
-    const updatedUser = await user.save();
-
-    res.json({
-      _id: updatedUser._id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      profilePic: updatedUser.profilePic,
-      role: updatedUser.role,
-      request: user.request,
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-});
-
-// @desc    Delete user
-// @route   DELETE /api/users/:id
-// @access  Private/Admin
-const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findByIdAndDelete(req.params.id);
-
-  if (user) {
-    res.json({ message: 'User deleted successfully' });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
   }
 });
 
@@ -200,6 +86,21 @@ const deleteUser = asyncHandler(async (req, res) => {
 const getUsers = asyncHandler(async (req, res) => {
   const users = await User.find({});
   res.json(users);
+});
+
+// @desc    Delete user
+// @route   DELETE /api/users/:id
+// @access  Private/Admin
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    await user.remove();
+    res.json({ message: 'User removed' });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
 });
 
 // @desc    Get user by ID
@@ -216,13 +117,83 @@ const getUserById = asyncHandler(async (req, res) => {
   }
 });
 
-const getAuthorInfoById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select(
-    'firstName lastName profilePic'
-  );
+// desc    Update user
+// route   PUT /api/users/account
+// access  Private/
+// make it handle authorization token
+
+const updateUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const {
+    name,
+    email,
+    isAdmin,
+    isSeller,
+    profilePic,
+    firstName,
+    lastName,
+    phone,
+    number,
+    line1,
+    line2,
+    city,
+    state,
+    zip,
+    country,
+  } = req.body;
 
   if (user) {
-    res.json(user);
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.isAdmin = isAdmin || user.isAdmin;
+    user.isSeller = isSeller || user.isSeller;
+    user.profilePic = profilePic || user.profilePic;
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.phone = phone || user.phone;
+    user.shippingInfo.number = number || user.shippingInfo.number;
+    user.shippingInfo.line1 = line1 || user.shippingInfo.line1;
+    user.shippingInfo.line2 = line2 || user.shippingInfo.line2;
+    user.shippingInfo.city = city || user.shippingInfo.city;
+    user.shippingInfo.state = state || user.shippingInfo.state;
+    user.shippingInfo.zip = zip || user.shippingInfo.zip;
+    user.shippingInfo.country = country || user.shippingInfo.country;
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      profilePic: updatedUser.profilePic,
+      isAdmin: updatedUser.isAdmin,
+      isSeller: updatedUser.isSeller,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      phone: updatedUser.phone,
+      number: updatedUser.shippingInfo.number,
+      line1: updatedUser.shippingInfo.line1,
+      line2: updatedUser.shippingInfo.line2,
+      city: updatedUser.shippingInfo.city,
+      state: updatedUser.shippingInfo.state,
+      zip: updatedUser.shippingInfo.zip,
+      country: updatedUser.shippingInfo.country,
+      token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
+});
+
+const adminPrivileges = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    user.isAdmin = req.body.isAdmin;
+
+    await user.save();
+    res.json({ message: 'User updated' });
   } else {
     res.status(404);
     throw new Error('User not found');
@@ -232,12 +203,9 @@ const getAuthorInfoById = asyncHandler(async (req, res) => {
 export {
   authUser,
   registerUser,
-  getUserProfile,
-  updateUserProfile,
+  getUsers,
   deleteUser,
   getUserById,
-  getUsers,
   updateUser,
-  requestRole,
-  getAuthorInfoById,
+  adminPrivileges,
 };

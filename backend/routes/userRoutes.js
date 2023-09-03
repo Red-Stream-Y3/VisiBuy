@@ -2,31 +2,23 @@ import express from 'express';
 import {
   authUser,
   registerUser,
-  getUserProfile,
-  updateUserProfile,
   getUsers,
   deleteUser,
   getUserById,
   updateUser,
-  requestRole,
-  getAuthorInfoById,
+  adminPrivileges,
 } from '../controllers/userController.js';
-import { protect, admin, adminMod } from '../middleware/authMiddleware.js';
+import { protect, admin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.route('/').post(registerUser).get(protect, adminMod, getUsers);
+router.route('/').post(registerUser).get(protect, admin, getUsers);
 router.post('/login', authUser);
-router
-  .route('/profile')
-  .get(protect, getUserProfile)
-  .put(protect, updateUserProfile);
+router.route('/account').put(protect, updateUser);
 router
   .route('/:id')
-  .delete(protect, admin, deleteUser)
-  .get(protect, adminMod, getUserById)
-  .put(protect, adminMod, updateUser);
-router.route('/:id/request').put(protect, requestRole);
-router.route('/:id/author').get(getAuthorInfoById);
+  .put(protect, admin, adminPrivileges)
+  .delete(protect, deleteUser)
+  .get(protect, getUserById);
 
 export default router;

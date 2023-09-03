@@ -31,8 +31,9 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
+// to check admin
 const admin = (req, res, next) => {
-  if (req.user && req.user.role === 'admin') {
+  if (req.user && req.user.isAdmin) {
     next();
   } else {
     res.status(401);
@@ -40,28 +41,16 @@ const admin = (req, res, next) => {
   }
 };
 
-const adminMod = (req, res, next) => {
-  if (
-    req.user &&
-    (req.user.role === 'admin' || req.user.role === 'moderator')
-  ) {
+// to check admin or seller
+const adminSeller = (req, res, next) => {
+  if ((req.user && req.user.isAdmin) || req.user.isSeller) {
     next();
   } else {
     res.status(401);
-    throw new Error(`Not authorized as an admin or moderator`);
+    throw new Error(
+      `Not authorized as an ${req.user.isAdmin ? 'admin' : 'seller'}`
+    );
   }
 };
 
-const adminContributor = (req, res, next) => {
-  if (
-    req.user &&
-    (req.user.role === 'admin' || req.user.role === 'contributor')
-  ) {
-    next();
-  } else {
-    res.status(401);
-    throw new Error(`Not authorized as an admin or contributor`);
-  }
-};
-
-export { protect, admin, adminMod, adminContributor };
+export { protect, admin, adminSeller };
