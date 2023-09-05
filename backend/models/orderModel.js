@@ -31,11 +31,6 @@ const orderSchema = mongoose.Schema(
           required: true,
           ref: 'Product',
         },
-        seller: {
-          type: mongoose.Schema.Types.ObjectId,
-          required: false,
-          ref: 'User',
-        },
       },
     ],
     shippingDetails: {

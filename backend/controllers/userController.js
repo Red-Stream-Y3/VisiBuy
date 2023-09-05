@@ -14,8 +14,6 @@ const authUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      isSeller: user.isSeller,
-      profilePic: user.profilePic,
       firstName: user.firstName,
       lastName: user.lastName,
       phone: user.phone,
@@ -60,8 +58,6 @@ const registerUser = asyncHandler(async (req, res) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      isSeller: user.isSeller,
-      profilePic: user.profilePic,
       firstName: user.firstName,
       lastName: user.lastName,
       phone: user.phone,
@@ -128,8 +124,6 @@ const updateUser = asyncHandler(async (req, res) => {
     name,
     email,
     isAdmin,
-    isSeller,
-    profilePic,
     firstName,
     lastName,
     phone,
@@ -146,8 +140,6 @@ const updateUser = asyncHandler(async (req, res) => {
     user.name = name || user.name;
     user.email = email || user.email;
     user.isAdmin = isAdmin || user.isAdmin;
-    user.isSeller = isSeller || user.isSeller;
-    user.profilePic = profilePic || user.profilePic;
     user.firstName = firstName || user.firstName;
     user.lastName = lastName || user.lastName;
     user.phone = phone || user.phone;
@@ -165,9 +157,7 @@ const updateUser = asyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
-      profilePic: updatedUser.profilePic,
       isAdmin: updatedUser.isAdmin,
-      isSeller: updatedUser.isSeller,
       firstName: updatedUser.firstName,
       lastName: updatedUser.lastName,
       phone: updatedUser.phone,

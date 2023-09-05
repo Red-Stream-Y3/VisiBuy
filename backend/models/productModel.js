@@ -57,7 +57,6 @@ const productSchema = mongoose.Schema(
       required: true,
       default: '',
     },
-    uses: [String],
     ingredients: {
       type: String,
       required: true,
@@ -81,12 +80,6 @@ const productSchema = mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
-    },
-    shop: {
-      type: mongoose.Schema.Types.ObjectId,
-      required: true,
-      ref: 'Shop',
-      default: '64458bd232c4bea2a2cbd9ef',
     },
   },
   {

@@ -22,16 +22,6 @@ const userSchema = mongoose.Schema(
       required: true,
       default: false,
     },
-    isSeller: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
-    profilePic: {
-      type: String,
-      default:
-        'https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=580&q=80',
-    },
     firstName: {
       type: String,
       pattern: '^[a-zA-Z]*$',
@@ -46,43 +36,6 @@ const userSchema = mongoose.Schema(
       type: String,
       pattern: '^[0-9]*$',
       default: '',
-    },
-    shippingInfo: {
-      number: {
-        type: String,
-        pattern: '^[a-zA-Z0-9/-]*$',
-        default: '',
-      },
-      line1: {
-        type: String,
-        pattern: '^[a-zA-Z]*$',
-        default: '',
-      },
-      line2: {
-        type: String,
-        pattern: '^[a-zA-Z]*$',
-        default: '',
-      },
-      city: {
-        type: String,
-        pattern: '^[a-zA-Z]*$',
-        default: '',
-      },
-      state: {
-        type: String,
-        pattern: '^[a-zA-Z]*$',
-        default: '',
-      },
-      country: {
-        type: String,
-        pattern: '^[a-zA-Z]*$',
-        default: '',
-      },
-      zip: {
-        type: String,
-        pattern: '^[0-9]*$',
-        default: '',
-      },
     },
   },
   {

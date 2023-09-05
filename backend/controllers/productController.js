@@ -73,7 +73,6 @@ const createProduct = asyncHandler(async (req, res) => {
     brand,
     detail,
     description,
-    uses: [],
     ingredients,
     price,
     countInStock,
@@ -90,7 +89,6 @@ const createProduct = asyncHandler(async (req, res) => {
     brand,
     detail,
     description,
-    uses: [],
     ingredients,
     price,
     countInStock,
@@ -110,7 +108,6 @@ const updateProduct = asyncHandler(async (req, res) => {
     brand,
     detail,
     description,
-    uses,
     ingredients,
     reviews,
     rating,
@@ -127,7 +124,6 @@ const updateProduct = asyncHandler(async (req, res) => {
     product.brand = brand;
     product.detail = detail;
     product.description = description;
-    product.uses = uses;
     product.ingredients = ingredients;
     product.reviews = reviews;
     product.rating = rating;
