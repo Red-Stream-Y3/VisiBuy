@@ -16,7 +16,7 @@ const CartButton = () => {
   );
 
   const handleCartClick = () => {
-    navigation.navigate('OrderScreen');
+    navigation.navigate('CartScreen');
   };
 
   return (

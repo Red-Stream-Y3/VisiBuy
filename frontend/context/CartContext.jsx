@@ -22,6 +22,10 @@ const cartReducer = (state, action) => {
       }
 
       return { ...state, cart: updatedCart };
+
+    case 'RESET_CART':
+      return { ...state, cart: [] };
+
     default:
       return state;
   }
@@ -34,8 +38,12 @@ export const CartProvider = ({ children }) => {
     dispatch({ type: 'ADD_TO_CART', payload: { product } });
   };
 
+  const clearCart = () => {
+    dispatch({ type: 'RESET_CART' });
+  };
+
   return (
-    <CartContext.Provider value={{ cart: state.cart, addToCart }}>
+    <CartContext.Provider value={{ cart: state.cart, addToCart, clearCart }}>
       {children}
     </CartContext.Provider>
   );

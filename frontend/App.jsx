@@ -3,7 +3,13 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { HomeScreen, ProductDetailScreen, OrderScreen } from './screens';
+import {
+  HomeScreen,
+  ProductDetailScreen,
+  CartScreen,
+  ShippingScreen,
+  OrderSummaryScreen,
+} from './screens';
 import { CartProvider } from './context/CartContext';
 
 const Stack = createStackNavigator();
@@ -21,9 +27,19 @@ const App = () => {
               options={({ route }) => ({ title: route.params.product.name })}
             />
             <Stack.Screen
-              name="OrderScreen"
-              component={OrderScreen}
+              name="CartScreen"
+              component={CartScreen}
               options={{ title: 'Your Cart 🛒' }}
+            />
+            <Stack.Screen
+              name="ShippingScreen"
+              component={ShippingScreen}
+              options={{ title: 'Shipping Information' }}
+            />
+            <Stack.Screen
+              name="OrderSummaryScreen"
+              component={OrderSummaryScreen}
+              options={{ title: 'Order Summary' }}
             />
           </Stack.Navigator>
         </SafeAreaProvider>

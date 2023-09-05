@@ -12,7 +12,6 @@ const addOrderItems = asyncHandler(async (req, res) => {
     phone,
     price,
     shippingMethod,
-    commission,
     shippingPrice,
     totalPrice,
   } = req.body;
@@ -20,16 +19,14 @@ const addOrderItems = asyncHandler(async (req, res) => {
   if (orderItems && orderItems.length === 0) {
     res.status(400);
     throw new Error('No order items');
-    return;
   } else {
     const order = new Order({
       orderItems,
-      user: req.user._id,
+      user: '641aaee2b8ed930c6e7186c1',
       shippingDetails,
       phone,
       price,
       shippingMethod,
-      commission,
       shippingPrice,
       totalPrice,
     });

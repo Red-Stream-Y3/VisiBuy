@@ -1,10 +1,17 @@
 import React from 'react';
 import { View, Text, Button, Image, FlatList } from 'react-native';
-import { useCart } from '../context/CartContext';
-import { productItemStyles } from '../styles/SharedStyles'; // Import sharedStyles
+import { useCart } from '../../context/CartContext';
+import { productItemStyles } from '../../styles/SharedStyles';
+import { useNavigation } from '@react-navigation/native';
 
-const OrderScreen = () => {
+const CartScreen = () => {
   const { cart } = useCart();
+  const navigation = useNavigation();
+
+  const totalPrice = cart.reduce(
+    (total, item) => total + item.product.price * item.quantity,
+    0
+  );
 
   return (
     <View style={{ flex: 1 }}>
@@ -35,10 +42,27 @@ const OrderScreen = () => {
         )}
       />
       <View>
-        <Button title="Place Order" onPress={() => handlePlaceOrder()} />
+        <Text
+          style={{
+            textAlign: 'right',
+            fontSize: 18,
+            padding: 15,
+            fontWeight: 'bold',
+            borderRadius: 10,
+            marginBottom: 10,
+            marginRight: 10,
+          }}
+        >
+          Total Price: ${totalPrice.toFixed(2)}
+        </Text>
+
+        <Button
+          title="Checkout"
+          onPress={() => navigation.navigate('ShippingScreen')}
+        />
       </View>
     </View>
   );
 };
 
-export default OrderScreen;
+export default CartScreen;

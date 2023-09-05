@@ -34,11 +34,7 @@ const orderSchema = mongoose.Schema(
       },
     ],
     shippingDetails: {
-      firstName: {
-        type: String,
-        required: true,
-      },
-      lastName: {
+      name: {
         type: String,
         required: true,
       },
@@ -74,18 +70,13 @@ const orderSchema = mongoose.Schema(
     shippingMethod: {
       type: String,
       required: true,
-      default: 'Standard',
+      default: 'Cash on Delivery',
     },
     paymentResult: {
       id: { type: String },
       status: { type: String },
       update_time: { type: String },
       email_address: { type: String },
-    },
-    commission: {
-      type: Number,
-      required: true,
-      default: 0.0,
     },
     shippingPrice: {
       type: Number,
