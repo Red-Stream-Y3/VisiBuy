@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-import { ProductItem } from '../components';
+import { ProductItem, CartButton } from '../components';
 import { getAllProducts } from '../services/ProductServices';
 import { isScreenReaderEnabled } from '../utils/accessibility';
 
@@ -100,6 +100,7 @@ const HomeScreen = () => {
         ))}
       </ScrollView>
       {/* <AccessibilityButton label="Check Screen Reader" onPress={() => {}} /> */}
+      <CartButton />
     </View>
   );
 };
