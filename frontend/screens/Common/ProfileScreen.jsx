@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const ProfileScreen = () => {
-  return (
-    <div>ProfileScreen</div>
-  )
-}
+    return <div>ProfileScreen</div>;
+};
 
-export default ProfileScreen
+export default ProfileScreen;

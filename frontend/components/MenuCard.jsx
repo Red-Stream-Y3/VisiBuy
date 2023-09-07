@@ -7,20 +7,16 @@ const MenuCard = ({ MenuIcon, MenuName }) => {
     const cardWidth = screenWidth - 40;
     return (
         <View style={[styles.card, { width: cardWidth }]}>
-        <FontAwesome5
-            name={MenuIcon}
-            size={80}
-            color="black"
-            accessible={true}
-            accessibilityLabel={`Icon for ${MenuName}`}
-        />
-        <Text
-            style={styles.menuName}
-            accessible={true}
-            accessibilityLabel={`Menu Name: ${MenuName}`}
-        >
-            {MenuName}
-        </Text>
+            <FontAwesome5
+                name={MenuIcon}
+                size={80}
+                color="black"
+                accessible={true}
+                accessibilityLabel={`Icon for ${MenuName}`}
+            />
+            <Text style={styles.menuName} accessible={true} accessibilityLabel={`Menu Name: ${MenuName}`}>
+                {MenuName}
+            </Text>
         </View>
     );
 };
@@ -36,8 +32,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         shadowColor: 'black',
         shadowOffset: {
-        width: 0,
-        height: 2,
+            width: 0,
+            height: 2,
         },
         shadowOpacity: 0.25,
         shadowRadius: 4,

@@ -14,13 +14,13 @@ const menuData = [
         id: '2',
         MenuName: 'Products',
         MenuIcon: 'product-hunt',
-        Navigate: 'HomeScreen',
+        Navigate: 'ProductScreen',
     },
     {
         id: '3',
         MenuName: 'Cart',
         MenuIcon: 'shopping-cart',
-        Navigate: 'SearchScreen',
+        Navigate: 'CartScreen',
     },
     {
         id: '4',
@@ -39,7 +39,7 @@ const menuData = [
         MenuName: 'Settings',
         MenuIcon: 'cog',
         Navigate: 'SearchScreen',
-    }
+    },
 ];
 
 const MenuScreen = () => {
@@ -55,28 +55,28 @@ const MenuScreen = () => {
                 data={menuData}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
-                <TouchableOpacity
-                    onPress={() => handleMenuPress(item.Navigate)}
-                    accessible={true}
-                    accessibilityLabel={`Menu: ${item.MenuName}`}
-                    accessibilityRole="button"
-                >
-                    <MenuCard
-                    MenuIcon={item.MenuIcon}
-                    MenuName={item.MenuName}
-                    accessibilityRole="image"
-                    accessibilityLabel={`Icon for ${item.MenuName}`}
-                    />
-                </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => handleMenuPress(item.Navigate)}
+                        accessible={true}
+                        accessibilityLabel={`Menu: ${item.MenuName}`}
+                        accessibilityRole="button"
+                    >
+                        <MenuCard
+                            MenuIcon={item.MenuIcon}
+                            MenuName={item.MenuName}
+                            accessibilityRole="image"
+                            accessibilityLabel={`Icon for ${item.MenuName}`}
+                        />
+                    </TouchableOpacity>
                 )}
                 contentContainerStyle={styles.flatListContainer}
                 accessibilityRole="list"
             />
         </View>
     );
-    };
+};
 
-    const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
@@ -85,6 +85,6 @@ const MenuScreen = () => {
         justifyContent: 'center',
         alignItems: 'center',
     },
-    });
+});
 
 export default MenuScreen;
