@@ -188,18 +188,7 @@ const getOrdersByUserId = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error('No orders found');
   }
-  const orderIds = orders.map((order) => {
-    return {
-      _id: order._id,
-      date: order.paidAt ? order.paidAt : order.createdAt,
-      amount: order.totalPrice,
-      isConfirmed: order.isConfirmed,
-      isRejected: order.isRejected,
-      isPaid: order.isPaid,
-      isDelivered: order.isDelivered,
-    };
-  });
-  res.status(200).json(orderIds);
+  res.status(200).json(orders);
 });
 
 //get products for seller to ship
