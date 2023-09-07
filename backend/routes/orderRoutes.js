@@ -1,16 +1,16 @@
 import express from 'express';
 import {
-  addOrderItems,
-  getOrderById,
-  updateOrderToPaid,
-  getOrders,
-  updateOrderToConfirm,
-  updateOrderToReject,
-  queryOrders,
-  getOrdersByUserId,
-  updateOrderToDeliver,
-  getOrdersforSeller,
-  updateOrderProductsToShipped,
+    addOrderItems,
+    getOrderById,
+    updateOrderToPaid,
+    getOrders,
+    updateOrderToConfirm,
+    updateOrderToReject,
+    queryOrders,
+    getOrdersByUserId,
+    updateOrderToDeliver,
+    getOrdersforSeller,
+    updateOrderProductsToShipped,
 } from '../controllers/orderController.js';
 
 const router = express.Router();
