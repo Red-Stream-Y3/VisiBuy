@@ -1,5 +1,5 @@
 import { AccessibilityInfo } from 'react-native';
 
 export const isScreenReaderEnabled = async () => {
-  return AccessibilityInfo.isScreenReaderEnabled();
+    return AccessibilityInfo.isScreenReaderEnabled();
 };
