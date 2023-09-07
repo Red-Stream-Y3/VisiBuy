@@ -17,7 +17,12 @@ const CartButton = () => {
     };
 
     return (
-        <TouchableOpacity onPress={handleCartClick}>
+        <TouchableOpacity
+            onPress={handleCartClick}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel={`Total Quantity (${totalQuantity}) and Total Price (${totalPrice.toFixed(2)})`}
+        >
             <View style={styles.cartIcon}>
                 <Text style={styles.cartText}>View Cart ({totalQuantity})</Text>
                 <Text style={styles.totalPrice}>Total: ${totalPrice.toFixed(2)}</Text>
@@ -38,10 +43,16 @@ const styles = StyleSheet.create({
     cartText: {
         color: 'white',
         fontWeight: 'bold',
+        fontSize: 18,
+    },
+    cartQuantity: {
+        color: 'white',
+        fontSize: 18,
     },
     totalPrice: {
         color: 'white',
         fontWeight: 'bold',
+        fontSize: 18,
     },
 });
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Image, Button, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const OrderSummaryScreen = ({ route }) => {
@@ -8,7 +8,9 @@ const OrderSummaryScreen = ({ route }) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.heading}>Order Summary</Text>
+            <Text style={styles.heading} accessibilityRole="header" accessibilityLabel="Order Summary">
+                Order Summary
+            </Text>
 
             <FlatList
                 data={order.orderItems}
@@ -19,8 +21,20 @@ const OrderSummaryScreen = ({ route }) => {
                             <Image source={{ uri: item.image }} style={styles.image} />
                             <View style={styles.itemDetails}>
                                 <Text style={styles.itemName}>{item.name}</Text>
-                                <Text style={styles.itemPrice}>Price: ${item.price.toFixed(2)}</Text>
-                                <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
+                                <Text
+                                    style={styles.itemPrice}
+                                    accessibilityRole="text"
+                                    accessibilityLabel={`Price: $${item.price.toFixed(2)}`}
+                                >
+                                    Price: ${item.price.toFixed(2)}
+                                </Text>
+                                <Text
+                                    style={styles.itemQuantity}
+                                    accessibilityRole="text"
+                                    accessibilityLabel={`Quantity: ${item.quantity}`}
+                                >
+                                    Quantity: {item.quantity}
+                                </Text>
                             </View>
                         </View>
                     </View>
@@ -28,25 +42,87 @@ const OrderSummaryScreen = ({ route }) => {
             />
 
             <View style={styles.shippingCard}>
-                <Text style={styles.shippingHeading}>Shipping Details</Text>
-                <Text style={styles.shippingText}>Name: {order.shippingDetails.name}</Text>
-                <Text style={styles.shippingText}>Address: {order.shippingDetails.address}</Text>
-                <Text style={styles.shippingText}>Apartment: {order.shippingDetails.apartment}</Text>
-                <Text style={styles.shippingText}>State: {order.shippingDetails.state}</Text>
-                <Text style={styles.shippingText}>City: {order.shippingDetails.city}</Text>
-                <Text style={styles.shippingText}>Country: {order.shippingDetails.country}</Text>
-                <Text style={styles.shippingText}>Postal Code: {order.shippingDetails.postalCode}</Text>
-                <Text style={styles.shippingText}>Phone: {order.shippingDetails.phone}</Text>
+                <Text
+                    style={styles.shippingHeading}
+                    accessibilityRole="header"
+                    accessibilityLabel="Shipping Details Heading"
+                >
+                    Shipping Details
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`Name: ${order.shippingDetails.name}`}
+                >
+                    Name: {order.shippingDetails.name}
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`Address: ${order.shippingDetails.address}`}
+                >
+                    Address: {order.shippingDetails.address}
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`Apartment: ${order.shippingDetails.apartment}`}
+                >
+                    Apartment: {order.shippingDetails.apartment}
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`State: ${order.shippingDetails.state}`}
+                >
+                    State: {order.shippingDetails.state}
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`City: ${order.shippingDetails.city}`}
+                >
+                    City: {order.shippingDetails.city}
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`Country: ${order.shippingDetails.country}`}
+                >
+                    Country: {order.shippingDetails.country}
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`Postal Code: ${order.shippingDetails.postalCode}`}
+                >
+                    Postal Code: {order.shippingDetails.postalCode}
+                </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`Phone: ${order.shippingDetails.phone}`}
+                >
+                    Phone: {order.shippingDetails.phone}
+                </Text>
             </View>
 
-            <Text style={styles.totalPrice}>Total Price: ${order.totalPrice.toFixed(2)}</Text>
+            <Text
+                style={styles.totalPrice}
+                accessibilityRole="text"
+                accessibilityLabel={`Total Price: $${order.totalPrice.toFixed(2)}`}
+            >
+                Total Price: ${order.totalPrice.toFixed(2)}
+            </Text>
 
-            <Button
-                title="Continue Shopping"
-                onPress={() => {
-                    navigation.navigate('MenuScreen');
-                }}
-            />
+            <TouchableOpacity
+                style={{ ...styles.button, backgroundColor: 'blue' }}
+                onPress={() => navigation.navigate('Home')}
+                accessibilityRole="button"
+                accessibilityLabel="Continue Shopping Button"
+            >
+                <Text style={styles.buttonText}>Continue Shopping</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -57,7 +133,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     heading: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 20,
     },
@@ -77,8 +153,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     image: {
-        width: 80,
-        height: 80,
+        width: 100,
+        height: 100,
         marginRight: 10,
         borderRadius: 5,
     },
@@ -86,16 +162,16 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     itemName: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 5,
     },
     itemPrice: {
-        fontSize: 14,
+        fontSize: 20,
         color: 'green',
     },
     itemQuantity: {
-        fontSize: 14,
+        fontSize: 18,
     },
     shippingCard: {
         backgroundColor: 'white',
@@ -109,18 +185,29 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     shippingHeading: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 10,
     },
     shippingText: {
-        fontSize: 16,
+        fontSize: 20,
         marginBottom: 5,
     },
     totalPrice: {
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'right',
+    },
+    button: {
+        padding: 15,
+        border: 5,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
     },
 });
 
