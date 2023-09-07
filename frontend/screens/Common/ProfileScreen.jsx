@@ -1,11 +1,4 @@
 import React from 'react';
-<<<<<<< HEAD
-
-const ProfileScreen = () => {
-    return <div>ProfileScreen</div>;
-};
-
-=======
 import {
   View,
   Text,
@@ -231,5 +224,4 @@ const styles = StyleSheet.create({
   },
 });
 
->>>>>>> 818f5c5 (Change to menu)
 export default ProfileScreen;
