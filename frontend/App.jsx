@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {
     MenuScreen,
     ProfileScreen,
-    ProductScreen,
+    HomeScreen,
     ProductDetailScreen,
     CartScreen,
     ShippingScreen,
@@ -17,36 +17,6 @@ import { CartProvider } from './context/CartContext';
 const Stack = createStackNavigator();
 
 const App = () => {
-<<<<<<< HEAD
-    return (
-        <CartProvider>
-            <NavigationContainer>
-                <SafeAreaProvider>
-                    <Stack.Navigator initialRouteName="MenuScreen">
-                        <Stack.Screen name="Home" component={MenuScreen} />
-                        <Stack.Screen name="ProductScreen" component={ProductScreen} options={{ title: 'Products' }} />
-                        <Stack.Screen
-                            name="ProductDetailScreen"
-                            component={ProductDetailScreen}
-                            options={({ route }) => ({ title: route.params.product.name })}
-                        />
-                        <Stack.Screen name="CartScreen" component={CartScreen} options={{ title: 'Your Cart 🛒' }} />
-                        <Stack.Screen
-                            name="ShippingScreen"
-                            component={ShippingScreen}
-                            options={{ title: 'Shipping Information' }}
-                        />
-                        <Stack.Screen
-                            name="OrderSummaryScreen"
-                            component={OrderSummaryScreen}
-                            options={{ title: 'Order Summary' }}
-                        />
-                    </Stack.Navigator>
-                </SafeAreaProvider>
-            </NavigationContainer>
-        </CartProvider>
-    );
-=======
   return (
     <CartProvider>
       <NavigationContainer>
@@ -88,7 +58,6 @@ const App = () => {
       </NavigationContainer>
     </CartProvider>
   );
->>>>>>> 818f5c5 (Change to menu)
 };
 
 export default App;
