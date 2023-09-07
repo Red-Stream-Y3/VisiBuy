@@ -7,6 +7,7 @@ const MenuCard = ({ MenuIcon, MenuName }) => {
     const cardWidth = screenWidth - 40;
     return (
         <View style={[styles.card, { width: cardWidth }]}>
+<<<<<<< HEAD
             <FontAwesome5
                 name={MenuIcon}
                 size={80}
@@ -17,6 +18,22 @@ const MenuCard = ({ MenuIcon, MenuName }) => {
             <Text style={styles.menuName} accessible={true} accessibilityLabel={`Menu Name: ${MenuName}`}>
                 {MenuName}
             </Text>
+=======
+        <FontAwesome5
+            name={MenuIcon}
+            size={80}
+            color="#343a40"
+            accessible={true}
+            accessibilityLabel={`Icon for ${MenuName}`}
+        />
+        <Text
+            style={styles.menuName}
+            accessible={true}
+            accessibilityLabel={`Menu Name: ${MenuName}`}
+        >
+            {MenuName}
+        </Text>
+>>>>>>> 818f5c5 (Change to menu)
         </View>
     );
 };
