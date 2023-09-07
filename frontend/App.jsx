@@ -6,7 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {
     MenuScreen,
     ProfileScreen,
-    HomeScreen,
+    ProductScreen,
     ProductDetailScreen,
     CartScreen,
     ShippingScreen,
@@ -25,7 +25,7 @@ const App = () => {
             <Stack.Screen name="Home" component={MenuScreen} />
             <Stack.Screen
               name="HomeScreen"
-              component={HomeScreen}
+              component={ProductScreen}
               options={{ title: 'Browse Products' }}
             />
             <Stack.Screen
