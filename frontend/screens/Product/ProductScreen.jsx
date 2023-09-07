@@ -52,7 +52,7 @@ const ProductScreen = () => {
         };
 
         checkScreenReader();
-    }, [products]); // Include 'products' in the dependency array
+    }, [products]);
 
     // Function to navigate to the ProductDetailScreen
     const navigateToProductDetail = (product) => {
@@ -61,7 +61,9 @@ const ProductScreen = () => {
 
     return (
         <View style={styles.container}>
-            {/* <Text style={styles.header}>Products</Text> */}
+            {/* <Text style={styles.header} accessibilityRole="header">
+                Products
+            </Text> */}
             <ScrollView
                 vertical
                 contentContainerStyle={{
@@ -94,7 +96,7 @@ const ProductScreen = () => {
                 ))}
             </ScrollView>
             {/* <AccessibilityButton label="Check Screen Reader" onPress={() => {}} /> */}
-            <CartButton />
+            <CartButton accessibilityLabel="Cart Button" />
         </View>
     );
 };

@@ -24,15 +24,44 @@ export const productItemStyles = StyleSheet.create({
     image: {
         width: 100,
         height: 100,
+        marginRight: 10,
         borderRadius: 5,
     },
     name: {
-        fontSize: 18,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 5,
     },
     price: {
-        fontSize: 16,
+        fontSize: 19,
         color: 'green',
+    },
+    quantity: {
+        fontSize: 18,
+        color: 'green',
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 24,
+    },
+    input: {
+        height: 60,
+        borderColor: 'gray',
+        borderWidth: 1,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        fontSize: 20,
+    },
+    button: {
+        padding: 15,
+        border: 5,
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
     },
 });

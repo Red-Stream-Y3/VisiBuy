@@ -10,11 +10,22 @@ const ProductDetailScreen = ({ route }) => {
                 source={{ uri: product.images[0].url }}
                 style={styles.image}
                 accessible={true}
-                accessibilityLabel={product.name}
+                accessibilityLabel={`${product.name} Image`}
+                accessibilityRole="image"
             />
-            <Text style={styles.name}>{product.name}</Text>
-            <Text style={styles.price}>${product.price}</Text>
-            <Text style={styles.description}>{product.description}</Text>
+            <Text style={styles.name} accessibilityLabel={`${product.name} Name`} accessibilityRole="header">
+                {product.name}
+            </Text>
+            <Text style={styles.price} accessibilityLabel={`${product.name} Price`} accessibilityRole="text">
+                ${product.price}
+            </Text>
+            <Text
+                style={styles.description}
+                accessibilityLabel={`${product.name} Description`}
+                accessibilityRole="text"
+            >
+                {product.description}
+            </Text>
         </ScrollView>
     );
 };
