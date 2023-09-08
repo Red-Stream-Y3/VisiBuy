@@ -22,20 +22,42 @@ const userSchema = mongoose.Schema(
             required: true,
             default: false,
         },
-        firstName: {
-            type: String,
-            pattern: '^[a-zA-Z]*$',
-            default: '',
-        },
-        lastName: {
-            type: String,
-            pattern: '^[a-zA-Z]*$',
-            default: '',
-        },
         phone: {
             type: String,
             pattern: '^[0-9]*$',
             default: '',
+        },
+        shippingInfo: {
+            address: {
+                type: String,
+                pattern: '^[a-zA-Z]*$',
+                default: '',
+            },
+            apartment: {
+                type: String,
+                pattern: '^[a-zA-Z]*$',
+                default: '',
+            },
+            city: {
+                type: String,
+                pattern: '^[a-zA-Z]*$',
+                default: '',
+            },
+            state: {
+                type: String,
+                pattern: '^[a-zA-Z]*$',
+                default: '',
+            },
+            country: {
+                type: String,
+                pattern: '^[a-zA-Z]*$',
+                default: '',
+            },
+            postalCode: {
+                type: String,
+                pattern: '^[0-9]*$',
+                default: '',
+            },
         },
     },
     {

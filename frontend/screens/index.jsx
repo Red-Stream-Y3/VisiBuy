@@ -1,3 +1,5 @@
+export { default as LoginScreen } from './Common/LoginScreen';
+export { default as Register } from './Common/Register';
 export { default as MenuScreen } from './Common/MenuScreen';
 export { default as ProductScreen } from './Product/ProductScreen';
 export { default as ProductDetailScreen } from './Product/ProductDetailScreen';
