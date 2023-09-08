@@ -154,23 +154,24 @@ const getProductsBySearch = asyncHandler(async (req, res) => {
 // @route   POST /api/products/:id/reviews
 // @access  Private
 const createProductReview = asyncHandler(async (req, res) => {
-    const { rating, comment } = req.body;
+    const { comment } = req.body;
+    // const { rating } = 3;
 
     const product = await Product.findById(req.params.id);
 
     if (product) {
-        const alreadyReviewed = product.reviews.find((r) => r.user.toString() === req.user._id.toString());
+        // const alreadyReviewed = product.reviews.find((r) => r.user.toString() === req.user._id.toString());
 
-        if (alreadyReviewed) {
-            res.status(400);
-            throw new Error('Product already reviewed');
-        }
+        // if (alreadyReviewed) {
+        //     res.status(400);
+        //     throw new Error('Product already reviewed');
+        // }
 
         const review = {
-            name: req.user.name,
-            rating: Number(rating),
+            name: 'John Doe',
+            rating: 3,
             comment,
-            user: req.user._id,
+            user: '641aaee2b8ed930c6e7186c1',
         };
 
         product.reviews.push(review);

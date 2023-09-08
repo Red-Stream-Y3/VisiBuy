@@ -175,7 +175,7 @@ const queryOrders = asyncHandler(async (req, res) => {
 // get orders by user id and only output the order id and order status for each order
 
 const getOrdersByUserId = asyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.params.id });
+    const orders = await Order.find({ user: req.params.id, isDelivered: false });
     if (!orders) {
         res.status(404);
         throw new Error('No orders found');
@@ -215,6 +215,18 @@ const updateOrderProductsToShipped = asyncHandler(async (req, res) => {
     }
 });
 
+//get delivered orders
+const getDeliveredOrdersByUserId = asyncHandler(async (req, res) => {
+    const orders = await Order.find({ user: req.params.id, isDelivered: true });
+
+    if (!orders || orders.length === 0) {
+        res.status(404);
+        throw new Error('No delivered orders found');
+    }
+
+    res.status(200).json(orders);
+});
+
 export {
     addOrderItems,
     getOrderById,
@@ -229,4 +241,5 @@ export {
     updateOrderToDeliver,
     getOrdersforSeller,
     updateOrderProductsToShipped,
+    getDeliveredOrdersByUserId,
 };

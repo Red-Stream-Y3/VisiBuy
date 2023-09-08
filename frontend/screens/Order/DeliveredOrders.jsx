@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { getOrderDetailsByUserId } from '../../services/OrderServices'; // Update the path as needed
+import { getDeliveredOrdersByUserId } from '../../services/OrderServices'; // Update the path as needed
 import { useNavigation } from '@react-navigation/native';
 
-const OrdersScreen = () => {
+export default function DeliveredOrders() {
     const [orders, setOrders] = useState([]);
     const navigation = useNavigation();
 
@@ -24,7 +24,7 @@ const OrdersScreen = () => {
 
         const fetchOrderDetails = async () => {
             try {
-                const orderDetails = await getOrderDetailsByUserId(userId);
+                const orderDetails = await getDeliveredOrdersByUserId(userId);
                 setOrders(orderDetails);
             } catch (error) {
                 console.error('Error fetching order details:', error.message);
@@ -34,23 +34,9 @@ const OrdersScreen = () => {
         fetchOrderDetails();
     }, []);
 
-    const navigateToDeliveredOrders = (order) => {
-        navigation.navigate('DeliveredOrders', { order });
-    };
-
     return (
         <View contentContainerStyle={styles.container}>
-            <Text accessibilityRole="header" accessibilityLabel="Your Orders"></Text>
-
-            <TouchableOpacity
-                onPress={navigateToDeliveredOrders}
-                accessible={true}
-                accessibilityRole="button"
-                accessibilityLabel="Delivered Orders"
-                style={styles.deliveredButton}
-            >
-                <Text style={styles.deliveredButtonText}>Delivered Orders</Text>
-            </TouchableOpacity>
+            <Text accessibilityRole="header" accessibilityLabel="Delivered Orders"></Text>
 
             <FlatList
                 data={orders}
@@ -59,14 +45,23 @@ const OrdersScreen = () => {
                     <View style={styles.orderCard}>
                         {/* <Text style={styles.cardTitle}>Order ID: {item._id}</Text> */}
                         <Text style={styles.cardText}>Order Date: {formatDate(item.createdAt)}</Text>
-                        <Text style={styles.cardText}>Subtotal: ${item.totalPrice.toFixed(2)}</Text>
-
+                        <View style={{ flexDirection: 'row' }}>
+                            <Text style={styles.cardText}>Subtotal: ${item.totalPrice.toFixed(2)}</Text>
+                            {/* <Text style={styles.deliveredText}>Delivered</Text> */}
+                        </View>
                         {item.orderItems.map((orderItem) => (
                             <View key={orderItem.product} style={styles.productCard}>
                                 <Text style={styles.productName}>{orderItem.name}</Text>
                                 <Text style={styles.productDetails}>
                                     Quantity: {orderItem.quantity} | Price: ${orderItem.price.toFixed(2)}
                                 </Text>
+                                <TouchableOpacity
+                                    accessible={true}
+                                    accessibilityRole="button"
+                                    accessibilityLabel="Review Item"
+                                >
+                                    <Text style={styles.reviewText}>Review item</Text>
+                                </TouchableOpacity>{' '}
                             </View>
                         ))}
                     </View>
@@ -74,8 +69,7 @@ const OrdersScreen = () => {
             />
         </View>
     );
-};
-
+}
 const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
@@ -96,7 +90,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
-        marginBottom: 20,
+        margin: 20,
     },
     cardTitle: {
         fontSize: 20,
@@ -107,6 +101,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 5,
     },
+
     productCard: {
         borderColor: 'gray',
         borderWidth: 1,
@@ -121,24 +116,17 @@ const styles = StyleSheet.create({
     productDetails: {
         fontSize: 19,
     },
-    deliveredButton: {
-        backgroundColor: '#007bff', // Button background color
-        paddingVertical: 10,
-        paddingHorizontal: 10,
-        borderRadius: 5,
-        elevation: 3, // For Android elevation/shadow
-        shadowColor: '#000', // For iOS shadow
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        margin: 20,
-    },
-    deliveredButtonText: {
-        color: '#fff', // Text color
-        fontSize: 16,
+    // deliveredText: {
+    //     color: '#32CD32', // Text color
+    //     fontSize: 18,
+    //     marginBottom: 3,
+    //     fontWeight: 'bold',
+    //     marginLeft: 20,
+    // },
+    reviewText: {
+        color: '#007bff', // Blue text color
+        fontSize: 20,
         fontWeight: 'bold',
-        textAlign: 'center',
+        alignSelf: 'flex-end',
     },
 });
-
-export default OrdersScreen;

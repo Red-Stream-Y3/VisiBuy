@@ -5,15 +5,6 @@ import { ReviewsRatings, StarRating } from '../../components';
 const ProductDetailScreen = ({ route }) => {
     const { product } = route.params;
     const reviewItemRef = useRef(null);
-    const [comment, setComment] = useState('');
-
-    const handlePostReview = () => {
-        // Implement logic to post the review, e.g., send it to your backend
-        // You can use the 'comment' state to access the review text
-        // After posting, you can reset the comment input
-        // Example: API.postReview({ text: comment, productId: productId })
-        setComment('');
-    };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
@@ -44,21 +35,21 @@ const ProductDetailScreen = ({ route }) => {
                     <Text style={styles.reviewHeader}>Reviews</Text>
                     <View style={styles.rightSection}>
                         <StarRating rating={product.rating} />
-                        <Text style={styles.ratingText}>{product.rating} Ratings</Text>
+                        <Text style={styles.ratingText}>{product.numReviews} Ratings</Text>
                     </View>
                 </View>
 
                 {/* Write Review Input */}
-                <TextInput
+                {/* <TextInput
                     style={styles.input}
                     placeholder="Write your review..."
                     multiline
                     value={comment}
                     onChangeText={(text) => setComment(text)}
-                />
+                /> */}
 
                 {/* Post Button */}
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     style={styles.postBtn}
                     onPress={handlePostReview}
                     accessible={true}
@@ -66,7 +57,8 @@ const ProductDetailScreen = ({ route }) => {
                     accessibilityLabel="Post Review"
                 >
                     <Text style={styles.postBtnText}>Post Review</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+
                 {/* Reviews List */}
 
                 <View style={styles.reviewList}>
@@ -118,6 +110,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.2,
         shadowRadius: 4,
         elevation: 3,
+        marginTop: 20,
     },
 
     reviewHeaderSection: {
