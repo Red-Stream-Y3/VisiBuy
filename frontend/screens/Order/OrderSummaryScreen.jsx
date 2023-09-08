@@ -105,6 +105,13 @@ const OrderSummaryScreen = ({ route }) => {
                 >
                     Phone: {order.shippingDetails.phone}
                 </Text>
+                <Text
+                    style={styles.shippingText}
+                    accessibilityRole="text"
+                    accessibilityLabel={`Shipping Method: ${order.shippingMethod}`}
+                >
+                    Shipping Method: {order.shippingMethod}
+                </Text>
             </View>
 
             <Text
