@@ -1,29 +1,73 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { useUser } from '../../context/UserContext';
+import { updateUser } from '../../services/UserServices';
 
 const ProfileScreen = () => {
+    const navigation = useNavigation();
+    const { user, setUser } = useUser();
+
     // State variables to store user information
-    const [email, setEmail] = React.useState('');
-    const [firstName, setFirstName] = React.useState('');
-    const [lastName, setLastName] = React.useState('');
-    const [phoneNumber, setPhoneNumber] = React.useState('');
-    const [houseNumber, setHouseNumber] = React.useState('');
-    const [streetName1, setStreetName1] = React.useState('');
-    const [streetName2, setStreetName2] = React.useState('');
-    const [city, setCity] = React.useState('');
-    const [stateProvince, setStateProvince] = React.useState('');
-    const [country, setCountry] = React.useState('');
-    const [zipCode, setZipCode] = React.useState('');
+    const [name, setName] = useState('');
+    const [address, setAddress] = useState('');
+    const [apartment, setApartment] = useState('');
+    const [state, setState] = useState('');
+    const [city, setCity] = useState('');
+    const [country, setCountry] = useState('');
+    const [postalCode, setPostalCode] = useState('');
+    const [phone, setPhone] = useState('');
+
+    // useEffect to pre-fill input fields with user details when user context is available
+    useEffect(() => {
+        if (user) {
+            setName(user.name || '');
+            setAddress(user.address || '');
+            setApartment(user.apartment || '');
+            setState(user.state || '');
+            setCity(user.city || '');
+            setCountry(user.country || '');
+            setPostalCode(user.postalCode || '');
+            setPhone(user.phone || '');
+        }
+    }, [user]);
 
     // Function to update user information
-    const updateProfile = () => {
-        // Implmentation needed here
-        // Need authentication for fingerprint
+    const updateProfile = async () => {
+        try {
+            await updateUser({
+                id: user._id,
+                name,
+                address,
+                apartment,
+                state,
+                city,
+                country,
+                postalCode,
+                phone,
+            });
+
+            setUser({
+                ...user,
+                name,
+                address,
+                apartment,
+                state,
+                city,
+                country,
+                postalCode,
+                phone,
+            });
+
+            navigation.navigate('Home');
+        } catch (error) {
+            console.error('Error updating user:', error.message);
+        }
     };
 
     // Function to cancel update
     const cancelUpdate = () => {
-        // Implmentation needed here
+        navigation.navigate('Home');
     };
 
     return (
@@ -31,83 +75,46 @@ const ProfileScreen = () => {
             <View style={styles.container}>
                 <Text style={styles.header}>Profile Information</Text>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>First Name</Text>
+                    <Text style={styles.label}>Name</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="First Name"
-                        value={firstName}
-                        onChangeText={setFirstName}
-                        accessibilityLabel="First Name Input"
+                        placeholder="Name"
+                        value={name}
+                        onChangeText={setName}
+                        accessibilityLabel="Name Input"
                         accessibilityRole="text"
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Last Name</Text>
+                    <Text style={styles.label}>Address</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Last Name"
-                        value={lastName}
-                        onChangeText={setLastName}
-                        accessibilityLabel="Last Name Input"
+                        placeholder="Address"
+                        value={address}
+                        onChangeText={setAddress}
+                        accessibilityLabel="Address Input"
                         accessibilityRole="text"
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Email</Text>
+                    <Text style={styles.label}>Apartment</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Email"
-                        value={email}
-                        onChangeText={setEmail}
-                        accessibilityLabel="Email Input"
-                        accessibilityRole="text"
-                        inputMode="email"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Phone Number</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Phone Number"
-                        value={phoneNumber}
-                        onChangeText={setPhoneNumber}
-                        accessibilityLabel="Phone Number Input"
-                        accessibilityRole="text"
-                        inputMode="tel"
-                    />
-                </View>
-                <Text style={styles.header}>Shipping Information</Text>
-
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>House Number</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="House Number"
-                        value={houseNumber}
-                        onChangeText={setHouseNumber}
-                        accessibilityLabel="House Number Input"
+                        placeholder="Apartment (Optional)"
+                        value={apartment}
+                        onChangeText={setApartment}
+                        accessibilityLabel="Apartment Input (Optional)"
                         accessibilityRole="text"
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Street Name 1</Text>
+                    <Text style={styles.label}>State</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Street Name 1"
-                        value={streetName1}
-                        onChangeText={setStreetName1}
-                        accessibilityLabel="Street Name 1 Input"
-                        accessibilityRole="text"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Street Name 2</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Street Name 2"
-                        value={streetName2}
-                        onChangeText={setStreetName2}
-                        accessibilityLabel="Street Name 2 Input"
+                        placeholder="State"
+                        value={state}
+                        onChangeText={setState}
+                        accessibilityLabel="State Input"
                         accessibilityRole="text"
                     />
                 </View>
@@ -123,17 +130,6 @@ const ProfileScreen = () => {
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>State/Province</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="State/Province"
-                        value={stateProvince}
-                        onChangeText={setStateProvince}
-                        accessibilityLabel="State/Province Input"
-                        accessibilityRole="text"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
                     <Text style={styles.label}>Country</Text>
                     <TextInput
                         style={styles.input}
@@ -145,24 +141,27 @@ const ProfileScreen = () => {
                     />
                 </View>
                 <View style={styles.inputContainer}>
-                    <Text style={styles.label}>Zip Code</Text>
+                    <Text style={styles.label}>Postal Code</Text>
                     <TextInput
                         style={styles.input}
-                        placeholder="Zip Code"
-                        value={zipCode}
-                        onChangeText={setZipCode}
-                        accessibilityLabel="Zip Code Input"
+                        placeholder="Postal Code"
+                        value={postalCode}
+                        onChangeText={setPostalCode}
+                        accessibilityLabel="Postal Code Input"
                         accessibilityRole="text"
-                        inputMode="numeric"
                     />
                 </View>
-                <TouchableOpacity
-                    style={{ ...styles.button, backgroundColor: 'gray' }}
-                    onPress={cancelUpdate}
-                    accessibilityLabel="Cancel Update Button"
-                >
-                    <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
+                <View style={styles.inputContainer}>
+                    <Text style={styles.label}>Phone</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Phone"
+                        value={phone}
+                        onChangeText={setPhone}
+                        accessibilityLabel="Phone Input"
+                        accessibilityRole="text"
+                    />
+                </View>
 
                 <TouchableOpacity
                     style={{ ...styles.button, backgroundColor: 'blue' }}
@@ -170,6 +169,14 @@ const ProfileScreen = () => {
                     accessibilityLabel="Update Profile Button"
                 >
                     <Text style={styles.buttonText}>Update</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={{ ...styles.button, backgroundColor: 'gray' }}
+                    onPress={cancelUpdate}
+                    accessibilityLabel="Cancel Update Button"
+                >
+                    <Text style={styles.buttonText}>Cancel</Text>
                 </TouchableOpacity>
             </View>
         </ScrollView>
