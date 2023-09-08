@@ -6,3 +6,4 @@ export { default as ShippingScreen } from './Order/ShippingScreen';
 export { default as OrderSummaryScreen } from './Order/OrderSummaryScreen';
 export { default as OrdersScreen } from './Order/OrdersScreen';
 export { default as ProfileScreen } from './Common/ProfileScreen';
+export { default as DeliveredOrders } from './Order/DeliveredOrders';

@@ -12,6 +12,7 @@ import {
     ShippingScreen,
     OrdersScreen,
     OrderSummaryScreen,
+    DeliveredOrders,
 } from './screens';
 import { CartProvider } from './context/CartContext';
 
@@ -50,6 +51,11 @@ const App = () => {
                             name="OrderSummaryScreen"
                             component={OrderSummaryScreen}
                             options={{ title: 'Order Summary' }}
+                        />
+                        <Stack.Screen
+                            name="DeliveredOrders"
+                            component={DeliveredOrders}
+                            options={{ title: 'Delivered Orders' }}
                         />
                     </Stack.Navigator>
                 </SafeAreaProvider>

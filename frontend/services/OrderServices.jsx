@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://10.0.2.2:9120';
+const BASE_URL = 'http://192.168.8.116:9120';
 
 export const createOrder = async (order) => {
     try {
@@ -17,5 +17,14 @@ export const getOrderDetailsByUserId = async (userId) => {
         return response.data;
     } catch (error) {
         throw new Error('Error getting order details');
+    }
+};
+
+export const getDeliveredOrdersByUserId = async (userId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/v1/orders/user/delivered/${userId}`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error getting delivered order details');
     }
 };

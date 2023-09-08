@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const StarRating = ({ rating, starSize = 20 }) => {
+const StarRating = ({ rating, starSize = 30 }) => {
     // You can implement your star rating UI logic here.
     // For simplicity, we'll assume a 5-star rating system.
     const maxStars = 5;
