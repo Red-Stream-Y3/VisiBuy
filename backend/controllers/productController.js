@@ -154,10 +154,11 @@ const getProductsBySearch = asyncHandler(async (req, res) => {
 // @route   POST /api/products/:id/reviews
 // @access  Private
 const createProductReview = asyncHandler(async (req, res) => {
-    const { comment } = req.body;
+    const { user, name, comment, rating, productID } = req.body;
     // const { rating } = 3;
 
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(productID);
+    console.log('product', rating, name, comment, productID, product);
 
     if (product) {
         // const alreadyReviewed = product.reviews.find((r) => r.user.toString() === req.user._id.toString());
@@ -168,10 +169,10 @@ const createProductReview = asyncHandler(async (req, res) => {
         // }
 
         const review = {
-            name: 'John Doe',
-            rating: 3,
+            user,
+            name,
             comment,
-            user: '641aaee2b8ed930c6e7186c1',
+            rating: Number(rating),
         };
 
         product.reviews.push(review);

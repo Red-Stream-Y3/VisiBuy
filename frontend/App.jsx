@@ -15,6 +15,7 @@ import {
     OrdersScreen,
     OrderSummaryScreen,
     DeliveredOrders,
+    ReviewScreen,
 } from './screens';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -76,6 +77,11 @@ const App = () => {
                                 name="DeliveredOrders"
                                 component={DeliveredOrders}
                                 options={{ title: 'Delivered Orders' }}
+                            />
+                            <Stack.Screen
+                                name="ReviewScreen"
+                                component={ReviewScreen}
+                                options={({ route }) => ({ title: route.params.product.name })}
                             />
                         </Stack.Navigator>
                     </SafeAreaProvider>
