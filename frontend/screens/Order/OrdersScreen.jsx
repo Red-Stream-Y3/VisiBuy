@@ -52,6 +52,9 @@ const OrdersScreen = () => {
                 <Text style={styles.deliveredButtonText}>Delivered Orders</Text>
             </TouchableOpacity>
 
+            <View accessibilityRole="header" accessibilityLabel="Pending Orders">
+                <Text style={styles.header}>Pending Orders</Text>
+            </View>
             <FlatList
                 data={orders}
                 keyExtractor={(item) => item._id}
@@ -82,6 +85,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         padding: 20,
     },
+    header: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        marginTop: 10,
+        marginLeft: 20,
+    },
     heading: {
         fontSize: 28,
         fontWeight: 'bold',
@@ -96,7 +105,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 2,
-        marginBottom: 20,
+        margin: 20,
     },
     cardTitle: {
         fontSize: 20,

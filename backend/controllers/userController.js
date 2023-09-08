@@ -13,17 +13,13 @@ const authUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            isAdmin: user.isAdmin,
-            firstName: user.firstName,
-            lastName: user.lastName,
             phone: user.phone,
-            number: user.shippingInfo.number,
-            line1: user.shippingInfo.line1,
-            line2: user.shippingInfo.line2,
-            city: user.shippingInfo.city,
+            address: user.shippingInfo.address,
+            apartment: user.shippingInfo.apartment,
             state: user.shippingInfo.state,
-            zip: user.shippingInfo.zip,
+            city: user.shippingInfo.city,
             country: user.shippingInfo.country,
+            postalCode: user.shippingInfo.postalCode,
             token: generateToken(user._id),
         });
     } else {
@@ -57,17 +53,13 @@ const registerUser = asyncHandler(async (req, res) => {
             _id: user._id,
             name: user.name,
             email: user.email,
-            isAdmin: user.isAdmin,
-            firstName: user.firstName,
-            lastName: user.lastName,
             phone: user.phone,
-            number: user.shippingInfo.number,
-            line1: user.shippingInfo.line1,
-            line2: user.shippingInfo.line2,
-            city: user.shippingInfo.city,
+            address: user.shippingInfo.address,
+            apartment: user.shippingInfo.apartment,
             state: user.shippingInfo.state,
-            zip: user.shippingInfo.zip,
+            city: user.shippingInfo.city,
             country: user.shippingInfo.country,
+            postalCode: user.shippingInfo.postalCode,
             token: generateToken(user._id),
         });
     } else {
@@ -119,24 +111,18 @@ const getUserById = asyncHandler(async (req, res) => {
 // make it handle authorization token
 
 const updateUser = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.user._id);
-    const { name, email, isAdmin, firstName, lastName, phone, number, line1, line2, city, state, zip, country } =
-        req.body;
+    const user = await User.findById(req.body.id);
+    const { name, address, apartment, state, city, country, postalCode, phone } = req.body;
 
     if (user) {
         user.name = name || user.name;
-        user.email = email || user.email;
-        user.isAdmin = isAdmin || user.isAdmin;
-        user.firstName = firstName || user.firstName;
-        user.lastName = lastName || user.lastName;
+        user.address = address || user.address;
+        user.apartment = apartment || user.apartment;
+        user.state = state || user.state;
+        user.city = city || user.city;
+        user.country = country || user.country;
+        user.postalCode = postalCode || user.postalCode;
         user.phone = phone || user.phone;
-        user.shippingInfo.number = number || user.shippingInfo.number;
-        user.shippingInfo.line1 = line1 || user.shippingInfo.line1;
-        user.shippingInfo.line2 = line2 || user.shippingInfo.line2;
-        user.shippingInfo.city = city || user.shippingInfo.city;
-        user.shippingInfo.state = state || user.shippingInfo.state;
-        user.shippingInfo.zip = zip || user.shippingInfo.zip;
-        user.shippingInfo.country = country || user.shippingInfo.country;
 
         const updatedUser = await user.save();
 
@@ -144,17 +130,13 @@ const updateUser = asyncHandler(async (req, res) => {
             _id: updatedUser._id,
             name: updatedUser.name,
             email: updatedUser.email,
-            isAdmin: updatedUser.isAdmin,
-            firstName: updatedUser.firstName,
-            lastName: updatedUser.lastName,
             phone: updatedUser.phone,
-            number: updatedUser.shippingInfo.number,
-            line1: updatedUser.shippingInfo.line1,
-            line2: updatedUser.shippingInfo.line2,
-            city: updatedUser.shippingInfo.city,
-            state: updatedUser.shippingInfo.state,
-            zip: updatedUser.shippingInfo.zip,
-            country: updatedUser.shippingInfo.country,
+            address: updatedUser.address,
+            apartment: updatedUser.apartment,
+            state: updatedUser.state,
+            city: updatedUser.city,
+            country: updatedUser.country,
+            postalCode: updatedUser.postalCode,
             token: generateToken(updatedUser._id),
         });
     } else {
