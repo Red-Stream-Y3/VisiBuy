@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://10.0.2.2:9120';
+const BASE_URL = 'http://192.168.8.101:9120';
 
 export const getAllProducts = async () => {
     try {
@@ -11,7 +11,7 @@ export const getAllProducts = async () => {
     }
 };
 
-export const createProductReview = async (review) => {
+export const createProductReview = async (productId, review) => {
     try {
         const response = await axios.post(`${BASE_URL}/api/v1/products/${productId}/reviews`, review);
         return response.data;
