@@ -5,6 +5,6 @@ const router = express.Router();
 
 router.route('/').post(addCartItems);
 router.route('/:id').get(getCartById);
-router.route('/:id').put(updateCartById);
+router.route('/:id').patch(updateCartById);
 
 export default router;
