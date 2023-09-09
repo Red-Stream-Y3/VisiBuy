@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { getOrderDetailsByUserId } from '../../services/OrderServices'; // Update the path as needed
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { getOrderDetailsByUserId, markOrderAsDelivered } from '../../services/OrderServices';
 import { useNavigation } from '@react-navigation/native';
+import { useUser } from '../../context/UserContext';
 
 const OrdersScreen = () => {
+    const { user } = useUser();
     const [orders, setOrders] = useState([]);
     const navigation = useNavigation();
 
@@ -19,18 +21,26 @@ const OrdersScreen = () => {
         return `${year}-${month}-${day}  ${hours}:${minutes}:${seconds}`;
     };
 
+    const fetchOrderDetails = async () => {
+        try {
+            const userId = user ? user._id : '641aaee2b8ed930c6e7186c1';
+            const orderDetails = await getOrderDetailsByUserId(userId);
+            setOrders(orderDetails);
+        } catch (error) {
+            console.error('Error fetching order details:', error.message);
+        }
+    };
+
+    const markDelivered = async (orderId) => {
+        try {
+            await markOrderAsDelivered(orderId);
+            fetchOrderDetails();
+        } catch (error) {
+            console.error('Error marking order as delivered:', error.message);
+        }
+    };
+
     useEffect(() => {
-        const userId = '641aaee2b8ed930c6e7186c1';
-
-        const fetchOrderDetails = async () => {
-            try {
-                const orderDetails = await getOrderDetailsByUserId(userId);
-                setOrders(orderDetails);
-            } catch (error) {
-                console.error('Error fetching order details:', error.message);
-            }
-        };
-
         fetchOrderDetails();
     }, []);
 
@@ -52,8 +62,17 @@ const OrdersScreen = () => {
                 <Text style={styles.deliveredButtonText}>Delivered Orders</Text>
             </TouchableOpacity>
 
-            <View accessibilityRole="header" accessibilityLabel="Pending Orders">
+            <View accessibilityRole="header" accessibilityLabel="Pending Orders" style={styles.headerContainer}>
                 <Text style={styles.header}>Pending Orders</Text>
+                {/* <TouchableOpacity
+                    onPress={downloadPendingOrdersPDF}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Download Pending Orders as PDF"
+                    style={styles.downloadButton}
+                >
+                    <Text style={styles.downloadButtonText}>Print</Text>
+                </TouchableOpacity> */}
             </View>
             <FlatList
                 data={orders}
@@ -72,6 +91,15 @@ const OrdersScreen = () => {
                                 </Text>
                             </View>
                         ))}
+                        <TouchableOpacity
+                            onPress={() => markDelivered(item._id)}
+                            accessible={true}
+                            accessibilityRole="button"
+                            accessibilityLabel="Mark as Delivered"
+                            style={styles.deliveredButton}
+                        >
+                            <Text style={styles.deliveredButtonText}>Mark as Delivered</Text>
+                        </TouchableOpacity>
                     </View>
                 )}
             />
@@ -86,10 +114,33 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     header: {
-        fontSize: 28,
+        fontSize: 25,
         fontWeight: 'bold',
         marginTop: 10,
         marginLeft: 20,
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    downloadButton: {
+        backgroundColor: '#007bff',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        borderRadius: 5,
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        marginRight: 20,
+    },
+    downloadButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     heading: {
         fontSize: 28,
