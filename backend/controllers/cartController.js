@@ -44,7 +44,7 @@ const updateCartById = asyncHandler(async (req, res) => {
     const cart = await Cart.findById(req.params.id);
 
     if (cart) {
-        cart.orderItems = req.body.orderItems || cart.orderItems;
+        cart.orderItems = cart.orderItems.concat(req.body.orderItems);
 
         const updatedCart = await cart.save();
         res.json(updatedCart);
