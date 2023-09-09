@@ -36,4 +36,23 @@ const getCartById = asyncHandler(async (req, res) => {
     }
 });
 
-export { addCartItems, getCartById };
+// @desc    Update cart by ID
+// @route   PUT /api/carts/:id
+// @access  Private
+
+const updateCartById = asyncHandler(async (req, res) => {
+    const cart = await Cart.findById(req.params.id);
+
+    if (cart) {
+        cart.orderItems = req.body.orderItems || cart.orderItems;
+
+        const updatedCart = await cart.save();
+
+        res.json(updatedCart);
+    } else {
+        res.status(404);
+        throw new Error('Cart not found');
+    }
+});
+
+export { addCartItems, getCartById, updateCartById };
