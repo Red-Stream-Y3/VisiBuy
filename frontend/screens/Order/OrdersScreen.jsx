@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { getOrderDetailsByUserId, markOrderAsDelivered } from '../../services/OrderServices';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
@@ -74,33 +74,36 @@ const OrdersScreen = () => {
                     <Text style={styles.downloadButtonText}>Print</Text>
                 </TouchableOpacity> */}
             </View>
+
             <FlatList
                 data={orders}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
-                    <View style={styles.orderCard}>
-                        {/* <Text style={styles.cardTitle}>Order ID: {item._id}</Text> */}
-                        <Text style={styles.cardText}>Order Date: {formatDate(item.createdAt)}</Text>
-                        <Text style={styles.cardText}>Subtotal: ${item.totalPrice.toFixed(2)}</Text>
+                    <ScrollView>
+                        <View style={styles.orderCard}>
+                            {/* <Text style={styles.cardTitle}>Order ID: {item._id}</Text> */}
+                            <Text style={styles.cardText}>Order Date: {formatDate(item.createdAt)}</Text>
+                            <Text style={styles.cardText}>Subtotal: Rs {item.totalPrice.toFixed(2)}</Text>
 
-                        {item.orderItems.map((orderItem) => (
-                            <View key={orderItem.product} style={styles.productCard}>
-                                <Text style={styles.productName}>{orderItem.name}</Text>
-                                <Text style={styles.productDetails}>
-                                    Quantity: {orderItem.quantity} | Price: ${orderItem.price.toFixed(2)}
-                                </Text>
-                            </View>
-                        ))}
-                        <TouchableOpacity
-                            onPress={() => markDelivered(item._id)}
-                            accessible={true}
-                            accessibilityRole="button"
-                            accessibilityLabel="Mark as Delivered"
-                            style={styles.deliveredButton}
-                        >
-                            <Text style={styles.deliveredButtonText}>Mark as Delivered</Text>
-                        </TouchableOpacity>
-                    </View>
+                            {item.orderItems.map((orderItem) => (
+                                <View key={orderItem.product} style={styles.productCard}>
+                                    <Text style={styles.productName}>{orderItem.name}</Text>
+                                    <Text style={styles.productDetails}>
+                                        Quantity: {orderItem.quantity} | Price: Rs {orderItem.price.toFixed(2)}
+                                    </Text>
+                                </View>
+                            ))}
+                            <TouchableOpacity
+                                onPress={() => markDelivered(item._id)}
+                                accessible={true}
+                                accessibilityRole="button"
+                                accessibilityLabel="Mark as Delivered"
+                                style={styles.deliveredButton}
+                            >
+                                <Text style={styles.deliveredButtonText}>Mark as Delivered</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </ScrollView>
                 )}
             />
         </View>
@@ -109,8 +112,7 @@ const OrdersScreen = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
-        backgroundColor: '#fff',
+        flex: 1,
         padding: 20,
     },
     header: {

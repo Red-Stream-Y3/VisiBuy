@@ -25,7 +25,7 @@ const CartButton = () => {
         >
             <View style={styles.cartIcon}>
                 <Text style={styles.cartText}>View Cart ({totalQuantity})</Text>
-                <Text style={styles.totalPrice}>Total: ${totalPrice.toFixed(2)}</Text>
+                <Text style={styles.totalPrice}>Rs {totalPrice.toFixed(2)}</Text>
             </View>
         </TouchableOpacity>
     );

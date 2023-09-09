@@ -62,7 +62,7 @@ const CartScreen = () => {
                                 style={productItemStyles.price}
                                 accessibilityLabel={`Product Price: $${item.product.price}`}
                             >
-                                ${item.product.price}
+                                Rs {item.product.price}
                             </Text>
                             <Text
                                 style={productItemStyles.quantity}
@@ -87,7 +87,7 @@ const CartScreen = () => {
                     }}
                     accessibilityLabel={`Total Price: $${totalPrice.toFixed(2)}`}
                 >
-                    Total Price: ${totalPrice.toFixed(2)}
+                    Total Price: Rs {totalPrice.toFixed(2)}
                 </Text>
 
                 <TouchableOpacity

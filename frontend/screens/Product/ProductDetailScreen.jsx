@@ -19,7 +19,7 @@ const ProductDetailScreen = ({ route }) => {
                 {product.name}
             </Text>
             <Text style={styles.price} accessibilityLabel={`${product.name} Price`} accessibilityRole="text">
-                ${product.price}
+                Rs {product.price}
             </Text>
             <Text
                 style={styles.description}
