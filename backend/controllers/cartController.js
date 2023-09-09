@@ -37,7 +37,7 @@ const getCartById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update cart by ID
-// @route   PUT /api/carts/:id
+// @route   PATCH /api/carts/:id
 // @access  Private
 
 const updateCartById = asyncHandler(async (req, res) => {
@@ -47,7 +47,6 @@ const updateCartById = asyncHandler(async (req, res) => {
         cart.orderItems = req.body.orderItems || cart.orderItems;
 
         const updatedCart = await cart.save();
-
         res.json(updatedCart);
     } else {
         res.status(404);

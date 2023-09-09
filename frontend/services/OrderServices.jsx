@@ -49,7 +49,7 @@ export const createCart = async (cart) => {
 
 export const updateCart = async (cart) => {
     try {
-        const response = await axios.put(`${BASE_URL}/api/v1/carts/${cart.id}`, cart);
+        const response = await axios.patch(`${BASE_URL}/api/v1/carts/${cart.id}`, cart);
         return response.data;
     }
     catch (error) {
