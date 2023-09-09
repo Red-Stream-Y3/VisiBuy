@@ -16,6 +16,7 @@ import {
     OrderSummaryScreen,
     DeliveredOrders,
     ReviewScreen,
+    ScanScreen,
 } from './screens';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -42,6 +43,11 @@ const App = () => {
                                 name="HomeScreen"
                                 component={ProductScreen}
                                 options={{ title: 'Browse Products' }}
+                            />
+                            <Stack.Screen
+                                name="ScanScreen"
+                                component={ScanScreen}
+                                options={{ title: 'Scan Products' }}
                             />
                             <Stack.Screen
                                 name="ProfileScreen"
