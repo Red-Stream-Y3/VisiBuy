@@ -28,7 +28,7 @@ const ProductItem = forwardRef(({ product }, ref) => {
             </View>
             <View style={productItemStyles.detailsContainer}>
                 <Text style={productItemStyles.name}>{product.name}</Text>
-                <Text style={productItemStyles.price}>${product.price}</Text>
+                <Text style={productItemStyles.price}>Rs {product.price}</Text>
                 {/* <Text style={productItemStyles.quantity}>Quantity: {getProductQuantity()}</Text> */}
                 <Button title="Add to Cart" onPress={handleAddToCart} />
             </View>
