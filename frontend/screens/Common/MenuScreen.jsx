@@ -5,6 +5,12 @@ import { MenuCard } from '../../components';
 
 const menuData = [
     {
+        id: '0',
+        MenuName: 'Voice Mode',
+        MenuIcon: 'microphone',
+        Navigate: 'VoiceModeScreen',
+    },
+    {
         id: '1',
         MenuName: 'Search',
         MenuIcon: 'search',
