@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { getDeliveredOrdersByUserId } from '../../services/OrderServices'; // Update the path as needed
 import { useNavigation } from '@react-navigation/native';
+import { useUser } from '../../context/UserContext';
 
 export default function DeliveredOrders() {
+    const { user } = useUser();
     const [orders, setOrders] = useState([]);
     const navigation = useNavigation();
 
@@ -20,7 +22,7 @@ export default function DeliveredOrders() {
     };
 
     useEffect(() => {
-        const userId = '641aaee2b8ed930c6e7186c1';
+        const userId = user ? user._id : '641aaee2b8ed930c6e7186c1';
 
         const fetchOrderDetails = async () => {
             try {
@@ -66,7 +68,7 @@ export default function DeliveredOrders() {
                                     accessibilityLabel="Review Item"
                                 >
                                     <Text style={styles.reviewText}>Review item</Text>
-                                </TouchableOpacity>{' '}
+                                </TouchableOpacity>
                             </View>
                         ))}
                     </View>

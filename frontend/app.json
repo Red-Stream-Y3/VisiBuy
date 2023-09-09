@@ -16,6 +16,7 @@
             "supportsTablet": true
         },
         "android": {
+            "permissions": ["USE_FINGERPRINT", "USE_BIOMETRIC"],
             "adaptiveIcon": {
                 "foregroundImage": "./assets/adaptive-icon.png",
                 "backgroundColor": "#ffffff"

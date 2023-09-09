@@ -2,9 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { useCart } from '../../context/CartContext';
 import { createOrder } from '../../services/OrderServices';
+import { useUser } from '../../context/UserContext';
 
 const ShippingScreen = ({ navigation }) => {
+    const { user } = useUser();
     const { cart, clearCart } = useCart();
+
+    const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
 
     const [shippingDetails, setShippingDetails] = useState({
         name: '',
@@ -29,6 +33,7 @@ const ShippingScreen = ({ navigation }) => {
     const handleSubmit = async () => {
         try {
             const order = {
+                uId,
                 orderItems: [
                     ...cart.map((item) => ({
                         name: item.product.name,
