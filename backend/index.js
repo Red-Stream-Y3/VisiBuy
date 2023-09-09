@@ -10,6 +10,7 @@ import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config({ path: findConfig('.env.dev') });
@@ -25,6 +26,7 @@ app.use(bodyParser.json());
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/orders', orderRoutes);
+app.use('/api/v1/carts', cartRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -3,12 +3,39 @@ import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
 import { useCart } from '../../context/CartContext';
 import { productItemStyles } from '../../styles/SharedStyles';
 import { useNavigation } from '@react-navigation/native';
+import { createCart } from '../../services/OrderServices';
+import { useUser } from '../../context/UserContext';
 
 const CartScreen = () => {
+    const { user } = useUser();
     const { cart } = useCart();
     const navigation = useNavigation();
 
+    const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
+
     const totalPrice = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+
+    const handleCheckout = async () => {
+        const cartItems = {
+            orderItems: [
+                ...cart.map((item) => ({
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    image: item.product.images[0].url,
+                    price: item.product.price,
+                    product: item.product._id,
+                })),
+            ],
+            uId,
+        };
+
+        try {
+            await createCart(cartItems);
+            navigation.navigate('ShippingScreen');
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -65,7 +92,7 @@ const CartScreen = () => {
 
                 <TouchableOpacity
                     style={{ ...productItemStyles.button, backgroundColor: 'blue' }}
-                    onPress={() => navigation.navigate('ShippingScreen')}
+                    onPress={() => handleCheckout()}
                     accessibilityLabel="Checkout Button"
                     accessibilityRole="button"
                 >
