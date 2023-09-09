@@ -32,7 +32,7 @@ const menuData = [
         id: '5',
         MenuName: 'Orders',
         MenuIcon: 'clipboard-list',
-        Navigate: 'SearchScreen',
+        Navigate: 'OrdersScreen',
     },
     {
         id: '6',

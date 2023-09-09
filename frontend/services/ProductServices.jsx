@@ -10,3 +10,12 @@ export const getAllProducts = async () => {
         throw new Error('Error fetching products');
     }
 };
+
+export const createProductReview = async (productId, review) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/api/v1/products/${productId}/reviews`, review);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error creating review');
+    }
+};

@@ -1,20 +1,35 @@
 import React, { useRef, useState } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { ReviewsRatings, StarRating } from '../../components';
+import { createProductReview } from '../../services/ProductServices';
 
-const ProductDetailScreen = ({ route }) => {
+const ReviewScreen = ({ route }) => {
     const { product } = route.params;
+    const [comment, setComment] = useState('');
     const reviewItemRef = useRef(null);
+
+    const proID = product.product;
+
+    const handlePostReview = async () => {
+        try {
+            const newReview = {
+                user: '641aaee2b8ed930c6e7186c1',
+                name: 'John Doe',
+                comment: comment,
+                rating: '3',
+                productID: proID,
+            };
+
+            const response = await createProductReview(proID, newReview);
+
+            console.log('Review created:', response);
+        } catch (error) {
+            console.error('Error creating review:', error.message);
+        }
+    };
 
     return (
         <ScrollView contentContainerStyle={styles.container}>
-            <Image
-                source={{ uri: product.images[0].url }}
-                style={styles.image}
-                accessible={true}
-                accessibilityLabel={`${product.name} Image`}
-                accessibilityRole="image"
-            />
             <Text style={styles.name} accessibilityLabel={`${product.name} Name`} accessibilityRole="header">
                 {product.name}
             </Text>
@@ -38,18 +53,17 @@ const ProductDetailScreen = ({ route }) => {
                         <Text style={styles.ratingText}>{product.numReviews} Ratings</Text>
                     </View>
                 </View>
-
                 {/* Write Review Input */}
-                {/* <TextInput
+                <TextInput
                     style={styles.input}
                     placeholder="Write your review..."
                     multiline
                     value={comment}
                     onChangeText={(text) => setComment(text)}
-                /> */}
+                />
 
                 {/* Post Button */}
-                {/* <TouchableOpacity
+                <TouchableOpacity
                     style={styles.postBtn}
                     onPress={handlePostReview}
                     accessible={true}
@@ -57,7 +71,7 @@ const ProductDetailScreen = ({ route }) => {
                     accessibilityLabel="Post Review"
                 >
                     <Text style={styles.postBtnText}>Post Review</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
 
                 {/* Reviews List */}
 
@@ -172,4 +186,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default ProductDetailScreen;
+export default ReviewScreen;

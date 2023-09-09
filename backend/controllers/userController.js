@@ -6,111 +6,103 @@ import asyncHandler from 'express-async-handler';
 // @route   POST /api/users/login
 // @access  Public
 const authUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (user && (await user.matchPassword(password))) {
-    res.json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone,
-      number: user.shippingInfo.number,
-      line1: user.shippingInfo.line1,
-      line2: user.shippingInfo.line2,
-      city: user.shippingInfo.city,
-      state: user.shippingInfo.state,
-      zip: user.shippingInfo.zip,
-      country: user.shippingInfo.country,
-      token: generateToken(user._id),
-    });
-  } else {
-    res.status(401).json({
-      error: 'Invalid email and password',
-    });
-  }
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user && (await user.matchPassword(password))) {
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            address: user.shippingInfo.address,
+            apartment: user.shippingInfo.apartment,
+            state: user.shippingInfo.state,
+            city: user.shippingInfo.city,
+            country: user.shippingInfo.country,
+            postalCode: user.shippingInfo.postalCode,
+            token: generateToken(user._id),
+        });
+    } else {
+        res.status(401).json({
+            error: 'Invalid email and password',
+        });
+    }
 });
 
 // @desc    Register a new user
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+    const { name, email, password } = req.body;
 
-  const userExists = await User.findOne({ email });
+    const userExists = await User.findOne({ email });
 
-  if (userExists) {
-    res.status(400);
-    throw new Error('User already exists');
-  }
+    if (userExists) {
+        res.status(400);
+        throw new Error('User already exists');
+    }
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-  });
-
-  if (user) {
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      phone: user.phone,
-      number: user.shippingInfo.number,
-      line1: user.shippingInfo.line1,
-      line2: user.shippingInfo.line2,
-      city: user.shippingInfo.city,
-      state: user.shippingInfo.state,
-      zip: user.shippingInfo.zip,
-      country: user.shippingInfo.country,
-      token: generateToken(user._id),
+    const user = await User.create({
+        name,
+        email,
+        password,
     });
-  } else {
-    res.status(400);
-    throw new Error('Invalid user data');
-  }
+
+    if (user) {
+        res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            address: user.shippingInfo.address,
+            apartment: user.shippingInfo.apartment,
+            state: user.shippingInfo.state,
+            city: user.shippingInfo.city,
+            country: user.shippingInfo.country,
+            postalCode: user.shippingInfo.postalCode,
+            token: generateToken(user._id),
+        });
+    } else {
+        res.status(400);
+        throw new Error('Invalid user data');
+    }
 });
 
 // @desc    Get all users
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({});
-  res.json(users);
+    const users = await User.find({});
+    res.json(users);
 });
 
 // @desc    Delete user
 // @route   DELETE /api/users/:id
 // @access  Private/Admin
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
 
-  if (user) {
-    await user.remove();
-    res.json({ message: 'User removed' });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
+    if (user) {
+        await user.remove();
+        res.json({ message: 'User removed' });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 // @desc    Get user by ID
 // @route   GET /api/users/:id
 // @access  Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select('-password');
+    const user = await User.findById(req.params.id).select('-password');
 
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
+    if (user) {
+        res.json(user);
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 // desc    Update user
@@ -119,83 +111,52 @@ const getUserById = asyncHandler(async (req, res) => {
 // make it handle authorization token
 
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user._id);
-  const {
-    name,
-    email,
-    isAdmin,
-    firstName,
-    lastName,
-    phone,
-    number,
-    line1,
-    line2,
-    city,
-    state,
-    zip,
-    country,
-  } = req.body;
+    const user = await User.findById(req.body.id);
+    const { name, address, apartment, state, city, country, postalCode, phone } = req.body;
 
-  if (user) {
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.isAdmin = isAdmin || user.isAdmin;
-    user.firstName = firstName || user.firstName;
-    user.lastName = lastName || user.lastName;
-    user.phone = phone || user.phone;
-    user.shippingInfo.number = number || user.shippingInfo.number;
-    user.shippingInfo.line1 = line1 || user.shippingInfo.line1;
-    user.shippingInfo.line2 = line2 || user.shippingInfo.line2;
-    user.shippingInfo.city = city || user.shippingInfo.city;
-    user.shippingInfo.state = state || user.shippingInfo.state;
-    user.shippingInfo.zip = zip || user.shippingInfo.zip;
-    user.shippingInfo.country = country || user.shippingInfo.country;
+    if (user) {
+        user.name = name || user.name;
+        user.address = address || user.address;
+        user.apartment = apartment || user.apartment;
+        user.state = state || user.state;
+        user.city = city || user.city;
+        user.country = country || user.country;
+        user.postalCode = postalCode || user.postalCode;
+        user.phone = phone || user.phone;
 
-    const updatedUser = await user.save();
+        const updatedUser = await user.save();
 
-    res.json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin,
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      phone: updatedUser.phone,
-      number: updatedUser.shippingInfo.number,
-      line1: updatedUser.shippingInfo.line1,
-      line2: updatedUser.shippingInfo.line2,
-      city: updatedUser.shippingInfo.city,
-      state: updatedUser.shippingInfo.state,
-      zip: updatedUser.shippingInfo.zip,
-      country: updatedUser.shippingInfo.country,
-      token: generateToken(updatedUser._id),
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
+        res.json({
+            _id: updatedUser._id,
+            name: updatedUser.name,
+            email: updatedUser.email,
+            phone: updatedUser.phone,
+            address: updatedUser.address,
+            apartment: updatedUser.apartment,
+            state: updatedUser.state,
+            city: updatedUser.city,
+            country: updatedUser.country,
+            postalCode: updatedUser.postalCode,
+            token: generateToken(updatedUser._id),
+        });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
 const adminPrivileges = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params.id);
 
-  if (user) {
-    user.isAdmin = req.body.isAdmin;
+    if (user) {
+        user.isAdmin = req.body.isAdmin;
 
-    await user.save();
-    res.json({ message: 'User updated' });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
+        await user.save();
+        res.json({ message: 'User updated' });
+    } else {
+        res.status(404);
+        throw new Error('User not found');
+    }
 });
 
-export {
-  authUser,
-  registerUser,
-  getUsers,
-  deleteUser,
-  getUserById,
-  updateUser,
-  adminPrivileges,
-};
+export { authUser, registerUser, getUsers, deleteUser, getUserById, updateUser, adminPrivileges };

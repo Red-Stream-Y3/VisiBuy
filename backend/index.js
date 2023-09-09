@@ -12,7 +12,7 @@ import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 
 if (process.env.NODE_ENV !== 'production') {
-  dotenv.config({ path: findConfig('.env.dev') });
+    dotenv.config({ path: findConfig('.env.dev') });
 }
 
 connectDB();
@@ -31,9 +31,9 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 if (process.env.NODE_ENV !== 'test') {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port: ${PORT}`.yellow.bold);
-  });
+    app.listen(PORT, () => {
+        console.log(`Server is running on port: ${PORT}`.yellow.bold);
+    });
 }
 
 export default app;

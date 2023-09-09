@@ -40,7 +40,6 @@ const OrderSummaryScreen = ({ route }) => {
                     </View>
                 )}
             />
-
             <View style={styles.shippingCard}>
                 <Text
                     style={styles.shippingHeading}
@@ -66,13 +65,6 @@ const OrderSummaryScreen = ({ route }) => {
                 <Text
                     style={styles.shippingText}
                     accessibilityRole="text"
-                    accessibilityLabel={`Apartment: ${order.shippingDetails.apartment}`}
-                >
-                    Apartment: {order.shippingDetails.apartment}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
                     accessibilityLabel={`State: ${order.shippingDetails.state}`}
                 >
                     State: {order.shippingDetails.state}
@@ -94,16 +86,16 @@ const OrderSummaryScreen = ({ route }) => {
                 <Text
                     style={styles.shippingText}
                     accessibilityRole="text"
-                    accessibilityLabel={`Postal Code: ${order.shippingDetails.postalCode}`}
+                    accessibilityLabel={`Phone: ${order.shippingDetails.phone}`}
                 >
-                    Postal Code: {order.shippingDetails.postalCode}
+                    Phone: {order.shippingDetails.phone}
                 </Text>
                 <Text
                     style={styles.shippingText}
                     accessibilityRole="text"
-                    accessibilityLabel={`Phone: ${order.shippingDetails.phone}`}
+                    accessibilityLabel={`Shipping Method: ${order.shippingMethod}`}
                 >
-                    Phone: {order.shippingDetails.phone}
+                    Shipping Method: {order.shippingMethod}
                 </Text>
             </View>
 
