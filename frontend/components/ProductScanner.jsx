@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Camera, CameraType } from "expo-camera";
 import { useRef, useState } from "react";
-import { ActivityIndicator, Button, Pressable, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import { ActivityIndicator, Button, Modal, Pressable, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { visionDirectScan } from "../utils/scanUtils";
 
 const ProductScanner = () => {
@@ -9,6 +9,8 @@ const ProductScanner = () => {
     const [permission, requestPermission] = Camera.useCameraPermissions('wide-camera');
     const [ready, setReady] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+    const [result, setResult] = useState(null);
     let cameraRef = useRef();
 
     //toggle between front and back camera
@@ -45,9 +47,10 @@ const ProductScanner = () => {
                     await visionDirectScan(null, false, data)
                     .then((res) => {
                         console.debug(res);
-                        setLoading(false);
-                        setReady(true);
                         
+                        setResult(res);
+                        setShowModal(true);
+
                         /**
                          * 
                          * 
@@ -55,17 +58,20 @@ const ProductScanner = () => {
                          * TODO: Do stuff here with the result
                          * 
                          * 
-                         * 
+                         * /api/v1/products
                          */
 
-                        ToastAndroid.show(res.result, ToastAndroid.SHORT);
+                        setLoading(false);
+                        setReady(true);
+
+                        //ToastAndroid.show(res.result, ToastAndroid.SHORT);
                     })
                     .catch((err) => {
                         //console.debug(err);
                         ToastAndroid.show(err.message, ToastAndroid.SHORT);
+                        cameraRef.current.resumePreview();
+                        setLoading(false);
                     });
-
-                    cameraRef.current.resumePreview();
                 },
             });
 
@@ -83,20 +89,58 @@ const ProductScanner = () => {
                 <Pressable
                         android_ripple={{ color: '#2480ed' }}
                         style={styles.button} onPress={() => requestPermission()}>
-                        <Text style={styles.header1}>Scan</Text>
+                        <Text style={styles.header1}>Grant Access</Text>
                     </Pressable>
             </View>
         );
     } else {
         return (
             <View style={{ flex: 1, width: '100%' }}>
-                <Camera 
-                    onCameraReady={() => setReady(true)} 
-                    ratio="16:9" 
-                    style={styles.camera} 
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={showModal}
+                    onRequestClose={() => {
+                        setShowModal(false);
+                    }}
+                >
+                    <Pressable
+                        style={{
+                            flex: 1,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        onPress={() => {
+                            setShowModal(false);
+                            cameraRef.current.resumePreview();
+                        }}
+                    >
+                        <View
+                            style={{
+                                height: 'auto',
+                                width: 'auto',
+                                backgroundColor: '#fff',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                borderColor: '#ccc',
+                                borderWidth: 1,
+                                padding: 20,
+                                borderRadius: 5,
+                            }}
+                        >
+                            <Text style={styles.header1}>Result</Text>
+                            <Text>{result?.result}</Text>
+                        </View>
+                    </Pressable>
+                </Modal>
+                <Camera
+                    onCameraReady={() => setReady(true)}
+                    ratio="16:9"
+                    style={styles.camera}
                     ref={cameraRef}
                     autoFocus={Camera.Constants.AutoFocus.on}
-                    type={type}>
+                    type={type}
+                >
                     <Pressable
                         android_ripple={{ color: '#2480ed' }}
                         style={styles.button}
