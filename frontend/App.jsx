@@ -17,6 +17,7 @@ import {
     DeliveredOrders,
     ReviewScreen,
     ScanScreen,
+    VoiceModeScreen,
 } from './screens';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -88,6 +89,11 @@ const App = () => {
                                 name="ReviewScreen"
                                 component={ReviewScreen}
                                 options={({ route }) => ({ title: route.params.product.name })}
+                            />
+                            <Stack.Screen
+                                name="VoiceModeScreen"
+                                component={VoiceModeScreen}
+                                options={{ title: 'Voice Mode' }}
                             />
                         </Stack.Navigator>
                     </SafeAreaProvider>

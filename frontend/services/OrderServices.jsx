@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.88.160:9120';
+const BASE_URL = 'http://192.168.8.101:9120';
 
 export const createOrder = async (order) => {
     try {
@@ -46,3 +46,14 @@ export const createCart = async (cart) => {
         throw new Error('Error creating cart');
     }
 };
+
+export const updateCart = async (cart) => {
+    try {
+        const response = await axios.patch(`${BASE_URL}/api/v1/carts/${cart.id}`, cart);
+        return response.data;
+    }
+    catch (error) {
+        throw new Error('Error updating cart');
+    }
+}
+

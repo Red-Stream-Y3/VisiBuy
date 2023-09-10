@@ -49,7 +49,7 @@ const productSchema = mongoose.Schema(
         },
         detail: {
             type: String,
-            required: true,
+            required: false,
             default: '',
         },
         description: {
@@ -59,7 +59,7 @@ const productSchema = mongoose.Schema(
         },
         ingredients: {
             type: String,
-            required: true,
+            required: false,
             default: '',
         },
         reviews: [reviewSchema],

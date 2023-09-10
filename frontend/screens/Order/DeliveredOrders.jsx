@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native
 import { getDeliveredOrdersByUserId } from '../../services/OrderServices'; // Update the path as needed
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
+import { ScrollView } from 'react-native-virtualized-view';
 
 export default function DeliveredOrders() {
     const { user } = useUser();
@@ -43,37 +44,38 @@ export default function DeliveredOrders() {
     return (
         <View contentContainerStyle={styles.container}>
             <Text accessibilityRole="header" accessibilityLabel="Delivered Orders"></Text>
-
-            <FlatList
-                data={orders}
-                keyExtractor={(item) => item._id}
-                renderItem={({ item }) => (
-                    <View style={styles.orderCard}>
-                        {/* <Text style={styles.cardTitle}>Order ID: {item._id}</Text> */}
-                        <Text style={styles.cardText}>Order Date: {formatDate(item.createdAt)}</Text>
-                        <View style={{ flexDirection: 'row' }}>
-                            <Text style={styles.cardText}>Subtotal: ${item.totalPrice.toFixed(2)}</Text>
-                            {/* <Text style={styles.deliveredText}>Delivered</Text> */}
-                        </View>
-                        {item.orderItems.map((orderItem) => (
-                            <View key={orderItem.product} style={styles.productCard}>
-                                <Text style={styles.productName}>{orderItem.name}</Text>
-                                <Text style={styles.productDetails}>
-                                    Quantity: {orderItem.quantity} | Price: ${orderItem.price.toFixed(2)}
-                                </Text>
-                                <TouchableOpacity
-                                    onPress={() => handleReviewItem(orderItem)}
-                                    accessible={true}
-                                    accessibilityRole="button"
-                                    accessibilityLabel="Review Item"
-                                >
-                                    <Text style={styles.reviewText}>Review item</Text>
-                                </TouchableOpacity>
+            <ScrollView>
+                <FlatList
+                    data={orders}
+                    keyExtractor={(item) => item._id}
+                    renderItem={({ item }) => (
+                        <View style={styles.orderCard}>
+                            {/* <Text style={styles.cardTitle}>Order ID: {item._id}</Text> */}
+                            <Text style={styles.cardText}>Order Date: {formatDate(item.createdAt)}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={styles.cardText}>Subtotal: Rs {item.totalPrice.toFixed(2)}</Text>
+                                {/* <Text style={styles.deliveredText}>Delivered</Text> */}
                             </View>
-                        ))}
-                    </View>
-                )}
-            />
+                            {item.orderItems.map((orderItem) => (
+                                <View key={orderItem.product} style={styles.productCard}>
+                                    <Text style={styles.productName}>{orderItem.name}</Text>
+                                    <Text style={styles.productDetails}>
+                                        Quantity: {orderItem.quantity} | Price: ${orderItem.price.toFixed(2)}
+                                    </Text>
+                                    <TouchableOpacity
+                                        onPress={() => handleReviewItem(orderItem)}
+                                        accessible={true}
+                                        accessibilityRole="button"
+                                        accessibilityLabel="Review Item"
+                                    >
+                                        <Text style={styles.reviewText}>Review item</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            ))}
+                        </View>
+                    )}
+                />
+            </ScrollView>
         </View>
     );
 }
