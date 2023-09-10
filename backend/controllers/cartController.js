@@ -42,18 +42,19 @@ const getCartById = asyncHandler(async (req, res) => {
 
 const updateCartById = asyncHandler(async (req, res) => {
     const { orderItems } = req.body;
-    console.log("orderItems: ", orderItems);
-    const cart = await Cart.findById(req.params.id);
-
-    if (cart) {
-        console.log("cart: ", cart.orderItems);
-        cart.orderItems = cart.orderItems.concat(orderItems);
-        console.log("cart.orderItems: ", cart.orderItems);
-        const updatedCart = await cart.save();
-        res.json(updatedCart);
+    if (orderItems && orderItems.length === 0) {
+        res.status(400);
+        throw new Error('No order items');
     } else {
-        res.status(404);
-        throw new Error('Cart not found');
+        const cart = await Cart.findById(req.params.id);
+        if (cart) {
+            cart.orderItems = cart.orderItems.concat(orderItems);
+            const updatedCart = await cart.save();
+            res.json(updatedCart);
+        } else {
+            res.status(404);
+            throw new Error('Cart not found');
+        }
     }
 });
 
