@@ -36,4 +36,26 @@ const getCartById = asyncHandler(async (req, res) => {
     }
 });
 
-export { addCartItems, getCartById };
+// @desc    Update cart by ID
+// @route   PATCH /api/carts/:id
+// @access  Private
+
+const updateCartById = asyncHandler(async (req, res) => {
+    const { orderItems } = req.body;
+    if (orderItems && orderItems.length === 0) {
+        res.status(400);
+        throw new Error('No order items');
+    } else {
+        const cart = await Cart.findById(req.params.id);
+        if (cart) {
+            cart.orderItems = cart.orderItems.concat(orderItems);
+            const updatedCart = await cart.save();
+            res.json(updatedCart);
+        } else {
+            res.status(404);
+            throw new Error('Cart not found');
+        }
+    }
+});
+
+export { addCartItems, getCartById, updateCartById };
