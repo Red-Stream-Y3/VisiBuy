@@ -11,6 +11,7 @@ import userRoutes from './routes/userRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
+import visionSearchRoutes from './routes/visionSearchRoutes.js';
 
 if (process.env.NODE_ENV !== 'production') {
     dotenv.config({ path: findConfig('.env.dev') });
@@ -21,12 +22,13 @@ connectDB();
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb', extended: true}));
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/products', productRoutes);
 app.use('/api/v1/orders', orderRoutes);
 app.use('/api/v1/carts', cartRoutes);
+app.use('/api/v1/vision', visionSearchRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

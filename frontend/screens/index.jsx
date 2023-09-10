@@ -10,4 +10,5 @@ export { default as OrdersScreen } from './Order/OrdersScreen';
 export { default as ProfileScreen } from './Common/ProfileScreen';
 export { default as DeliveredOrders } from './Order/DeliveredOrders';
 export { default as ReviewScreen } from './Product/ReviewScreen';
+export { default as ScanScreen } from './Scan/ScanScreen';
 export { default as VoiceModeScreen } from './Common/VoiceModeScreen';
