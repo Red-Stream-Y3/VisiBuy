@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity,ScrollView } from 'react-native';
 import { getDeliveredOrdersByUserId } from '../../services/OrderServices'; // Update the path as needed
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
-import { ScrollView } from 'react-native-virtualized-view';
 
 export default function DeliveredOrders() {
     const { user } = useUser();
