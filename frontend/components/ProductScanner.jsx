@@ -1,8 +1,10 @@
 import axios from "axios";
 import { Camera, CameraType } from "expo-camera";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Button, Modal, Pressable, StyleSheet, Text, ToastAndroid, View } from "react-native";
 import { visionDirectScan } from "../utils/scanUtils";
+import ProductItem from "./ProductItem";
+import { getProductBySearch } from "../services/ProductServices";
 
 const ProductScanner = () => {
     const [type, setType] = useState(CameraType.back);
@@ -11,7 +13,24 @@ const ProductScanner = () => {
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [result, setResult] = useState(null);
+    const [searchResult, setSearchResult] = useState(null);
     let cameraRef = useRef();
+
+    const getSearchResult = async () => {
+        if(!result) return;
+        try {
+            const searchRes = await getProductBySearch(result.result);
+            //console.log(searchRes);
+            setSearchResult(searchRes);
+        } catch (error) {
+            console.debug(error);
+            ToastAndroid.show(error.message, ToastAndroid.SHORT);
+        }
+    };
+
+    useEffect(() => {
+        getSearchResult();
+    }, [result]);
 
     //toggle between front and back camera
     const toggleCameraType = () => {
@@ -130,6 +149,7 @@ const ProductScanner = () => {
                         >
                             <Text style={styles.header1}>Result</Text>
                             <Text>{result?.result}</Text>
+                            {searchResult ? <ProductItem product={searchResult} /> : <ActivityIndicator size="large" />}
                         </View>
                     </Pressable>
                 </Modal>
