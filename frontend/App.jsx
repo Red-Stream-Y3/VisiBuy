@@ -16,6 +16,8 @@ import {
     OrderSummaryScreen,
     DeliveredOrders,
     ReviewScreen,
+    ScanScreen,
+    VoiceModeScreen,
 } from './screens';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -42,6 +44,11 @@ const App = () => {
                                 name="HomeScreen"
                                 component={ProductScreen}
                                 options={{ title: 'Browse Products' }}
+                            />
+                            <Stack.Screen
+                                name="ScanScreen"
+                                component={ScanScreen}
+                                options={{ title: 'Scan Products' }}
                             />
                             <Stack.Screen
                                 name="ProfileScreen"
@@ -82,6 +89,11 @@ const App = () => {
                                 name="ReviewScreen"
                                 component={ReviewScreen}
                                 options={({ route }) => ({ title: route.params.product.name })}
+                            />
+                            <Stack.Screen
+                                name="VoiceModeScreen"
+                                component={VoiceModeScreen}
+                                options={{ title: 'Voice Mode' }}
                             />
                         </Stack.Navigator>
                     </SafeAreaProvider>
