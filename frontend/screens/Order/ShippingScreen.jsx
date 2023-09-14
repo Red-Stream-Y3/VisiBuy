@@ -11,9 +11,19 @@ const ShippingScreen = ({ navigation }) => {
     const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
 
     const [shippingDetails, setShippingDetails] = useState({
+        name: user ? user.name : '',
+        address: user ? user.address : '',
+        apartment: user ? user.apartment : '',
+        state: user ? user.state : '',
+        city: user ? user.city : '',
+        country: user ? user.country : '',
+        postalCode: user ? user.postalCode : '',
+        phone: user ? user.phone : '',
+    });
+
+    const [validationErrors, setValidationErrors] = useState({
         name: '',
         address: '',
-        apartment: '',
         state: '',
         city: '',
         country: '',
@@ -28,9 +38,24 @@ const ShippingScreen = ({ navigation }) => {
             ...shippingDetails,
             [field]: value,
         });
+
+        setValidationErrors({ ...validationErrors, [field]: '' });
     };
 
     const handleSubmit = async () => {
+        const errors = {};
+
+        for (const key in shippingDetails) {
+            if (!shippingDetails[key].trim()) {
+                errors[key] = 'Field is required';
+            }
+        }
+
+        if (Object.keys(errors).length > 0) {
+            setValidationErrors(errors);
+            return;
+        }
+
         try {
             const order = {
                 uId,
@@ -58,82 +83,103 @@ const ShippingScreen = ({ navigation }) => {
     };
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Full Name"
-                        onChangeText={(text) => handleInputChange('name', text)}
-                        accessibilityLabel="Full Name Input"
-                    />
+        <>
+            <ScrollView>
+                <View style={styles.container}>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={[styles.input, validationErrors.name && styles.inputError]}
+                            placeholder="Full Name"
+                            value={shippingDetails.name}
+                            onChangeText={(text) => handleInputChange('name', text)}
+                            accessibilityLabel="Full Name Input"
+                        />
+                        {validationErrors.name && <Text style={styles.errorText}>{validationErrors.name}</Text>}
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={[styles.input, validationErrors.address && styles.inputError]}
+                            placeholder="Address"
+                            value={shippingDetails.address}
+                            onChangeText={(text) => handleInputChange('address', text)}
+                            accessibilityLabel="Address Input"
+                        />
+                        {validationErrors.address && <Text style={styles.errorText}>{validationErrors.address}</Text>}
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Apartment (optional)"
+                            value={shippingDetails.apartment}
+                            onChangeText={(text) => handleInputChange('apartment', text)}
+                            accessibilityLabel="Apartment Input"
+                        />
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={[styles.input, validationErrors.state && styles.inputError]}
+                            placeholder="State"
+                            value={shippingDetails.state}
+                            onChangeText={(text) => handleInputChange('state', text)}
+                            accessibilityLabel="State Input"
+                        />
+                        {validationErrors.state && <Text style={styles.errorText}>{validationErrors.state}</Text>}
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={[styles.input, validationErrors.city && styles.inputError]}
+                            placeholder="City"
+                            value={shippingDetails.city}
+                            onChangeText={(text) => handleInputChange('city', text)}
+                            accessibilityLabel="City Input"
+                        />
+                        {validationErrors.city && <Text style={styles.errorText}>{validationErrors.city}</Text>}
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={[styles.input, validationErrors.country && styles.inputError]}
+                            placeholder="Country"
+                            value={shippingDetails.country}
+                            onChangeText={(text) => handleInputChange('country', text)}
+                            accessibilityLabel="Country Input"
+                        />
+                        {validationErrors.country && <Text style={styles.errorText}>{validationErrors.country}</Text>}
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={[styles.input, validationErrors.postalCode && styles.inputError]}
+                            placeholder="Postal Code"
+                            value={shippingDetails.postalCode}
+                            onChangeText={(text) => handleInputChange('postalCode', text)}
+                            accessibilityLabel="Postal Code Input"
+                            keyboardType="numeric"
+                        />
+                        {validationErrors.postalCode && (
+                            <Text style={styles.errorText}>{validationErrors.postalCode}</Text>
+                        )}
+                    </View>
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={[styles.input, validationErrors.phone && styles.inputError]}
+                            placeholder="Phone"
+                            value={shippingDetails.phone}
+                            onChangeText={(text) => handleInputChange('phone', text)}
+                            accessibilityLabel="Phone Input"
+                            keyboardType="numeric"
+                        />
+                        {validationErrors.phone && <Text style={styles.errorText}>{validationErrors.phone}</Text>}
+                    </View>
                 </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Address"
-                        onChangeText={(text) => handleInputChange('address', text)}
-                        accessibilityLabel="Address Input"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Apartment (optional)"
-                        onChangeText={(text) => handleInputChange('apartment', text)}
-                        accessibilityLabel="Apartment Input"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="State"
-                        onChangeText={(text) => handleInputChange('state', text)}
-                        accessibilityLabel="State Input"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="City"
-                        onChangeText={(text) => handleInputChange('city', text)}
-                        accessibilityLabel="City Input"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Country"
-                        onChangeText={(text) => handleInputChange('country', text)}
-                        accessibilityLabel="Country Input"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Postal Code"
-                        onChangeText={(text) => handleInputChange('postalCode', text)}
-                        accessibilityLabel="Postal Code Input"
-                    />
-                </View>
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Phone"
-                        onChangeText={(text) => handleInputChange('phone', text)}
-                        accessibilityLabel="Phone Input"
-                    />
-                </View>
-                <TouchableOpacity
-                    style={{ ...styles.button, backgroundColor: 'blue' }}
-                    onPress={handleSubmit}
-                    accessibilityLabel="Place Order Button"
-                    accessibilityRole="button"
-                >
-                    <Text style={styles.buttonText}>Place Order</Text>
-                </TouchableOpacity>
-            </View>
-        </ScrollView>
+            </ScrollView>
+            <TouchableOpacity
+                style={{ ...styles.button, backgroundColor: 'blue' }}
+                onPress={handleSubmit}
+                accessibilityLabel="Place Order Button"
+                accessibilityRole="button"
+            >
+                <Text style={styles.buttonText}>Place Order</Text>
+            </TouchableOpacity>
+        </>
     );
 };
 
@@ -152,6 +198,9 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
         fontSize: 20,
+    },
+    inputError: {
+        borderColor: 'red',
     },
     button: {
         padding: 15,

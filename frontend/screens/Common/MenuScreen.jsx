@@ -26,7 +26,7 @@ const menuData = [
         id: '3',
         MenuName: 'Products',
         MenuIcon: 'apple-alt',
-        Navigate: 'HomeScreen',
+        Navigate: 'ProductScreen',
     },
     {
         id: '4',

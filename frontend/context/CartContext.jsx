@@ -21,6 +21,17 @@ const cartReducer = (state, action) => {
 
             return { ...state, cart: updatedCart };
 
+        case 'REMOVE_FROM_CART':
+            const { productId } = action.payload;
+            const updatedCart2 = [...state.cart];
+            const existingProductIndex2 = updatedCart2.findIndex((item) => item.product._id === productId);
+
+            if (existingProductIndex2 !== -1) {
+                updatedCart2.splice(existingProductIndex2, 1);
+            }
+
+            return { ...state, cart: updatedCart2 };
+
         case 'RESET_CART':
             return { ...state, cart: [] };
 
@@ -36,11 +47,19 @@ export const CartProvider = ({ children }) => {
         dispatch({ type: 'ADD_TO_CART', payload: { product } });
     };
 
+    const removeFromCart = (productId) => {
+        dispatch({ type: 'REMOVE_FROM_CART', payload: { productId } });
+    };
+
     const clearCart = () => {
         dispatch({ type: 'RESET_CART' });
     };
 
-    return <CartContext.Provider value={{ cart: state.cart, addToCart, clearCart }}>{children}</CartContext.Provider>;
+    return (
+        <CartContext.Provider value={{ cart: state.cart, addToCart, removeFromCart, clearCart }}>
+            {children}
+        </CartContext.Provider>
+    );
 };
 
 export const useCart = () => {
