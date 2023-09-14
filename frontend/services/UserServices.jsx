@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.8.101:9120';
+const BASE_URL = 'https://visibuyapp-e9453e5950ca.herokuapp.com';
 
 export const loginUser = async (user) => {
     try {
