@@ -175,7 +175,8 @@ const queryOrders = asyncHandler(async (req, res) => {
 // get orders by user id and only output the order id and order status for each order
 
 const getOrdersByUserId = asyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.params.id, isDelivered: false });
+    const orders = await Order.find({ user: req.params.id, isDelivered: false }).sort({ createdAt: -1 });
+
     if (!orders) {
         res.status(404);
         throw new Error('No orders found');
