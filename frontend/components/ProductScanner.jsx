@@ -6,7 +6,7 @@ import { visionDirectScan } from "../utils/scanUtils";
 import ProductItem from "./ProductItem";
 import { getProductBySearch } from "../services/ProductServices";
 
-const ProductScanner = () => {
+const ProductScanner = (props) => {
     const [type, setType] = useState(CameraType.back);
     const [permission, requestPermission] = Camera.useCameraPermissions('wide-camera');
     const [ready, setReady] = useState(false);
@@ -70,11 +70,13 @@ const ProductScanner = () => {
                         setResult(res);
                         setShowModal(true);
 
+                        if(props?.resultCallback) props.resultCallback(res.result);
+
                         /**
                          * 
                          * 
                          * 
-                         * TODO: Do stuff here with the result
+                         * TODO: Do stuff here with the res.result
                          * 
                          * 
                          * /api/v1/products
