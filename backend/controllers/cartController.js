@@ -44,8 +44,9 @@ const updateCartById = asyncHandler(async (req, res) => {
     console.log("updateCartById id " + req.params.id);
     console.log("updateCartById body " + req.body);
     const { orderItems } = req.body;
+    console.log("updateCartById orderItems " + orderItems);
     console.log("updateCartById orderItems " + orderItems.orderItems);
-    console.log("updateCartById orderItems.length " + orderItems.orderItems.length);
+    console.log("updateCartById orderItems.length " + orderItems.orderItems);
     if (orderItems && orderItems.length === 0) {
         res.status(400);
         throw new Error('No order items');
