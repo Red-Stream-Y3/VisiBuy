@@ -1,14 +1,46 @@
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import { useCart } from '../../context/CartContext';
 import { productItemStyles } from '../../styles/SharedStyles';
 import { useNavigation } from '@react-navigation/native';
+import { createCart } from '../../services/OrderServices';
+import { useUser } from '../../context/UserContext';
 
 const CartScreen = () => {
-    const { cart } = useCart();
+    const { user } = useUser();
+    const { cart, removeFromCart } = useCart();
     const navigation = useNavigation();
 
+    const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
+
     const totalPrice = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+
+    const handleCheckout = async () => {
+        const cartItems = {
+            orderItems: [
+                ...cart.map((item) => ({
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    image: item.product.images[0].url,
+                    price: item.product.price,
+                    product: item.product._id,
+                })),
+            ],
+            uId,
+        };
+
+        try {
+            await createCart(cartItems);
+            navigation.navigate('ShippingScreen');
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const handleRemoveItem = (productId) => {
+        removeFromCart(productId);
+    };
 
     return (
         <View style={{ flex: 1 }}>
@@ -35,7 +67,7 @@ const CartScreen = () => {
                                 style={productItemStyles.price}
                                 accessibilityLabel={`Product Price: $${item.product.price}`}
                             >
-                                ${item.product.price}
+                                Rs {item.product.price}
                             </Text>
                             <Text
                                 style={productItemStyles.quantity}
@@ -44,6 +76,12 @@ const CartScreen = () => {
                                 Quantity: {item.quantity}
                             </Text>
                         </View>
+                        <TouchableOpacity
+                            style={productItemStyles.deleteButton}
+                            onPress={() => handleRemoveItem(item.product._id)}
+                        >
+                            <FontAwesome name="trash" size={24} color="red" />
+                        </TouchableOpacity>
                     </View>
                 )}
             />
@@ -60,12 +98,12 @@ const CartScreen = () => {
                     }}
                     accessibilityLabel={`Total Price: $${totalPrice.toFixed(2)}`}
                 >
-                    Total Price: ${totalPrice.toFixed(2)}
+                    Total Amount: Rs {totalPrice.toFixed(2)}
                 </Text>
 
                 <TouchableOpacity
                     style={{ ...productItemStyles.button, backgroundColor: 'blue' }}
-                    onPress={() => navigation.navigate('ShippingScreen')}
+                    onPress={() => handleCheckout()}
                     accessibilityLabel="Checkout Button"
                     accessibilityRole="button"
                 >

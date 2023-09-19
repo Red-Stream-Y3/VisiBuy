@@ -5,6 +5,12 @@ import { MenuCard } from '../../components';
 
 const menuData = [
     {
+        id: '0',
+        MenuName: 'Voice Mode',
+        MenuIcon: 'microphone',
+        Navigate: 'VoiceModeScreen',
+    },
+    {
         id: '1',
         MenuName: 'Search',
         MenuIcon: 'search',
@@ -20,7 +26,7 @@ const menuData = [
         id: '3',
         MenuName: 'Products',
         MenuIcon: 'apple-alt',
-        Navigate: 'HomeScreen',
+        Navigate: 'ProductScreen',
     },
     {
         id: '4',

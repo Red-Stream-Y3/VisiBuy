@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-virtualized-view';
 
 const OrderSummaryScreen = ({ route }) => {
     const { order } = route.params;
@@ -11,117 +12,102 @@ const OrderSummaryScreen = ({ route }) => {
             <Text style={styles.heading} accessibilityRole="header" accessibilityLabel="Order Summary">
                 Order Summary
             </Text>
-
-            <FlatList
-                data={order.orderItems}
-                keyExtractor={(item) => item.product}
-                renderItem={({ item }) => (
-                    <View style={styles.productCard}>
-                        <View style={styles.itemContainer}>
-                            <Image source={{ uri: item.image }} style={styles.image} />
-                            <View style={styles.itemDetails}>
-                                <Text style={styles.itemName}>{item.name}</Text>
-                                <Text
-                                    style={styles.itemPrice}
-                                    accessibilityRole="text"
-                                    accessibilityLabel={`Price: $${item.price.toFixed(2)}`}
-                                >
-                                    Price: ${item.price.toFixed(2)}
-                                </Text>
-                                <Text
-                                    style={styles.itemQuantity}
-                                    accessibilityRole="text"
-                                    accessibilityLabel={`Quantity: ${item.quantity}`}
-                                >
-                                    Quantity: {item.quantity}
-                                </Text>
+            <ScrollView>
+                <FlatList
+                    data={order.orderItems}
+                    keyExtractor={(item) => item.product}
+                    renderItem={({ item }) => (
+                        <View style={styles.productCard}>
+                            <View style={styles.itemContainer}>
+                                <Image source={{ uri: item.image }} style={styles.image} />
+                                <View style={styles.itemDetails}>
+                                    <Text style={styles.itemName}>{item.name}</Text>
+                                    <Text
+                                        style={styles.itemPrice}
+                                        accessibilityRole="text"
+                                        accessibilityLabel={`Price: $${item.price.toFixed(2)}`}
+                                    >
+                                        Price: Rs {item.price.toFixed(2)}
+                                    </Text>
+                                    <Text
+                                        style={styles.itemQuantity}
+                                        accessibilityRole="text"
+                                        accessibilityLabel={`Quantity: ${item.quantity}`}
+                                    >
+                                        Quantity: {item.quantity}
+                                    </Text>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                )}
-            />
-
-            <View style={styles.shippingCard}>
-                <Text
-                    style={styles.shippingHeading}
-                    accessibilityRole="header"
-                    accessibilityLabel="Shipping Details Heading"
-                >
-                    Shipping Details
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`Name: ${order.shippingDetails.name}`}
-                >
-                    Name: {order.shippingDetails.name}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`Address: ${order.shippingDetails.address}`}
-                >
-                    Address: {order.shippingDetails.address}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`Apartment: ${order.shippingDetails.apartment}`}
-                >
-                    Apartment: {order.shippingDetails.apartment}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`State: ${order.shippingDetails.state}`}
-                >
-                    State: {order.shippingDetails.state}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`City: ${order.shippingDetails.city}`}
-                >
-                    City: {order.shippingDetails.city}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`Country: ${order.shippingDetails.country}`}
-                >
-                    Country: {order.shippingDetails.country}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`Postal Code: ${order.shippingDetails.postalCode}`}
-                >
-                    Postal Code: {order.shippingDetails.postalCode}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`Phone: ${order.shippingDetails.phone}`}
-                >
-                    Phone: {order.shippingDetails.phone}
-                </Text>
-                <Text
-                    style={styles.shippingText}
-                    accessibilityRole="text"
-                    accessibilityLabel={`Shipping Method: ${order.shippingMethod}`}
-                >
-                    Shipping Method: {order.shippingMethod}
-                </Text>
-            </View>
+                    )}
+                />
+                <View style={styles.shippingCard}>
+                    <Text
+                        style={styles.shippingHeading}
+                        accessibilityRole="header"
+                        accessibilityLabel="Shipping Details Heading"
+                    >
+                        Shipping Details
+                    </Text>
+                    <Text
+                        style={styles.shippingText}
+                        accessibilityRole="text"
+                        accessibilityLabel={`Name: ${order.shippingDetails.name}`}
+                    >
+                        Name: {order.shippingDetails.name}
+                    </Text>
+                    <Text
+                        style={styles.shippingText}
+                        accessibilityRole="text"
+                        accessibilityLabel={`Address: ${order.shippingDetails.address}`}
+                    >
+                        Address: {order.shippingDetails.address}
+                    </Text>
+                    <Text
+                        style={styles.shippingText}
+                        accessibilityRole="text"
+                        accessibilityLabel={`State: ${order.shippingDetails.state}`}
+                    >
+                        State: {order.shippingDetails.state}
+                    </Text>
+                    <Text
+                        style={styles.shippingText}
+                        accessibilityRole="text"
+                        accessibilityLabel={`City: ${order.shippingDetails.city}`}
+                    >
+                        City: {order.shippingDetails.city}
+                    </Text>
+                    <Text
+                        style={styles.shippingText}
+                        accessibilityRole="text"
+                        accessibilityLabel={`Country: ${order.shippingDetails.country}`}
+                    >
+                        Country: {order.shippingDetails.country}
+                    </Text>
+                    <Text
+                        style={styles.shippingText}
+                        accessibilityRole="text"
+                        accessibilityLabel={`Phone: ${order.shippingDetails.phone}`}
+                    >
+                        Phone: {order.shippingDetails.phone}
+                    </Text>
+                    <Text
+                        style={styles.shippingText}
+                        accessibilityRole="text"
+                        accessibilityLabel={`Shipping Method: ${order.shippingMethod}`}
+                    >
+                        Shipping Method: {order.shippingMethod}
+                    </Text>
+                </View>
+            </ScrollView>
 
             <Text
                 style={styles.totalPrice}
                 accessibilityRole="text"
                 accessibilityLabel={`Total Price: $${order.totalPrice.toFixed(2)}`}
             >
-                Total Price: ${order.totalPrice.toFixed(2)}
+                Total Price: Rs {order.totalPrice.toFixed(2)}
             </Text>
-
             <TouchableOpacity
                 style={{ ...styles.button, backgroundColor: 'blue' }}
                 onPress={() => navigation.navigate('Home')}
@@ -201,6 +187,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     totalPrice: {
+        marginTop: 10,
         fontSize: 22,
         fontWeight: 'bold',
         textAlign: 'right',

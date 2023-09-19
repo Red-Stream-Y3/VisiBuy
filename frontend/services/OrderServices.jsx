@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://192.168.8.116:9120';
+const BASE_URL = 'https://visibuyapp-e9453e5950ca.herokuapp.com';
 
 export const createOrder = async (order) => {
     try {
@@ -26,5 +26,32 @@ export const getDeliveredOrdersByUserId = async (userId) => {
         return response.data;
     } catch (error) {
         throw new Error('Error getting delivered order details');
+    }
+};
+
+export const markOrderAsDelivered = async (orderId) => {
+    try {
+        const response = await axios.put(`${BASE_URL}/api/v1/orders/${orderId}/deliver`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error marking order as delivered');
+    }
+};
+
+export const createCart = async (cart) => {
+    try {
+        const response = await axios.post(`${BASE_URL}/api/v1/carts`, cart);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error creating cart');
+    }
+};
+
+export const updateCart = async (cart) => {
+    try {
+        const response = await axios.patch(`${BASE_URL}/api/v1/carts/${cart.id}`, cart);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error updating cart');
     }
 };

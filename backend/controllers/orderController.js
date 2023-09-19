@@ -6,7 +6,7 @@ import mongoose from 'mongoose';
 // @route   POST /api/orders
 // @access  Private
 const addOrderItems = asyncHandler(async (req, res) => {
-    const { orderItems, shippingDetails, phone, price, shippingMethod, shippingPrice, totalPrice } = req.body;
+    const { uId, orderItems, shippingDetails, phone, price, shippingMethod, shippingPrice, totalPrice } = req.body;
 
     if (orderItems && orderItems.length === 0) {
         res.status(400);
@@ -14,7 +14,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     } else {
         const order = new Order({
             orderItems,
-            user: '641aaee2b8ed930c6e7186c1',
+            user: uId,
             shippingDetails,
             phone,
             price,
@@ -175,7 +175,8 @@ const queryOrders = asyncHandler(async (req, res) => {
 // get orders by user id and only output the order id and order status for each order
 
 const getOrdersByUserId = asyncHandler(async (req, res) => {
-    const orders = await Order.find({ user: req.params.id, isDelivered: false });
+    const orders = await Order.find({ user: req.params.id, isDelivered: false }).sort({ createdAt: -1 });
+
     if (!orders) {
         res.status(404);
         throw new Error('No orders found');
