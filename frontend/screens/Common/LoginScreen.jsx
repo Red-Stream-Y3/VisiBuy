@@ -1,29 +1,57 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '../../context/UserContext';
+import { useCart } from '../../context/CartContext';
+import { createCart } from '../../services/OrderServices';
 import { loginUser } from '../../services/UserServices';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
     const { user, setUser } = useUser();
+    const { cart, setCartID } = useCart();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
+
     const handleLogin = async () => {
         try {
-            const user = await loginUser({ email, password });
-            setUser(user);
+            const loggedInUser = await loginUser({ email, password });
+            setUser(loggedInUser);
 
-            navigation.navigate('Home');
+            await AsyncStorage.setItem('userData', JSON.stringify(loggedInUser));
         } catch (error) {
             console.log(error);
         }
     };
 
-    // Function to navigate to the registration screen
     const goToRegister = () => {
         navigation.navigate('Register');
+    };
+
+    const handleCheckout = async () => {
+        const cartItems = {
+            orderItems: [
+                ...cart.map((item) => ({
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    image: item.product.images[0].url,
+                    price: item.product.price,
+                    product: item.product._id,
+                })),
+            ],
+            uId,
+        };
+
+        try {
+            const res = await createCart(cartItems);
+            setCartID(res._id);
+            navigation.navigate('Home');
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -44,7 +72,14 @@ const LoginScreen = () => {
                 secureTextEntry
                 accessibilityLabel="Password Input"
             />
-            <TouchableOpacity style={styles.button} onPress={handleLogin} accessibilityLabel="Login Button">
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                    handleLogin();
+                    handleCheckout();
+                }}
+                accessibilityLabel="Login Button"
+            >
                 <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
