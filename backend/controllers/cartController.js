@@ -41,7 +41,11 @@ const getCartById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const updateCartById = asyncHandler(async (req, res) => {
+    console.log("updateCartById id" + req.params.id);
+    console.log("updateCartById body" + req.body);
     const { orderItems } = req.body;
+    console.log("updateCartById orderItems" + orderItems);
+    console.log("updateCartById orderItems.length" + orderItems.length);
     if (orderItems && orderItems.length === 0) {
         res.status(400);
         throw new Error('No order items');
@@ -51,6 +55,7 @@ const updateCartById = asyncHandler(async (req, res) => {
             cart.orderItems = cart.orderItems.concat(orderItems);
             const updatedCart = await cart.save();
             res.json(updatedCart);
+            console.log("updateCartById updatedCart" + updatedCart);
         } else {
             res.status(404);
             throw new Error('Cart not found');
