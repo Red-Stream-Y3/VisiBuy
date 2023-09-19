@@ -41,9 +41,10 @@ const getCartById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const updateCartById = asyncHandler(async (req, res) => {
-    console.log("updateCartById id " + req.params.id);
-    console.log("updateCartById body " + req.body.orderItems);
-    const { orderItems } = req.body.orderItems;
+    console.log("updateCartById id " + req.params.id); //id is correct here 
+    console.log("updateCartById body,orderitems " + req.body.orderItems); //orderItems is undefined here 
+    console.log("updateCartById body " + req.body); //orderItems is undefined here
+    const { orderItems } = req.body;
     if (orderItems && orderItems.length === 0) {
         res.status(400);
         throw new Error('No order items');
