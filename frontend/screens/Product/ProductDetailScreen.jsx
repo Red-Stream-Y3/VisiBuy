@@ -1,74 +1,86 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import { ReviewsRatings, StarRating } from '../../components';
+import React, { useRef } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, Button } from 'react-native';
+import { ReviewsRatings, StarRating, CartButton } from '../../components';
+import { useCart } from '../../context/CartContext';
 
 const ProductDetailScreen = ({ route }) => {
     const { product } = route.params;
     const reviewItemRef = useRef(null);
+    const { addToCart } = useCart();
+
+    const handleAddToCart = () => {
+        addToCart(product);
+    };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Image
-                source={{ uri: product.images[0].url }}
-                style={styles.image}
-                accessible={true}
-                accessibilityLabel={`${product.name} Image`}
-                accessibilityRole="image"
-            />
-            <Text style={styles.name} accessibilityLabel={`${product.name} Name`} accessibilityRole="header">
-                {product.name}
-            </Text>
-            <Text style={styles.price} accessibilityLabel={`${product.name} Price`} accessibilityRole="text">
-                Rs {product.price}
-            </Text>
-            <Text
-                style={styles.description}
-                accessibilityLabel={`${product.name} Description`}
-                accessibilityRole="text"
-            >
-                {product.description}
-            </Text>
+        <>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Image
+                    source={{ uri: product.images[0].url }}
+                    style={styles.image}
+                    accessible={true}
+                    accessibilityLabel={`${product.name} Image`}
+                    accessibilityRole="image"
+                />
+                <Text style={styles.name} accessibilityLabel={`${product.name} Name`} accessibilityRole="header">
+                    {product.name}
+                </Text>
+                <Text style={styles.price} accessibilityLabel={`${product.name} Price`} accessibilityRole="text">
+                    Rs {product.price}
+                </Text>
+                <Button title="Add to Cart" onPress={handleAddToCart} style={styles.addToCartButton}>
+                    <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+                </Button>
+                <Text
+                    style={styles.description}
+                    accessibilityLabel={`${product.name} Description`}
+                    accessibilityRole="text"
+                >
+                    {product.description}
+                </Text>
 
-            {/* ReviewsRatings component */}
-            <View style={styles.reviewContainer}>
-                <View style={styles.reviewHeaderSection}>
-                    <Text style={styles.reviewHeader}>Reviews</Text>
-                    <View style={styles.rightSection}>
-                        <StarRating rating={product.rating} />
-                        <Text style={styles.ratingText}>{product.numReviews} Ratings</Text>
+                {/* ReviewsRatings component */}
+                <View style={styles.reviewContainer}>
+                    <View style={styles.reviewHeaderSection}>
+                        <Text style={styles.reviewHeader}>Reviews</Text>
+                        <View style={styles.rightSection}>
+                            <StarRating rating={product.rating} />
+                            <Text style={styles.ratingText}>{product.numReviews} Ratings</Text>
+                        </View>
+                    </View>
+
+                    {/* Write Review Input */}
+                    {/* <TextInput
+        style={styles.input}
+        placeholder="Write your review..."
+        multiline
+        value={comment}
+        onChangeText={(text) => setComment(text)}
+    /> */}
+
+                    {/* Post Button */}
+                    {/* <TouchableOpacity
+        style={styles.postBtn}
+        onPress={handlePostReview}
+        accessible={true}
+        accessibilityRole="button"
+        accessibilityLabel="Post Review"
+    >
+        <Text style={styles.postBtnText}>Post Review</Text>
+    </TouchableOpacity> */}
+
+                    {/* Reviews List */}
+
+                    <View style={styles.reviewList}>
+                        {product.reviews &&
+                            product.reviews.map((review, index) => (
+                                <ReviewsRatings key={review._id} review={review} ref={reviewItemRef} />
+                            ))}
                     </View>
                 </View>
-
-                {/* Write Review Input */}
-                {/* <TextInput
-                    style={styles.input}
-                    placeholder="Write your review..."
-                    multiline
-                    value={comment}
-                    onChangeText={(text) => setComment(text)}
-                /> */}
-
-                {/* Post Button */}
-                {/* <TouchableOpacity
-                    style={styles.postBtn}
-                    onPress={handlePostReview}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel="Post Review"
-                >
-                    <Text style={styles.postBtnText}>Post Review</Text>
-                </TouchableOpacity> */}
-
-                {/* Reviews List */}
-
-                <View style={styles.reviewList}>
-                    {product.reviews &&
-                        product.reviews.map((review, index) => (
-                            <ReviewsRatings key={review._id} review={review} ref={reviewItemRef} />
-                        ))}
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+            <CartButton accessibilityLabel="Add to Cart" product={product} />
+        </>
     );
 };
 
@@ -97,6 +109,25 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 16,
         marginBottom: 10,
+        marginTop: 15,
+    },
+    addToCartButton: {
+        backgroundColor: '#007bff',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 5,
+        elevation: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+        marginBottom: 15,
+    },
+    addToCartButtonText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     reviewContainer: {
         borderWidth: 1,
