@@ -70,6 +70,11 @@ const ProfileScreen = () => {
         navigation.navigate('Home');
     };
 
+    const handleLogout = () => {
+        setUser(null);
+        navigation.navigate('Login');
+    };
+
     return (
         <ScrollView>
             <View style={styles.container}>
@@ -170,14 +175,20 @@ const ProfileScreen = () => {
                 >
                     <Text style={styles.buttonText}>Update</Text>
                 </TouchableOpacity>
-
                 <TouchableOpacity
+                    style={{ ...styles.button, backgroundColor: 'gray' }}
+                    onPress={handleLogout}
+                    accessibilityLabel="Logout Button"
+                >
+                    <Text style={styles.buttonText}>Logout</Text>
+                </TouchableOpacity>
+                {/* <TouchableOpacity
                     style={{ ...styles.button, backgroundColor: 'gray' }}
                     onPress={cancelUpdate}
                     accessibilityLabel="Cancel Update Button"
                 >
                     <Text style={styles.buttonText}>Cancel</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
             </View>
         </ScrollView>
     );

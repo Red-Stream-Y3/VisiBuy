@@ -30,7 +30,7 @@ const App = () => {
             <CartProvider>
                 <NavigationContainer>
                     <SafeAreaProvider>
-                        <Stack.Navigator initialRouteName="Home">
+                        <Stack.Navigator initialRouteName="Login">
                             <Stack.Screen
                                 name="Home"
                                 component={MenuScreen}
@@ -38,8 +38,12 @@ const App = () => {
                                     headerBackVisible: false,
                                 }}
                             />
-                            {/* <Stack.Screen name="Login" component={LoginScreen} />
-                            <Stack.Screen name="Register" component={Register} /> */}
+                            <Stack.Screen
+                                name="Login"
+                                component={LoginScreen}
+                                options={{ title: '', headerBackVisible: true }}
+                            />
+                            <Stack.Screen name="Register" component={Register} options={{ title: '' }} />
                             <Stack.Screen
                                 name="ProductScreen"
                                 component={ProductScreen}
