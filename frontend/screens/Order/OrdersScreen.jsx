@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, ScrollView, Platform } from 'react-native';
+
+import * as Print from 'expo-print';
+import * as FileSystem from 'expo-file-system';
+import * as IntentLauncher from 'expo-intent-launcher';
+import * as Sharing from 'expo-sharing';
+
 import { getOrderDetailsByUserId, markOrderAsDelivered } from '../../services/OrderServices';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
@@ -48,6 +54,98 @@ const OrdersScreen = () => {
         navigation.navigate('DeliveredOrders', { order });
     };
 
+    const generatePDF = async () => {
+        const html = `<html>
+<head>
+    <title>Pending Orders</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<center><h1>Visibuy - Orders</h1></center>
+    <table>
+        <thead>
+            <tr>
+                <th>Order Date</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            ${orders
+                .filter((order) => !order.delivered)
+                .map(
+                    (order) => `
+                    <tr>
+                        <td>${formatDate(order.createdAt)}</td>
+                        <td>Rs ${order.totalPrice.toFixed(2)}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <ul>
+                                ${order.orderItems
+                                    .map(
+                                        (orderItem) => `
+                                    <li>
+                                        <strong>Product:</strong> ${orderItem.name}<br>
+                                        <strong>Quantity:</strong> ${orderItem.quantity}<br>
+                                        <strong>Price:</strong> Rs ${orderItem.price.toFixed(2)}
+                                    </li>
+                                `,
+                                    )
+                                    .join('')}
+                            </ul>
+                        </td>
+                    </tr>
+                `,
+                )
+                .join('')}
+        </tbody>
+    </table>
+</body>
+</html>
+`;
+
+        const { uri } = await Print.printToFileAsync({ html });
+
+        const destinationPath = `${FileSystem.cacheDirectory}VisibuyOrders.pdf`;
+
+        try {
+            // Move the PDF file to the cache directory
+            await FileSystem.moveAsync({ from: uri, to: destinationPath });
+
+            // Get the content URI of the saved PDF
+            const contentUri = await FileSystem.getContentUriAsync(destinationPath);
+
+            if (Platform.OS === 'ios') {
+                await Sharing.shareAsync(contentUri);
+                return;
+            } else {
+                IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+                    data: contentUri,
+                    flags: 1,
+                    type: 'application/pdf',
+                });
+            }
+        } catch (error) {
+            console.error('Error saving PDF:', error);
+        }
+    };
+
     return (
         <View contentContainerStyle={styles.container}>
             <Text accessibilityRole="header" accessibilityLabel="Your Orders"></Text>
@@ -64,18 +162,19 @@ const OrdersScreen = () => {
 
             <View accessibilityRole="header" accessibilityLabel="Pending Orders" style={styles.headerContainer}>
                 <Text style={styles.header}>Pending Orders</Text>
-                {/* <TouchableOpacity
-                    onPress={downloadPendingOrdersPDF}
+                <TouchableOpacity
+                    onPress={generatePDF}
                     accessible={true}
                     accessibilityRole="button"
                     accessibilityLabel="Download Pending Orders as PDF"
                     style={styles.downloadButton}
                 >
                     <Text style={styles.downloadButtonText}>Print</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             </View>
 
             <FlatList
+                contentContainerStyle={{ paddingBottom: 180 }}
                 data={orders}
                 keyExtractor={(item) => item._id}
                 renderItem={({ item }) => (
@@ -89,7 +188,7 @@ const OrdersScreen = () => {
                                 <View key={orderItem.product} style={styles.productCard}>
                                     <Text style={styles.productName}>{orderItem.name}</Text>
                                     <Text style={styles.productDetails}>
-                                        Quantity: {orderItem.quantity} | Price: Rs {orderItem.price.toFixed(2)}
+                                        Quantity: {orderItem.quantity} | Rs {orderItem.price.toFixed(2)}
                                     </Text>
                                 </View>
                             ))}
@@ -120,6 +219,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginTop: 10,
         marginLeft: 20,
+        marginBottom: 10,
     },
     headerContainer: {
         flexDirection: 'row',
