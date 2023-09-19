@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity } from 'react-native';
+import { FontAwesome } from '@expo/vector-icons';
 import { useCart } from '../../context/CartContext';
 import { productItemStyles } from '../../styles/SharedStyles';
 import { useNavigation } from '@react-navigation/native';
@@ -8,7 +9,7 @@ import { useUser } from '../../context/UserContext';
 
 const CartScreen = () => {
     const { user } = useUser();
-    const { cart } = useCart();
+    const { cart, removeFromCart } = useCart();
     const navigation = useNavigation();
 
     const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
@@ -35,6 +36,10 @@ const CartScreen = () => {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const handleRemoveItem = (productId) => {
+        removeFromCart(productId);
     };
 
     return (
@@ -71,6 +76,12 @@ const CartScreen = () => {
                                 Quantity: {item.quantity}
                             </Text>
                         </View>
+                        <TouchableOpacity
+                            style={productItemStyles.deleteButton}
+                            onPress={() => handleRemoveItem(item.product._id)}
+                        >
+                            <FontAwesome name="trash" size={24} color="red" />
+                        </TouchableOpacity>
                     </View>
                 )}
             />
@@ -87,7 +98,7 @@ const CartScreen = () => {
                     }}
                     accessibilityLabel={`Total Price: $${totalPrice.toFixed(2)}`}
                 >
-                    Total Price: Rs {totalPrice.toFixed(2)}
+                    Total Amount: Rs {totalPrice.toFixed(2)}
                 </Text>
 
                 <TouchableOpacity
