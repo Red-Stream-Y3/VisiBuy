@@ -1,25 +1,47 @@
 import React, { forwardRef } from 'react';
 import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { useToast } from 'react-native-toast-notifications';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { deleteProductReview } from '../services/ProductServices';
+//import { deleteReview } from '../services/ProductServices';
+import axios from 'axios';
 
 const ReviewsRatings = forwardRef(({ review, loggedInUserId, product }, ref) => {
     const isReviewWriter = review.user.toString() === loggedInUserId;
-    const revID = review._id;
-    //console.log('review id', revID);
+    const reviewId = review._id;
+    const productId = product._id;
 
-    const handleDelete = async (reviewId) => {
-        // Rename the function to handleDelete
+    const BASE_URL = 'https://visibuyapp-e9453e5950ca.herokuapp.com';
+
+    const handleDeleteReview = async () => {
+        console.log('Product ID:', productId);
+        console.log('Review ID:', reviewId);
+
         try {
-            // Call the deleteProductReview API service
-            await deleteProductReview(product._id, reviewId);
+            const response = await axios.delete(`${BASE_URL}/api/v1/products/${productId}/reviews/${reviewId}`);
 
-            // If the deletion is successful, you can handle it here if needed.
+            console.log('Review deleted:', response.data);
+            toast.show('Review deleted!', {
+                type: 'danger',
+                duration: 3000,
+                animationType: 'zoom-in',
+                textStyle: {
+                    fontSize: 30,
+                    color: 'white',
+                },
+                containerStyle: {
+                    height: 60,
+                    paddingHorizontal: 20,
+                    backgroundColor: '#333',
+                },
+                placement: 'bottom',
+            });
+            navigation.goBack();
         } catch (error) {
-            // Handle the error gracefully, e.g., show an error message
-            Alert.alert('Error', 'Unable to delete review. Please try again later.');
+            console.error('Error deleting review:', error);
         }
     };
+
     return (
         <View ref={ref} style={styles.container}>
             <Text style={styles.username}>{review.name}</Text>
@@ -29,8 +51,8 @@ const ReviewsRatings = forwardRef(({ review, loggedInUserId, product }, ref) => 
                 </View>
 
                 {isReviewWriter && (
-                    <TouchableOpacity onPress={() => handleDelete(revID)}>
-                        <FontAwesome name="trash" size={30} color="red" />
+                    <TouchableOpacity onPress={handleDeleteReview}>
+                        <FontAwesome name="trash" size={26} color="red" />
                     </TouchableOpacity>
                 )}
             </View>

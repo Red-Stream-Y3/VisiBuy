@@ -9,7 +9,6 @@ const ProductDetailScreen = ({ route }) => {
     const { product } = route.params;
     const reviewItemRef = useRef(null);
     const { user, setUser } = useUser();
-
     const userID = user._id;
 
     const handleAddToCart = () => {

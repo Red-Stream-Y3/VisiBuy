@@ -163,8 +163,7 @@ const createProductReview = asyncHandler(async (req, res) => {
         const alreadyReviewed = product.reviews.find((r) => r.user.toString() === user.toString());
 
         if (alreadyReviewed) {
-            res.status(400);
-            throw new Error('Product already reviewed');
+            res.status(400).send('Product already reviewed');
         }
 
         const review = {
@@ -192,10 +191,12 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route   DELETE /api/products/:productId/reviews/:reviewId
 // @access  Private
 const deleteProductReview = asyncHandler(async (req, res) => {
-    const productId = req.params.productId;
-    const reviewId = req.params.reviewId;
+    const { productId, reviewId } = req.params;
 
     const product = await Product.findById(productId);
+
+    console.log('Product ID:', productId);
+    console.log('Review ID:', reviewId);
 
     if (product) {
         // Find the index of the review to be deleted
@@ -211,19 +212,18 @@ const deleteProductReview = asyncHandler(async (req, res) => {
             if (product.numReviews === 0) {
                 product.rating = 0;
             } else {
-                product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.numReviews;
+                const totalRating = product.reviews.reduce((acc, item) => item.rating + acc, 0);
+                product.rating = totalRating / product.numReviews;
             }
 
             // Save the updated product
             await product.save();
-            res.json({ message: 'Review deleted' });
+            res.json({ message: 'Review deleted successfully', product });
         } else {
-            res.status(404);
-            throw new Error('Review not found');
+            res.status(404).json({ message: 'Review not found' });
         }
     } else {
-        res.status(404);
-        throw new Error('Product not found');
+        res.status(404).json({ message: 'Product not found' });
     }
 });
 
@@ -255,6 +255,27 @@ const getTopRatedProducts = asyncHandler(async (req, res) => {
     }
 });
 
+const getProductById2 = async (req, res) => {
+    try {
+        const productId = req.params.id; // Assuming the product ID is passed as a route parameter
+
+        // Find the product by ID in the database
+        const product = await Product.findById(productId);
+
+        // Check if the product with the given ID exists
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // If the product is found, send it as a response
+        res.status(200).json(product);
+    } catch (error) {
+        // Handle errors, such as database errors, and send an error response
+        console.error('Error fetching product by ID:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
 export {
     getProducts,
     getProductById,
@@ -268,4 +289,5 @@ export {
     getLowestPriceProduct,
     getTopRatedProducts,
     deleteProductReview,
+    getProductById2,
 };
