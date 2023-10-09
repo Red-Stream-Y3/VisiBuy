@@ -217,6 +217,23 @@ const getTopRatedProducts = asyncHandler(async (req, res) => {
     }
 });
 
+// @desc    Search products by search term
+// @route   GET /api/products/search/:name
+// @access  Public
+
+const searchProductsByName = asyncHandler(async (req, res) => {
+    const { name } = req.params;
+
+    const products = await Product.find({ name: { $regex: name, $options: 'i' } });
+
+    if (products) {
+        res.json(products);
+    } else {
+        res.status(404);
+        throw new Error('No products found');
+    }
+});
+
 export {
     getProducts,
     getProductById,
@@ -229,4 +246,5 @@ export {
     createProductReview,
     getLowestPriceProduct,
     getTopRatedProducts,
+    searchProductsByName,
 };
