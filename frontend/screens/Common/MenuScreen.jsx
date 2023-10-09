@@ -14,7 +14,7 @@ const menuData = [
         id: '1',
         MenuName: 'Search',
         MenuIcon: 'search',
-        Navigate: 'SearchScreen', // Change to the correct screen name where relevant
+        Navigate: 'SearchScreen',
     },
     {
         id: '2',
@@ -46,12 +46,12 @@ const menuData = [
         MenuIcon: 'user-alt',
         Navigate: 'ProfileScreen',
     },
-    {
-        id: '7',
-        MenuName: 'Settings',
-        MenuIcon: 'cog',
-        Navigate: 'SearchScreen',
-    },
+    // {
+    //     id: '7',
+    //     MenuName: 'Settings',
+    //     MenuIcon: 'cog',
+    //     Navigate: 'SearchScreen',
+    // },
 ];
 
 const MenuScreen = () => {

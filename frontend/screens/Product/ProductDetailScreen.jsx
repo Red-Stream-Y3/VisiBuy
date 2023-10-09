@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, Button } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { ReviewsRatings, StarRating, CartButton } from '../../components';
 import { useCart } from '../../context/CartContext';
 import { useUser } from '../../context/UserContext';
@@ -13,6 +13,14 @@ const ProductDetailScreen = ({ route }) => {
 
     const handleAddToCart = () => {
         addToCart(product);
+    };
+
+    const CustomButton = ({ title, onPress, style, buttonTextStyle }) => {
+        return (
+            <TouchableOpacity onPress={onPress} style={style}>
+                <Text style={buttonTextStyle}>{title}</Text>
+            </TouchableOpacity>
+        );
     };
 
     return (
@@ -31,9 +39,12 @@ const ProductDetailScreen = ({ route }) => {
                 <Text style={styles.price} accessibilityLabel={`${product.name} Price`} accessibilityRole="text">
                     Rs {product.price}
                 </Text>
-                <Button title="Add to Cart" onPress={handleAddToCart} style={styles.addToCartButton}>
-                    <Text style={styles.addToCartButtonText}>Add to Cart</Text>
-                </Button>
+                <CustomButton
+                    title="Add to Cart"
+                    onPress={handleAddToCart}
+                    style={styles.button}
+                    buttonTextStyle={styles.buttonText}
+                />
                 <Text
                     style={styles.description}
                     accessibilityLabel={`${product.name} Description`}
@@ -98,23 +109,21 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         marginTop: 15,
     },
-    addToCartButton: {
-        backgroundColor: '#007bff',
-        paddingVertical: 8,
-        paddingHorizontal: 16,
-        borderRadius: 5,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        marginBottom: 15,
-    },
-    addToCartButtonText: {
-        color: '#fff',
-        fontSize: 14,
+    button: {
+        padding: 10,
+        borderRadius: 20,
+        alignItems: 'center',
+        marginVertical: 20,
+        backgroundColor: '#5d96f0',
+        marginHorizontal: 10,
+        color: 'black',
         fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 20,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
     },
     reviewContainer: {
         borderWidth: 1,

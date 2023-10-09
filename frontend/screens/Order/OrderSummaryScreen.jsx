@@ -8,10 +8,10 @@ const OrderSummaryScreen = ({ route }) => {
     const navigation = useNavigation();
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.heading} accessibilityRole="header" accessibilityLabel="Order Summary">
+        <View style={styles.container} accessibilityLabel="Order Summary">
+            {/* <Text style={styles.heading} accessibilityRole="header" accessibilityLabel="Order Summary">
                 Order Summary
-            </Text>
+            </Text> */}
             <ScrollView>
                 <FlatList
                     data={order.orderItems}
@@ -22,92 +22,51 @@ const OrderSummaryScreen = ({ route }) => {
                                 <Image source={{ uri: item.image }} style={styles.image} />
                                 <View style={styles.itemDetails}>
                                     <Text style={styles.itemName}>{item.name}</Text>
-                                    <Text
-                                        style={styles.itemPrice}
-                                        accessibilityRole="text"
-                                        accessibilityLabel={`Price: $${item.price.toFixed(2)}`}
-                                    >
-                                        Price: Rs {item.price.toFixed(2)}
+                                    <Text style={styles.itemPrice}>
+                                        Rs {item.price.toFixed(2)} X {item.quantity}
                                     </Text>
-                                    <Text
-                                        style={styles.itemQuantity}
-                                        accessibilityRole="text"
-                                        accessibilityLabel={`Quantity: ${item.quantity}`}
-                                    >
-                                        Quantity: {item.quantity}
-                                    </Text>
+                                    {/* <Text style={styles.total}>Rs {item.price.toFixed(2) * item.quantity} </Text> */}
                                 </View>
                             </View>
                         </View>
                     )}
                 />
                 <View style={styles.shippingCard}>
-                    <Text
-                        style={styles.shippingHeading}
-                        accessibilityRole="header"
-                        accessibilityLabel="Shipping Details Heading"
-                    >
-                        Shipping Details
-                    </Text>
-                    <Text
-                        style={styles.shippingText}
-                        accessibilityRole="text"
-                        accessibilityLabel={`Name: ${order.shippingDetails.name}`}
-                    >
-                        Name: {order.shippingDetails.name}
-                    </Text>
-                    <Text
-                        style={styles.shippingText}
-                        accessibilityRole="text"
-                        accessibilityLabel={`Address: ${order.shippingDetails.address}`}
-                    >
-                        Address: {order.shippingDetails.address}
-                    </Text>
-                    <Text
-                        style={styles.shippingText}
-                        accessibilityRole="text"
-                        accessibilityLabel={`State: ${order.shippingDetails.state}`}
-                    >
-                        State: {order.shippingDetails.state}
-                    </Text>
-                    <Text
-                        style={styles.shippingText}
-                        accessibilityRole="text"
-                        accessibilityLabel={`City: ${order.shippingDetails.city}`}
-                    >
-                        City: {order.shippingDetails.city}
-                    </Text>
-                    <Text
-                        style={styles.shippingText}
-                        accessibilityRole="text"
-                        accessibilityLabel={`Country: ${order.shippingDetails.country}`}
-                    >
-                        Country: {order.shippingDetails.country}
-                    </Text>
-                    <Text
-                        style={styles.shippingText}
-                        accessibilityRole="text"
-                        accessibilityLabel={`Phone: ${order.shippingDetails.phone}`}
-                    >
-                        Phone: {order.shippingDetails.phone}
-                    </Text>
-                    <Text
-                        style={styles.shippingText}
-                        accessibilityRole="text"
-                        accessibilityLabel={`Shipping Method: ${order.shippingMethod}`}
-                    >
-                        Shipping Method: {order.shippingMethod}
-                    </Text>
+                    <Text style={styles.shippingHeading}>Shipping Details</Text>
+                    <View style={styles.shippingDetails}>
+                        <View style={styles.shippingRow}>
+                            <Text style={styles.shippingLabel}>Name:</Text>
+                            <Text style={styles.shippingValue}>{order.shippingDetails.name}</Text>
+                        </View>
+                        <View style={styles.shippingRow}>
+                            <Text style={styles.shippingLabel}>Address:</Text>
+                            <Text style={styles.shippingValue}>{order.shippingDetails.address}</Text>
+                        </View>
+                        <View style={styles.shippingRow}>
+                            <Text style={styles.shippingLabel}>State:</Text>
+                            <Text style={styles.shippingValue}>{order.shippingDetails.state}</Text>
+                        </View>
+                        <View style={styles.shippingRow}>
+                            <Text style={styles.shippingLabel}>City:</Text>
+                            <Text style={styles.shippingValue}>{order.shippingDetails.city}</Text>
+                        </View>
+                        <View style={styles.shippingRow}>
+                            <Text style={styles.shippingLabel}>Country:</Text>
+                            <Text style={styles.shippingValue}>{order.shippingDetails.country}</Text>
+                        </View>
+                        <View style={styles.shippingRow}>
+                            <Text style={styles.shippingLabel}>Phone:</Text>
+                            <Text style={styles.shippingValue}>{order.shippingDetails.phone}</Text>
+                        </View>
+                        <View style={styles.shippingRow}>
+                            <Text style={styles.shippingLabel}>Method:</Text>
+                            <Text style={styles.shippingValue}>{order.shippingMethod}</Text>
+                        </View>
+                    </View>
                 </View>
             </ScrollView>
 
-            <Text
-                style={styles.totalPrice}
-                accessibilityRole="text"
-                accessibilityLabel={`Total Price: $${order.totalPrice.toFixed(2)}`}
-            >
-                Total Price: Rs {order.totalPrice.toFixed(2)}
-            </Text>
+            <Text style={styles.totalPrice}>Total Price: Rs {order.totalPrice.toFixed(2)}</Text>
             <TouchableOpacity
                 style={{ ...styles.button, backgroundColor: 'blue' }}
                 onPress={() => navigation.navigate('Home')}
@@ -123,7 +82,8 @@ const OrderSummaryScreen = ({ route }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+        paddingHorizontal: 10,
+        paddingVertical: 20,
     },
     heading: {
         fontSize: 22,
@@ -146,8 +106,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     image: {
-        width: 100,
-        height: 100,
+        width: 130,
+        height: 110,
         marginRight: 10,
         borderRadius: 5,
     },
@@ -162,9 +122,13 @@ const styles = StyleSheet.create({
     itemPrice: {
         fontSize: 20,
         color: 'green',
+        marginTop: 5,
     },
-    itemQuantity: {
+    total: {
         fontSize: 18,
+        fontWeight: 'bold',
+        marginTop: 5,
+        textAlign: 'right',
     },
     shippingCard: {
         backgroundColor: 'white',
@@ -178,13 +142,25 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     shippingHeading: {
-        fontSize: 22,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 10,
     },
-    shippingText: {
-        fontSize: 20,
+    shippingDetails: {
+        marginTop: 10,
+    },
+    shippingRow: {
+        flexDirection: 'row',
         marginBottom: 5,
+    },
+    shippingLabel: {
+        flex: 1,
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    shippingValue: {
+        flex: 2,
+        fontSize: 18,
     },
     totalPrice: {
         marginTop: 10,
