@@ -33,20 +33,38 @@ const getCartById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update cart by ID
-// @route   PATCH /api/carts/:id
+// @route   PUT /api/carts/:id
+// @access  Private
+
+// @desc    Update cart by ID
+// @route   PUT /api/carts/:id
 // @access  Private
 
 const updateCartById = asyncHandler(async (req, res) => {
     const cart = await Cart.findById(req.params.id);
-    const { orderItems } = req.body;
-    console.log('orderItems' + orderItems);
-    console.log('orderItems string' + JSON.stringify(orderItems));
+
     if (cart) {
-        cart.orderItems = cart.orderItems.concat(orderItems);
-        const updatedCart = await cart.save();
-        res.json(updatedCart);
-    }
-    else {
+        const { orderItems } = req.body;
+
+        orderItems.forEach((newItem) => {
+            const existingItemIndex = cart.orderItems.findIndex(
+                (existingItem) => existingItem.productId === newItem.productId,
+            );
+            if (existingItemIndex !== -1) {
+                cart.orderItems[existingItemIndex].quantity += newItem.quantity;
+            } else {
+                cart.orderItems.push(newItem);
+            }
+        });
+
+        try {
+            const updatedCart = await cart.save();
+            res.json(updatedCart);
+        } catch (error) {
+            res.status(500);
+            throw new Error('Error updating cart: ' + error.message);
+        }
+    } else {
         res.status(404);
         throw new Error('Cart not found');
     }
