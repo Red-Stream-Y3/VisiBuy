@@ -66,6 +66,4 @@ const updateCartById = asyncHandler(async (req, res) => {
     }
 });
 
-export { updateCartById };
-
 export { addCartItems, getCartById, updateCartById };
