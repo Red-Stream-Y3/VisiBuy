@@ -10,7 +10,6 @@ import {
     getProductsBySearch,
     createProductReview,
     getLowestPriceProduct,
-    searchProductsByName,
 } from '../controllers/productController.js';
 
 const router = express.Router();
