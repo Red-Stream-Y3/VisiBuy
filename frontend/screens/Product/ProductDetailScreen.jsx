@@ -2,11 +2,15 @@ import React, { useRef } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, Button } from 'react-native';
 import { ReviewsRatings, StarRating, CartButton } from '../../components';
 import { useCart } from '../../context/CartContext';
+import { useUser } from '../../context/UserContext';
 
 const ProductDetailScreen = ({ route }) => {
+    const { addToCart } = useCart();
     const { product } = route.params;
     const reviewItemRef = useRef(null);
-    const { addToCart } = useCart();
+    const { user, setUser } = useUser();
+
+    const userID = user._id;
 
     const handleAddToCart = () => {
         addToCart(product);
@@ -45,36 +49,20 @@ const ProductDetailScreen = ({ route }) => {
                         <Text style={styles.reviewHeader}>Reviews</Text>
                         <View style={styles.rightSection}>
                             <StarRating rating={product.rating} />
-                            <Text style={styles.ratingText}>{product.numReviews} Ratings</Text>
+                            {/* <Text style={styles.ratingText}>{product.numReviews}</Text> */}
                         </View>
                     </View>
-
-                    {/* Write Review Input */}
-                    {/* <TextInput
-        style={styles.input}
-        placeholder="Write your review..."
-        multiline
-        value={comment}
-        onChangeText={(text) => setComment(text)}
-    /> */}
-
-                    {/* Post Button */}
-                    {/* <TouchableOpacity
-        style={styles.postBtn}
-        onPress={handlePostReview}
-        accessible={true}
-        accessibilityRole="button"
-        accessibilityLabel="Post Review"
-    >
-        <Text style={styles.postBtnText}>Post Review</Text>
-    </TouchableOpacity> */}
-
-                    {/* Reviews List */}
 
                     <View style={styles.reviewList}>
                         {product.reviews &&
                             product.reviews.map((review, index) => (
-                                <ReviewsRatings key={review._id} review={review} ref={reviewItemRef} />
+                                <ReviewsRatings
+                                    key={review._id}
+                                    review={review}
+                                    loggedInUserId={userID}
+                                    ref={reviewItemRef}
+                                    product={product}
+                                />
                             ))}
                     </View>
                 </View>
