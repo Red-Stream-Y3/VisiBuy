@@ -33,7 +33,11 @@ const getCartById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update cart by ID
-// @route   PATCH /api/carts/:id
+// @route   PUT /api/carts/:id
+// @access  Private
+
+// @desc    Update cart by ID
+// @route   PUT /api/carts/:id
 // @access  Private
 
 const updateCartById = asyncHandler(async (req, res) => {

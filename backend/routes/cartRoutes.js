@@ -9,8 +9,8 @@ router.use((req, res, next) => {
     console.log(req.body); // Log the request body
     console.log('Request params:');
     console.log(req.params); // Log the request params
-    console.log('Request whole');
-    console.log(req); // Log the whole request
+    // console.log('Request whole');
+    // console.log(req); // Log the whole request
 
     next();
 });
