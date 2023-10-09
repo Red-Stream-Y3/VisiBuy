@@ -22,7 +22,7 @@ connectDB();
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json({limit: '50mb', extended: true}));
+app.use(bodyParser.json({ extended: true }));
 
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/products', productRoutes);
