@@ -37,7 +37,7 @@ const getCartById = asyncHandler(async (req, res) => {
 // @access  Private
 
 // @desc    Update cart by ID
-// @route   PUT /api/carts/:id
+// @route   PATCH /api/carts/:id
 // @access  Private
 
 const updateCartById = asyncHandler(async (req, res) => {
@@ -50,6 +50,7 @@ const updateCartById = asyncHandler(async (req, res) => {
             const existingItemIndex = cart.orderItems.findIndex(
                 (existingItem) => existingItem.productId === newItem.productId,
             );
+            console.log(existingItemIndex);
             if (existingItemIndex !== -1) {
                 cart.orderItems[existingItemIndex].quantity += newItem.quantity;
             } else {
