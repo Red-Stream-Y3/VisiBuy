@@ -116,12 +116,12 @@ const updateUser = asyncHandler(async (req, res) => {
 
     if (user) {
         user.name = name || user.name;
-        user.address = address || user.address;
-        user.apartment = apartment || user.apartment;
-        user.state = state || user.state;
-        user.city = city || user.city;
-        user.country = country || user.country;
-        user.postalCode = postalCode || user.postalCode;
+        user.shippingInfo.address = address || user.address;
+        user.shippingInfo.apartment = apartment || user.apartment;
+        user.shippingInfo.state = state || user.state;
+        user.shippingInfo.city = city || user.city;
+        user.shippingInfo.country = country || user.country;
+        user.shippingInfo.postalCode = postalCode || user.postalCode;
         user.phone = phone || user.phone;
 
         const updatedUser = await user.save();
