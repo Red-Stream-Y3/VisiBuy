@@ -38,3 +38,12 @@ export const deleteProductReview = async (productId, reviewId) => {
         throw new Error('Error deleting review');
     }
 };
+
+export const searchProducts = async (search) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/v1/products/search/${search}`);
+        return response.data;
+    } catch (error) {
+        throw new Error('Error searching products');
+    }
+};
