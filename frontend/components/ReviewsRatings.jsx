@@ -3,24 +3,23 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-//import { deleteReview } from '../services/ProductServices';
-import axios from 'axios';
+import { deleteReview } from '../services/ProductServices';
 
 const ReviewsRatings = forwardRef(({ review, loggedInUserId, product }, ref) => {
     const isReviewWriter = review.user.toString() === loggedInUserId;
-    const reviewId = review._id;
-    const productId = product._id;
+    const navigation = useNavigation();
+    const toast = useToast();
+    // const reviewId = review._id;
+    // const productId = product._id;
 
-    const BASE_URL = 'https://visibuyapp-e9453e5950ca.herokuapp.com';
+    // console.log(reviewId, productId);
 
     const handleDeleteReview = async () => {
-        console.log('Product ID:', productId);
-        console.log('Review ID:', reviewId);
+        // console.log('Product ID:', productId);
+        // console.log('Review ID:', reviewId);
 
         try {
-            const response = await axios.delete(`${BASE_URL}/api/v1/products/${productId}/reviews/${reviewId}`);
-
-            console.log('Review deleted:', response.data);
+            await deleteReview(product._id, review._id);
             toast.show('Review deleted!', {
                 type: 'danger',
                 duration: 3000,

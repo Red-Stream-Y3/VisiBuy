@@ -57,7 +57,7 @@ export const deleteReview = async (productId, reviewId) => {
         const response = await axios.delete(`${BASE_URL}/api/v1/products/${productId}/reviews/${reviewId}`);
         return response.data;
     } catch (error) {
-        throw error;
+        throw new Error('Error deleting review');
     }
 };
 
