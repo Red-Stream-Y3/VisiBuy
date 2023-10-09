@@ -28,3 +28,13 @@ export const getProductBySearch = async (search) => {
         throw new Error('Error fetching products');
     }
 };
+
+export const deleteProductReview = async (productId, reviewId) => {
+    try {
+        const response = await axios.delete(`${BASE_URL}/api/v1/products/${productId}/reviews/${reviewId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting review:', error);
+        throw new Error('Error deleting review');
+    }
+};

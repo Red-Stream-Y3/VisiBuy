@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
+import User from '../models/userModel.js';
 import axios from 'axios';
 
 // @desc    Fetch all products
@@ -154,19 +155,23 @@ const getProductsBySearch = asyncHandler(async (req, res) => {
 // @route   POST /api/products/:id/reviews
 // @access  Private
 const createProductReview = asyncHandler(async (req, res) => {
-    const { user, name, comment, rating, productID } = req.body;
-    // const { rating } = 3;
+    const user = await User.findById(req.body.id);
+    const { name, comment, rating, productID } = req.body;
 
     const product = await Product.findById(productID);
     console.log('product', rating, name, comment, productID, product);
 
     if (product) {
-        // const alreadyReviewed = product.reviews.find((r) => r.user.toString() === req.user._id.toString());
+        const alreadyReviewed = product.reviews.find((r) => r.user.toString() === req.user._id.toString());
 
-        // if (alreadyReviewed) {
-        //     res.status(400);
-        //     throw new Error('Product already reviewed');
-        // }
+        console.log('product.reviews:', product.reviews);
+        console.log('req.user._id:', req.user._id);
+        console.log('alreadyReviewed:', alreadyReviewed);
+
+        if (alreadyReviewed) {
+            res.status(400);
+            throw new Error('Product already reviewed');
+        }
 
         const review = {
             user,
@@ -183,6 +188,45 @@ const createProductReview = asyncHandler(async (req, res) => {
 
         await product.save();
         res.status(201).json({ message: 'Review added' });
+    } else {
+        res.status(404);
+        throw new Error('Product not found');
+    }
+});
+
+// @desc    Delete product review
+// @route   DELETE /api/products/:productId/reviews/:reviewId
+// @access  Private
+const deleteProductReview = asyncHandler(async (req, res) => {
+    const productId = req.params.productId;
+    const reviewId = req.params.reviewId;
+
+    const product = await Product.findById(productId);
+
+    if (product) {
+        // Find the index of the review to be deleted
+        const reviewIndex = product.reviews.findIndex((r) => r._id.toString() === reviewId);
+
+        if (reviewIndex !== -1) {
+            // Remove the review from the product's reviews array
+            product.reviews.splice(reviewIndex, 1);
+
+            // Update the number of reviews and recalculate the rating
+            product.numReviews = product.reviews.length;
+
+            if (product.numReviews === 0) {
+                product.rating = 0;
+            } else {
+                product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.numReviews;
+            }
+
+            // Save the updated product
+            await product.save();
+            res.json({ message: 'Review deleted' });
+        } else {
+            res.status(404);
+            throw new Error('Review not found');
+        }
     } else {
         res.status(404);
         throw new Error('Product not found');
@@ -229,4 +273,5 @@ export {
     createProductReview,
     getLowestPriceProduct,
     getTopRatedProducts,
+    deleteProductReview,
 };
