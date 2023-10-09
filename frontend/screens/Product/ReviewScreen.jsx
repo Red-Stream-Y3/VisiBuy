@@ -15,7 +15,7 @@ const ReviewScreen = ({ route }) => {
 
     const proID = product.product;
 
-    const [name, setName] = useState('');
+    // const [name, setName] = useState('');
     const [comment, setComment] = useState('');
     const [rating, setRating] = useState('');
     const [isValid, setIsValid] = useState(true);
@@ -32,6 +32,10 @@ const ReviewScreen = ({ route }) => {
             };
 
             const response = await createProductReview(proID, newReview);
+
+            if (response && response.error) {
+                throw new Error(response.error);
+            }
 
             console.log('Review created:', response);
             toast.show('Review posted!', {
@@ -52,6 +56,23 @@ const ReviewScreen = ({ route }) => {
             navigation.goBack();
         } catch (error) {
             console.error('Error creating review:', error.message);
+            toast.show('Product already reviewed!!', {
+                type: 'danger',
+                duration: 3000,
+                animationType: 'zoom-in',
+                textStyle: {
+                    fontSize: 30,
+                    color: 'white',
+                },
+                containerStyle: {
+                    height: 60,
+                    paddingHorizontal: 20,
+                    backgroundColor: '#333',
+                },
+                placement: 'bottom',
+            });
+            navigation.goBack();
+            // Display a user-friendly error message to the user, e.g., toast.show(error.message)
         }
     };
 
