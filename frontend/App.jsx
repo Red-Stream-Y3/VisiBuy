@@ -19,6 +19,7 @@ import {
     ReviewScreen,
     ScanScreen,
     VoiceModeScreen,
+    SearchScreen,
 } from './screens';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -50,6 +51,11 @@ const App = () => {
                                     name="ProductScreen"
                                     component={ProductScreen}
                                     options={{ title: 'Browse Products' }}
+                                />
+                                <Stack.Screen
+                                    name="SearchScreen"
+                                    component={SearchScreen}
+                                    options={{ title: 'Search Products' }}
                                 />
                                 <Stack.Screen
                                     name="ScanScreen"

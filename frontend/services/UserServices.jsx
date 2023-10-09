@@ -23,7 +23,6 @@ export const registerUser = async (user) => {
 export const updateUser = async (user) => {
     try {
         const response = await axios.put(`${BASE_URL}/api/v1/users/account`, user);
-        console.log(response);
         return response.data;
     } catch (error) {
         console.log(error);
