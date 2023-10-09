@@ -43,7 +43,6 @@ const updateCartById = asyncHandler(async (req, res) => {
     if (cart) {
         orderItems.forEach((newItem) => {
             const existingItem = cart.orderItems.find((item) => item.product === newItem.product);
-            console.log('existingItem: ', existingItem);
 
             if (existingItem) {
                 existingItem.quantity += newItem.quantity;
