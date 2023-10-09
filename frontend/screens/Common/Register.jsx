@@ -12,8 +12,18 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
+    const [emailError, setEmailError] = useState('');
+
     const handleRegister = async () => {
         try {
+            // Email validation using a regular expression
+            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+
+            if (!email.match(emailPattern)) {
+                setEmailError('Invalid email format');
+                return;
+            }
+
             const user = await registerUser({ name, email, password });
 
             setUser(user);
@@ -40,15 +50,20 @@ const Register = () => {
                 accessibilityRole="text"
             />
             <TextInput
-                style={styles.input}
+                style={[styles.input, emailError && styles.inputError]}
                 placeholder="Email"
                 value={email}
-                onChangeText={setEmail}
+                onChangeText={(text) => {
+                    setEmail(text);
+                    setEmailError('');
+                }}
                 accessibilityLabel="Email Input"
             />
+            {emailError && <Text style={styles.errorText}>{emailError}</Text>}
             <TextInput
                 style={styles.input}
                 placeholder="Password"
+                keyboardType="numeric"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
@@ -96,6 +111,9 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 15,
     },
+    inputError: {
+        borderColor: 'red',
+    },
     button: {
         backgroundColor: 'blue',
         padding: 15,
@@ -120,6 +138,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 20,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
+        marginBottom: 10,
     },
 });
 

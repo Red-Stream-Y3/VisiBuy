@@ -13,6 +13,7 @@ const LoginScreen = () => {
     const { cart, setCartID } = useCart();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
 
     const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
 
@@ -22,8 +23,9 @@ const LoginScreen = () => {
             setUser(loggedInUser);
 
             await AsyncStorage.setItem('userData', JSON.stringify(loggedInUser));
+            navigation.navigate('Home');
         } catch (error) {
-            console.log(error);
+            setError('Invalid email or password');
         }
     };
 
@@ -48,7 +50,6 @@ const LoginScreen = () => {
         try {
             const res = await createCart(cartItems);
             setCartID(res._id);
-            navigation.navigate('Home');
         } catch (error) {
             console.log(error);
         }
@@ -67,11 +68,13 @@ const LoginScreen = () => {
             <TextInput
                 style={styles.input}
                 placeholder="Password"
+                keyboardType="numeric"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
                 accessibilityLabel="Password Input"
             />
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
             <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
@@ -140,6 +143,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 20,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 16,
+        marginBottom: 10,
     },
 });
 
