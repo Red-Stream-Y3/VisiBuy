@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 import User from '../models/userModel.js';
 import axios from 'axios';
+import mongoose from 'mongoose';
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -276,6 +277,40 @@ const getProductById2 = async (req, res) => {
     }
 };
 
+const getUserReviewedProductsById = async (req, res) => {
+    const { userId } = req.params;
+
+    //Validate the userId parameter.
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userReviewedProducts = await Product.aggregate([
+            {
+                $unwind: '$reviews',
+            },
+            {
+                $match: {
+                    'reviews.user': new mongoose.Types.ObjectId(userId),
+                },
+            },
+            {
+                $group: {
+                    _id: '$_id',
+                    name: { $first: '$name' },
+                    reviews: { $push: '$reviews' },
+                },
+            },
+        ]);
+
+        res.status(200).json(userReviewedProducts);
+    } catch (error) {
+        console.error('Error fetching user reviewed products:', error);
+        res.status(500).json({ message: 'Error fetching user reviewed products' });
+    }
+};
+
 export {
     getProducts,
     getProductById,
@@ -290,4 +325,5 @@ export {
     getTopRatedProducts,
     deleteProductReview,
     getProductById2,
+    getUserReviewedProductsById,
 };

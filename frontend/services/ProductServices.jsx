@@ -69,3 +69,13 @@ export const searchProducts = async (search) => {
         throw new Error('Error searching products');
     }
 };
+
+export const getUserReviewedProducts = async (userId) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/api/v1/products/user/reviewed-products/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching user reviewed products:', error);
+        throw error;
+    }
+};

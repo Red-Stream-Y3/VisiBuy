@@ -14,6 +14,7 @@ import { useUser } from '../../context/UserContext';
 export default function DeliveredOrders() {
     const { user } = useUser();
     const [orders, setOrders] = useState([]);
+    const [userProducts, setUserProducts] = useState([]);
     const navigation = useNavigation();
 
     const formatDate = (dateString) => {
@@ -45,6 +46,10 @@ export default function DeliveredOrders() {
 
     const handleReviewItem = (product) => {
         navigation.navigate('ReviewScreen', { product });
+    };
+
+    const navigateToReviewedProducts = () => {
+        navigation.navigate('ReviewedProducts');
     };
 
     const generatePDF = async () => {
@@ -151,6 +156,17 @@ export default function DeliveredOrders() {
             >
                 <Text style={styles.downloadButtonText}>Print</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={navigateToReviewedProducts}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Navigate to Reviewed Products"
+                style={styles.downloadButton}
+            >
+                <Text style={styles.downloadButtonText}>View Reviewed Products</Text>
+            </TouchableOpacity>
+
             <ScrollView>
                 <FlatList
                     data={orders}
