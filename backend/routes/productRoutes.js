@@ -12,6 +12,7 @@ import {
     getLowestPriceProduct,
     deleteProductReview,
     getProductById2,
+    getUserReviewedProductsById,
 } from '../controllers/productController.js';
 
 const router = express.Router();
@@ -24,5 +25,6 @@ router.get('/search/:searchTerm', getProductsBySearch);
 router.route('/:id/reviews').post(createProductReview);
 router.route('/:id').get(getProductById).delete(deleteProduct).put(updateProduct);
 router.route('/:productId/reviews/:reviewId').delete(deleteProductReview);
+router.get('/user/reviewed-products/:userId', getUserReviewedProductsById);
 
 export default router;

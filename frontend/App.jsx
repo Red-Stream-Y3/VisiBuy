@@ -20,6 +20,7 @@ import {
     ScanScreen,
     VoiceModeScreen,
     SearchScreen,
+    ReviewedProducts,
 } from './screens';
 import { CartProvider } from './context/CartContext';
 import { UserProvider } from './context/UserContext';
@@ -106,6 +107,11 @@ const App = () => {
                                     name="VoiceModeScreen"
                                     component={VoiceModeScreen}
                                     options={{ title: 'Voice Mode' }}
+                                />
+                                <Stack.Screen
+                                    name="ReviewedProducts"
+                                    component={ReviewedProducts}
+                                    options={{ title: 'Reviewed Products' }}
                                 />
                             </Stack.Navigator>
                         </SafeAreaProvider>
