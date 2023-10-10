@@ -89,27 +89,25 @@ const ShippingScreen = ({ navigation }) => {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={[styles.input, validationErrors.name && styles.inputError]}
-                            placeholder="Full Name"
+                            placeholder={`Full Name ${validationErrors.name ? `- ${validationErrors.name}` : ''}`}
                             value={shippingDetails.name}
                             onChangeText={(text) => handleInputChange('name', text)}
                             accessibilityLabel="Full Name Input"
                         />
-                        {validationErrors.name && <Text style={styles.errorText}>{validationErrors.name}</Text>}
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={[styles.input, validationErrors.address && styles.inputError]}
-                            placeholder="Address"
+                            placeholder={`Address ${validationErrors.address ? `- ${validationErrors.address}` : ''}`}
                             value={shippingDetails.address}
                             onChangeText={(text) => handleInputChange('address', text)}
                             accessibilityLabel="Address Input"
                         />
-                        {validationErrors.address && <Text style={styles.errorText}>{validationErrors.address}</Text>}
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={styles.input}
-                            placeholder="Apartment (optional)"
+                            placeholder={`Apartment (optional)`}
                             value={shippingDetails.apartment}
                             onChangeText={(text) => handleInputChange('apartment', text)}
                             accessibilityLabel="Apartment Input"
@@ -118,56 +116,51 @@ const ShippingScreen = ({ navigation }) => {
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={[styles.input, validationErrors.state && styles.inputError]}
-                            placeholder="State"
+                            placeholder={`State ${validationErrors.state ? `- ${validationErrors.state}` : ''}`}
                             value={shippingDetails.state}
                             onChangeText={(text) => handleInputChange('state', text)}
                             accessibilityLabel="State Input"
                         />
-                        {validationErrors.state && <Text style={styles.errorText}>{validationErrors.state}</Text>}
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={[styles.input, validationErrors.city && styles.inputError]}
-                            placeholder="City"
+                            placeholder={`City ${validationErrors.city ? `- ${validationErrors.city}` : ''}`}
                             value={shippingDetails.city}
                             onChangeText={(text) => handleInputChange('city', text)}
                             accessibilityLabel="City Input"
                         />
-                        {validationErrors.city && <Text style={styles.errorText}>{validationErrors.city}</Text>}
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={[styles.input, validationErrors.country && styles.inputError]}
-                            placeholder="Country"
+                            placeholder={`Country ${validationErrors.country ? `- ${validationErrors.country}` : ''}`}
                             value={shippingDetails.country}
                             onChangeText={(text) => handleInputChange('country', text)}
                             accessibilityLabel="Country Input"
                         />
-                        {validationErrors.country && <Text style={styles.errorText}>{validationErrors.country}</Text>}
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={[styles.input, validationErrors.postalCode && styles.inputError]}
-                            placeholder="Postal Code"
+                            placeholder={`Postal Code ${
+                                validationErrors.postalCode ? `- ${validationErrors.postalCode}` : ''
+                            }`}
                             value={shippingDetails.postalCode}
                             onChangeText={(text) => handleInputChange('postalCode', text)}
                             accessibilityLabel="Postal Code Input"
                             keyboardType="numeric"
                         />
-                        {validationErrors.postalCode && (
-                            <Text style={styles.errorText}>{validationErrors.postalCode}</Text>
-                        )}
                     </View>
                     <View style={styles.inputContainer}>
                         <TextInput
                             style={[styles.input, validationErrors.phone && styles.inputError]}
-                            placeholder="Phone"
+                            placeholder={`Phone ${validationErrors.phone ? `- ${validationErrors.phone}` : ''}`}
                             value={shippingDetails.phone}
                             onChangeText={(text) => handleInputChange('phone', text)}
                             accessibilityLabel="Phone Input"
                             keyboardType="numeric"
                         />
-                        {validationErrors.phone && <Text style={styles.errorText}>{validationErrors.phone}</Text>}
                     </View>
                 </View>
             </ScrollView>
@@ -212,6 +205,10 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 20,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 14,
     },
 });
 

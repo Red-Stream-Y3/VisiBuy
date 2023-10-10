@@ -2,6 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Product from '../models/productModel.js';
 import User from '../models/userModel.js';
 import axios from 'axios';
+import mongoose from 'mongoose';
 
 // @desc    Fetch all products
 // @route   GET /api/products
@@ -155,22 +156,15 @@ const getProductsBySearch = asyncHandler(async (req, res) => {
 // @route   POST /api/products/:id/reviews
 // @access  Private
 const createProductReview = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.body.id);
-    const { name, comment, rating, productID } = req.body;
+    const { user, name, comment, rating, productID } = req.body;
 
     const product = await Product.findById(productID);
-    console.log('product', rating, name, comment, productID, product);
 
     if (product) {
-        const alreadyReviewed = product.reviews.find((r) => r.user.toString() === req.user._id.toString());
-
-        console.log('product.reviews:', product.reviews);
-        console.log('req.user._id:', req.user._id);
-        console.log('alreadyReviewed:', alreadyReviewed);
+        const alreadyReviewed = product.reviews.find((r) => r.user.toString() === user.toString());
 
         if (alreadyReviewed) {
-            res.status(400);
-            throw new Error('Product already reviewed');
+            res.status(400).send('Product already reviewed');
         }
 
         const review = {
@@ -198,10 +192,12 @@ const createProductReview = asyncHandler(async (req, res) => {
 // @route   DELETE /api/products/:productId/reviews/:reviewId
 // @access  Private
 const deleteProductReview = asyncHandler(async (req, res) => {
-    const productId = req.params.productId;
-    const reviewId = req.params.reviewId;
+    const { productId, reviewId } = req.params;
 
     const product = await Product.findById(productId);
+
+    console.log('Product ID:', productId);
+    console.log('Review ID:', reviewId);
 
     if (product) {
         // Find the index of the review to be deleted
@@ -217,19 +213,18 @@ const deleteProductReview = asyncHandler(async (req, res) => {
             if (product.numReviews === 0) {
                 product.rating = 0;
             } else {
-                product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.numReviews;
+                const totalRating = product.reviews.reduce((acc, item) => item.rating + acc, 0);
+                product.rating = totalRating / product.numReviews;
             }
 
             // Save the updated product
             await product.save();
-            res.json({ message: 'Review deleted' });
+            res.json({ message: 'Review deleted successfully', product });
         } else {
-            res.status(404);
-            throw new Error('Review not found');
+            res.status(404).json({ message: 'Review not found' });
         }
     } else {
-        res.status(404);
-        throw new Error('Product not found');
+        res.status(404).json({ message: 'Product not found' });
     }
 });
 
@@ -261,6 +256,61 @@ const getTopRatedProducts = asyncHandler(async (req, res) => {
     }
 });
 
+const getProductById2 = async (req, res) => {
+    try {
+        const productId = req.params.id; // Assuming the product ID is passed as a route parameter
+
+        // Find the product by ID in the database
+        const product = await Product.findById(productId);
+
+        // Check if the product with the given ID exists
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+
+        // If the product is found, send it as a response
+        res.status(200).json(product);
+    } catch (error) {
+        // Handle errors, such as database errors, and send an error response
+        console.error('Error fetching product by ID:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+};
+
+const getUserReviewedProductsById = async (req, res) => {
+    const { userId } = req.params;
+
+    //Validate the userId parameter.
+    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    try {
+        const userReviewedProducts = await Product.aggregate([
+            {
+                $unwind: '$reviews',
+            },
+            {
+                $match: {
+                    'reviews.user': new mongoose.Types.ObjectId(userId),
+                },
+            },
+            {
+                $group: {
+                    _id: '$_id',
+                    name: { $first: '$name' },
+                    reviews: { $push: '$reviews' },
+                },
+            },
+        ]);
+
+        res.status(200).json(userReviewedProducts);
+    } catch (error) {
+        console.error('Error fetching user reviewed products:', error);
+        res.status(500).json({ message: 'Error fetching user reviewed products' });
+    }
+};
+
 export {
     getProducts,
     getProductById,
@@ -274,4 +324,6 @@ export {
     getLowestPriceProduct,
     getTopRatedProducts,
     deleteProductReview,
+    getProductById2,
+    getUserReviewedProductsById,
 };

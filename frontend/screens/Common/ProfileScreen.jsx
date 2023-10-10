@@ -161,6 +161,7 @@ const ProfileScreen = () => {
                     <TextInput
                         style={styles.input}
                         placeholder="Phone"
+                        keyboardType="numeric"
                         value={phone}
                         onChangeText={setPhone}
                         accessibilityLabel="Phone Input"

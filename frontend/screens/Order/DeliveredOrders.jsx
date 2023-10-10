@@ -7,6 +7,7 @@ import * as FileSystem from 'expo-file-system';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Sharing from 'expo-sharing';
 
+import { getUserReviewedProducts } from '../../services/ProductServices';
 import { getDeliveredOrdersByUserId } from '../../services/OrderServices';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
@@ -15,6 +16,7 @@ export default function DeliveredOrders() {
     const { user } = useUser();
     const [orders, setOrders] = useState([]);
     const navigation = useNavigation();
+    const [userProducts, setUserProducts] = useState([]);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -41,10 +43,26 @@ export default function DeliveredOrders() {
         };
 
         fetchOrderDetails();
+
+        const fetchData = async () => {
+            try {
+                const response = await getUserReviewedProducts(user._id);
+                setUserProducts(response);
+                console.log('User products:', userProducts);
+            } catch (error) {
+                console.error('Error fetching user reviewed products:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     const handleReviewItem = (product) => {
         navigation.navigate('ReviewScreen', { product });
+    };
+
+    const navigateToReviewedProducts = () => {
+        navigation.navigate('ReviewedProducts');
     };
 
     const generatePDF = async () => {
@@ -139,6 +157,103 @@ export default function DeliveredOrders() {
         }
     };
 
+    const generatePDFReview = async () => {
+        const reviewedProductsHTML = userProducts
+            .filter((product) => product.reviews.length > 0)
+            .map(
+                (product) => `
+            <tr>
+                <td>${product.name}</td>
+                <td>
+                    <table class="inner-table">
+                        ${product.reviews
+                            .map(
+                                (review) => `
+                            <tr>
+                                <td><strong>Comment:</strong> ${review.comment}</td>
+                                <td><strong>Rating:</strong> ${review.rating}</td>
+                            </tr>
+                        `,
+                            )
+                            .join('')}
+                    </table>
+                </td>
+            </tr>
+        `,
+            )
+            .join('');
+
+        const html = `
+        <html>
+            <head>
+                <title>Reviewed Products</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 20px;
+                    }
+                    th, td {
+                        border: 1px solid #dddddd;
+                        padding: 12px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #007bff;
+                        color: white;
+                    }
+                    .inner-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    .inner-table td {
+                        border: 1px solid #dddddd;
+                        padding: 8px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Reviewed Products</h1>
+                <table>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Reviews</th>
+                    </tr>
+                    ${reviewedProductsHTML}
+                </table>
+            </body>
+        </html>
+    `;
+
+        const { uri } = await Print.printToFileAsync({ html });
+
+        const destinationPath = `${FileSystem.cacheDirectory}ReviewedProducts.pdf`;
+
+        try {
+            // Move the PDF file to the cache directory
+            await FileSystem.moveAsync({ from: uri, to: destinationPath });
+
+            // Get the content URI of the saved PDF
+            const contentUri = await FileSystem.getContentUriAsync(destinationPath);
+
+            if (Platform.OS === 'ios') {
+                await Sharing.shareAsync(contentUri);
+                return;
+            } else {
+                IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+                    data: contentUri,
+                    flags: 1,
+                    type: 'application/pdf',
+                });
+            }
+        } catch (error) {
+            console.error('Error saving PDF:', error);
+        }
+    };
+
     return (
         <View contentContainerStyle={styles.container}>
             <Text accessibilityRole="header" accessibilityLabel="Delivered Orders"></Text>
@@ -151,6 +266,17 @@ export default function DeliveredOrders() {
             >
                 <Text style={styles.downloadButtonText}>Print</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+                onPress={generatePDFReview}
+                accessible={true}
+                accessibilityRole="button"
+                accessibilityLabel="Download Reviewed Products as PDF"
+                style={styles.downloadButton}
+            >
+                <Text style={styles.downloadButtonText}>Print Reviews</Text>
+            </TouchableOpacity>
+
             <ScrollView>
                 <FlatList
                     data={orders}
