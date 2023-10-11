@@ -256,26 +256,28 @@ export default function DeliveredOrders() {
 
     return (
         <View contentContainerStyle={styles.container}>
-            <Text accessibilityRole="header" accessibilityLabel="Delivered Orders"></Text>
-            <TouchableOpacity
-                onPress={generatePDF}
-                accessible={true}
-                accessibilityRole="button"
-                accessibilityLabel="Download Delivered Orders as PDF"
-                style={styles.downloadButton}
-            >
-                <Text style={styles.downloadButtonText}>Print</Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginBottom: 20 }}>
+                <Text accessibilityRole="header" accessibilityLabel="Delivered Orders"></Text>
+                <TouchableOpacity
+                    onPress={generatePDF}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Download Delivered Orders as PDF"
+                    style={styles.downloadButton}
+                >
+                    <Text style={styles.downloadButtonText}>Print</Text>
+                </TouchableOpacity>
 
-            <TouchableOpacity
-                onPress={generatePDFReview}
-                accessible={true}
-                accessibilityRole="button"
-                accessibilityLabel="Download Reviewed Products as PDF"
-                style={styles.downloadButton}
-            >
-                <Text style={styles.downloadButtonText}>Print Reviews</Text>
-            </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={generatePDFReview}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Download Reviewed Products as PDF"
+                    style={styles.downloadButton}
+                >
+                    <Text style={styles.downloadButtonText}>Print Reviews</Text>
+                </TouchableOpacity>
+            </View>
 
             <ScrollView>
                 <FlatList
@@ -296,6 +298,7 @@ export default function DeliveredOrders() {
                                         Quantity: {orderItem.quantity} | Price: ${orderItem.price.toFixed(2)}
                                     </Text>
                                     <TouchableOpacity
+                                        style={styles.reviewButton}
                                         onPress={() => handleReviewItem(orderItem)}
                                         accessible={true}
                                         accessibilityRole="button"
@@ -323,24 +326,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     downloadButton: {
-        backgroundColor: '#007bff',
-        paddingVertical: 10,
-        paddingHorizontal: 10,
+        padding: 20,
         borderRadius: 5,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        marginLeft: 100,
-        marginRight: 100,
-        marginBottom: 20,
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: 'blue',
+        marginHorizontal: 20,
     },
     downloadButtonText: {
-        color: '#fff',
-        fontSize: 16,
+        color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 24,
     },
     orderCard: {
         backgroundColor: 'white',
@@ -359,7 +355,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     cardText: {
-        fontSize: 20,
+        fontSize: 24,
+        fontWeight: 'bold',
         marginBottom: 5,
     },
 
@@ -371,23 +368,23 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     productName: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
     },
     productDetails: {
-        fontSize: 19,
-    },
-    // deliveredText: {
-    //     color: '#32CD32', // Text color
-    //     fontSize: 18,
-    //     marginBottom: 3,
-    //     fontWeight: 'bold',
-    //     marginLeft: 20,
-    // },
-    reviewText: {
-        color: '#007bff', // Blue text color
         fontSize: 20,
+    },
+    reviewButton: {
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: 'blue',
+        marginHorizontal: 20,
+    },
+    reviewText: {
+        color: 'white',
         fontWeight: 'bold',
-        alignSelf: 'flex-end',
+        fontSize: 20,
     },
 });

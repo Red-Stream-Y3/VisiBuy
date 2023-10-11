@@ -49,7 +49,7 @@ const ReviewScreen = ({ route }) => {
                 containerStyle: {
                     height: 60,
                     paddingHorizontal: 20,
-                    backgroundColor: '#333',
+                    backgroundColor: '#F2C200',
                 },
                 placement: 'bottom',
             });
@@ -67,7 +67,7 @@ const ReviewScreen = ({ route }) => {
                 containerStyle: {
                     height: 60,
                     paddingHorizontal: 20,
-                    backgroundColor: '#333',
+                    backgroundColor: '#F2C200',
                 },
                 placement: 'bottom',
             });
@@ -190,14 +190,14 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     name: {
-        fontSize: 24,
+        fontSize: 30,
         fontWeight: 'bold',
         marginBottom: 10,
     },
     price: {
-        fontSize: 18,
-        color: 'green',
-        marginBottom: 10,
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: 'blue',
     },
     description: {
         fontSize: 16,
@@ -226,9 +226,8 @@ const styles = StyleSheet.create({
     },
 
     reviewHeader: {
-        fontSize: 22,
+        fontSize: 28,
         fontWeight: 'bold',
-        color: '#333',
     },
 
     rightSection: {
@@ -249,41 +248,38 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     input: {
+        height: 100,
+        borderColor: 'gray',
         borderWidth: 1,
-        borderColor: '#ccc',
         borderRadius: 5,
-        padding: 10,
-        marginBottom: 15,
-        fontSize: 20,
-        minHeight: 100,
+        paddingHorizontal: 10,
+        marginBottom: 20,
+        color: 'gray',
+        fontWeight: 'bold',
+        fontSize: 24,
     },
     postBtn: {
-        backgroundColor: '#007bff',
-        paddingVertical: 10,
-        paddingHorizontal: 20,
+        padding: 20,
         borderRadius: 5,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        marginBottom: 15,
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: 'blue',
     },
     postBtnText: {
-        color: '#fff',
-        fontSize: 18,
+        color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 24,
     },
     invalidInput: {
-        borderColor: 'red',
+        borderColor: 'blue',
+        borderWidth: 5,
     },
     errorMessage: {
-        color: 'red',
-        marginTop: 5,
+        color: 'blue',
         fontSize: 20,
-        textAlign: 'center',
+        fontWeight: 'bold',
         marginBottom: 15,
+        textAlign: 'center',
     },
     disabledBtn: {
         backgroundColor: 'gray',
