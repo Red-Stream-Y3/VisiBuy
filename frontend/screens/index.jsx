@@ -12,3 +12,5 @@ export { default as DeliveredOrders } from './Order/DeliveredOrders';
 export { default as ReviewScreen } from './Product/ReviewScreen';
 export { default as ScanScreen } from './Scan/ScanScreen';
 export { default as VoiceModeScreen } from './Common/VoiceModeScreen';
+export { default as SearchScreen } from './Common/SearchScreen';
+export { default as ReviewedProducts } from './Product/ReviewedProducts';

@@ -33,26 +33,26 @@ const CartButton = () => {
 
 const styles = StyleSheet.create({
     cartIcon: {
-        backgroundColor: 'green',
-        padding: 10,
+        backgroundColor: 'yellow',
+        padding: 30,
         borderRadius: 5,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
     },
     cartText: {
-        color: 'white',
+        color: 'blue',
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize: 24,
     },
     cartQuantity: {
-        color: 'white',
-        fontSize: 18,
+        color: 'blue',
+        fontSize: 24,
     },
     totalPrice: {
-        color: 'white',
+        color: 'blue',
         fontWeight: 'bold',
-        fontSize: 18,
+        fontSize: 24,
     },
 });
 

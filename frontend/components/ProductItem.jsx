@@ -1,19 +1,45 @@
 import React, { forwardRef } from 'react';
-import { View, Text, Image, Button } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useCart } from '../context/CartContext';
+import { useUser } from '../context/UserContext';
 import { productItemStyles } from '../styles/SharedStyles';
+// import { updateCart } from '../services/OrderServices';
 
 const ProductItem = forwardRef(({ product }, ref) => {
-    const { addToCart } = useCart();
-    const { cart } = useCart();
+    const { user } = useUser();
+    const { addToCart, cart, cartID } = useCart();
+
+    const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
+
+    const cartItems = {
+        orderItems: [
+            ...cart.map((item) => ({
+                name: item.product.name,
+                quantity: item.quantity,
+                image: item.product.images[0].url,
+                price: item.product.price,
+                product: item.product._id,
+            })),
+        ],
+        uId,
+    };
 
     const handleAddToCart = () => {
         addToCart(product);
+        // updateCart(cartID, cartItems);
     };
 
     const getProductQuantity = () => {
         const cartItem = cart.find((item) => item.product._id === product._id);
         return cartItem ? cartItem.quantity : 0;
+    };
+
+    const CustomButton = ({ title, onPress, style, buttonTextStyle }) => {
+        return (
+            <TouchableOpacity onPress={onPress} style={style}>
+                <Text style={buttonTextStyle}>{title}</Text>
+            </TouchableOpacity>
+        );
     };
 
     return (
@@ -30,7 +56,12 @@ const ProductItem = forwardRef(({ product }, ref) => {
                 <Text style={productItemStyles.name}>{product.name}</Text>
                 <Text style={productItemStyles.price}>Rs {product.price}</Text>
                 {/* <Text style={productItemStyles.quantity}>Quantity: {getProductQuantity()}</Text> */}
-                <Button title="Add to Cart" onPress={handleAddToCart} />
+                <CustomButton
+                    title="Add to Cart"
+                    onPress={handleAddToCart}
+                    style={productItemStyles.button}
+                    buttonTextStyle={productItemStyles.buttonText}
+                />
             </View>
         </View>
     );

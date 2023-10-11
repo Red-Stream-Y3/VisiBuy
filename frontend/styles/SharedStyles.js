@@ -1,4 +1,3 @@
-// sharedStyles.js
 import { StyleSheet } from 'react-native';
 
 export const productItemStyles = StyleSheet.create({
@@ -15,35 +14,36 @@ export const productItemStyles = StyleSheet.create({
         marginBottom: 10,
     },
     imageContainer: {
-        flex: 1,
+        flex: 1.5,
     },
     detailsContainer: {
-        flex: 2,
-        marginLeft: 10,
+        flex: 1.5,
+        marginLeft: 0,
     },
     image: {
-        width: 100,
-        height: 100,
+        width: 150,
+        height: 200,
         marginRight: 10,
         borderRadius: 5,
     },
     name: {
-        fontSize: 20,
+        fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 5,
     },
     price: {
-        fontSize: 19,
-        color: 'green',
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'blue',
     },
     quantity: {
         fontSize: 18,
-        color: 'green',
+        fontWeight: 'bold',
     },
     buttonText: {
         color: 'white',
         fontWeight: 'bold',
-        fontSize: 24,
+        fontSize: 22,
     },
     input: {
         height: 60,
@@ -55,13 +55,9 @@ export const productItemStyles = StyleSheet.create({
     },
     button: {
         padding: 15,
-        border: 5,
+        borderRadius: 5,
         alignItems: 'center',
         marginTop: 10,
-    },
-    buttonText: {
-        color: 'white',
-        fontWeight: 'bold',
-        fontSize: 20,
+        backgroundColor: 'blue',
     },
 });

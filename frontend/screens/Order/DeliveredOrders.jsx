@@ -7,6 +7,7 @@ import * as FileSystem from 'expo-file-system';
 import * as IntentLauncher from 'expo-intent-launcher';
 import * as Sharing from 'expo-sharing';
 
+import { getUserReviewedProducts } from '../../services/ProductServices';
 import { getDeliveredOrdersByUserId } from '../../services/OrderServices';
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
@@ -15,6 +16,7 @@ export default function DeliveredOrders() {
     const { user } = useUser();
     const [orders, setOrders] = useState([]);
     const navigation = useNavigation();
+    const [userProducts, setUserProducts] = useState([]);
 
     const formatDate = (dateString) => {
         const date = new Date(dateString);
@@ -41,10 +43,26 @@ export default function DeliveredOrders() {
         };
 
         fetchOrderDetails();
+
+        const fetchData = async () => {
+            try {
+                const response = await getUserReviewedProducts(user._id);
+                setUserProducts(response);
+                console.log('User products:', userProducts);
+            } catch (error) {
+                console.error('Error fetching user reviewed products:', error);
+            }
+        };
+
+        fetchData();
     }, []);
 
     const handleReviewItem = (product) => {
         navigation.navigate('ReviewScreen', { product });
+    };
+
+    const navigateToReviewedProducts = () => {
+        navigation.navigate('ReviewedProducts');
     };
 
     const generatePDF = async () => {
@@ -139,18 +157,128 @@ export default function DeliveredOrders() {
         }
     };
 
+    const generatePDFReview = async () => {
+        const reviewedProductsHTML = userProducts
+            .filter((product) => product.reviews.length > 0)
+            .map(
+                (product) => `
+            <tr>
+                <td>${product.name}</td>
+                <td>
+                    <table class="inner-table">
+                        ${product.reviews
+                            .map(
+                                (review) => `
+                            <tr>
+                                <td><strong>Comment:</strong> ${review.comment}</td>
+                                <td><strong>Rating:</strong> ${review.rating}</td>
+                            </tr>
+                        `,
+                            )
+                            .join('')}
+                    </table>
+                </td>
+            </tr>
+        `,
+            )
+            .join('');
+
+        const html = `
+        <html>
+            <head>
+                <title>Reviewed Products</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-bottom: 20px;
+                    }
+                    th, td {
+                        border: 1px solid #dddddd;
+                        padding: 12px;
+                        text-align: left;
+                    }
+                    th {
+                        background-color: #007bff;
+                        color: white;
+                    }
+                    .inner-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    .inner-table td {
+                        border: 1px solid #dddddd;
+                        padding: 8px;
+                    }
+                </style>
+            </head>
+            <body>
+                <h1>Reviewed Products</h1>
+                <table>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Reviews</th>
+                    </tr>
+                    ${reviewedProductsHTML}
+                </table>
+            </body>
+        </html>
+    `;
+
+        const { uri } = await Print.printToFileAsync({ html });
+
+        const destinationPath = `${FileSystem.cacheDirectory}ReviewedProducts.pdf`;
+
+        try {
+            // Move the PDF file to the cache directory
+            await FileSystem.moveAsync({ from: uri, to: destinationPath });
+
+            // Get the content URI of the saved PDF
+            const contentUri = await FileSystem.getContentUriAsync(destinationPath);
+
+            if (Platform.OS === 'ios') {
+                await Sharing.shareAsync(contentUri);
+                return;
+            } else {
+                IntentLauncher.startActivityAsync('android.intent.action.VIEW', {
+                    data: contentUri,
+                    flags: 1,
+                    type: 'application/pdf',
+                });
+            }
+        } catch (error) {
+            console.error('Error saving PDF:', error);
+        }
+    };
+
     return (
         <View contentContainerStyle={styles.container}>
-            <Text accessibilityRole="header" accessibilityLabel="Delivered Orders"></Text>
-            <TouchableOpacity
-                onPress={generatePDF}
-                accessible={true}
-                accessibilityRole="button"
-                accessibilityLabel="Download Delivered Orders as PDF"
-                style={styles.downloadButton}
-            >
-                <Text style={styles.downloadButtonText}>Print</Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'column', justifyContent: 'space-between', marginBottom: 20 }}>
+                <Text accessibilityRole="header" accessibilityLabel="Delivered Orders"></Text>
+                <TouchableOpacity
+                    onPress={generatePDF}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Download Delivered Orders as PDF"
+                    style={styles.downloadButton}
+                >
+                    <Text style={styles.downloadButtonText}>Print</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={generatePDFReview}
+                    accessible={true}
+                    accessibilityRole="button"
+                    accessibilityLabel="Download Reviewed Products as PDF"
+                    style={styles.downloadButton}
+                >
+                    <Text style={styles.downloadButtonText}>Print Reviews</Text>
+                </TouchableOpacity>
+            </View>
+
             <ScrollView>
                 <FlatList
                     data={orders}
@@ -170,6 +298,7 @@ export default function DeliveredOrders() {
                                         Quantity: {orderItem.quantity} | Price: ${orderItem.price.toFixed(2)}
                                     </Text>
                                     <TouchableOpacity
+                                        style={styles.reviewButton}
                                         onPress={() => handleReviewItem(orderItem)}
                                         accessible={true}
                                         accessibilityRole="button"
@@ -197,24 +326,17 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     downloadButton: {
-        backgroundColor: '#007bff',
-        paddingVertical: 10,
-        paddingHorizontal: 10,
+        padding: 20,
         borderRadius: 5,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        marginLeft: 100,
-        marginRight: 100,
-        marginBottom: 20,
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: 'blue',
+        marginHorizontal: 20,
     },
     downloadButtonText: {
-        color: '#fff',
-        fontSize: 16,
+        color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 24,
     },
     orderCard: {
         backgroundColor: 'white',
@@ -233,7 +355,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     cardText: {
-        fontSize: 20,
+        fontSize: 24,
+        fontWeight: 'bold',
         marginBottom: 5,
     },
 
@@ -245,23 +368,23 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     productName: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
     },
     productDetails: {
-        fontSize: 19,
-    },
-    // deliveredText: {
-    //     color: '#32CD32', // Text color
-    //     fontSize: 18,
-    //     marginBottom: 3,
-    //     fontWeight: 'bold',
-    //     marginLeft: 20,
-    // },
-    reviewText: {
-        color: '#007bff', // Blue text color
         fontSize: 20,
+    },
+    reviewButton: {
+        padding: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: 'blue',
+        marginHorizontal: 20,
+    },
+    reviewText: {
+        color: 'white',
         fontWeight: 'bold',
-        alignSelf: 'flex-end',
+        fontSize: 20,
     },
 });

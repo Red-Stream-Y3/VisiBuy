@@ -1,29 +1,58 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useUser } from '../../context/UserContext';
+import { useCart } from '../../context/CartContext';
+import { createCart } from '../../services/OrderServices';
 import { loginUser } from '../../services/UserServices';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
     const { user, setUser } = useUser();
+    const { cart, setCartID } = useCart();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const uId = user ? user._id : '641aaee2b8ed930c6e7186c1';
 
     const handleLogin = async () => {
         try {
-            const user = await loginUser({ email, password });
-            setUser(user);
+            const loggedInUser = await loginUser({ email, password });
+            setUser(loggedInUser);
 
+            await AsyncStorage.setItem('userData', JSON.stringify(loggedInUser));
             navigation.navigate('Home');
         } catch (error) {
-            console.log(error);
+            setError('Invalid email or password');
         }
     };
 
-    // Function to navigate to the registration screen
     const goToRegister = () => {
         navigation.navigate('Register');
+    };
+
+    const handleCheckout = async () => {
+        const cartItems = {
+            orderItems: [
+                ...cart.map((item) => ({
+                    name: item.product.name,
+                    quantity: item.quantity,
+                    image: item.product.images[0].url,
+                    price: item.product.price,
+                    product: item.product._id,
+                })),
+            ],
+            uId,
+        };
+
+        try {
+            const res = await createCart(cartItems);
+            setCartID(res._id);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
@@ -39,12 +68,21 @@ const LoginScreen = () => {
             <TextInput
                 style={styles.input}
                 placeholder="Password"
+                keyboardType="numeric"
                 value={password}
                 onChangeText={setPassword}
                 secureTextEntry
                 accessibilityLabel="Password Input"
             />
-            <TouchableOpacity style={styles.button} onPress={handleLogin} accessibilityLabel="Login Button">
+            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                    handleLogin();
+                    handleCheckout();
+                }}
+                accessibilityLabel="Login Button"
+            >
                 <Text style={styles.buttonText}>Login</Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -105,6 +143,11 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: 'bold',
         fontSize: 20,
+    },
+    errorText: {
+        color: 'red',
+        fontSize: 16,
+        marginBottom: 10,
     },
 });
 

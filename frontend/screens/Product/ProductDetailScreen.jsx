@@ -1,74 +1,84 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
-import { ReviewsRatings, StarRating } from '../../components';
+import React, { useRef } from 'react';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { ReviewsRatings, StarRating, CartButton } from '../../components';
+import { useCart } from '../../context/CartContext';
+import { useUser } from '../../context/UserContext';
 
 const ProductDetailScreen = ({ route }) => {
+    const { addToCart } = useCart();
     const { product } = route.params;
     const reviewItemRef = useRef(null);
+    const { user, setUser } = useUser();
+    const userID = user._id;
+
+    const handleAddToCart = () => {
+        addToCart(product);
+    };
+
+    const CustomButton = ({ title, onPress, style, buttonTextStyle }) => {
+        return (
+            <TouchableOpacity onPress={onPress} style={style}>
+                <Text style={buttonTextStyle}>{title}</Text>
+            </TouchableOpacity>
+        );
+    };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Image
-                source={{ uri: product.images[0].url }}
-                style={styles.image}
-                accessible={true}
-                accessibilityLabel={`${product.name} Image`}
-                accessibilityRole="image"
-            />
-            <Text style={styles.name} accessibilityLabel={`${product.name} Name`} accessibilityRole="header">
-                {product.name}
-            </Text>
-            <Text style={styles.price} accessibilityLabel={`${product.name} Price`} accessibilityRole="text">
-                Rs {product.price}
-            </Text>
-            <Text
-                style={styles.description}
-                accessibilityLabel={`${product.name} Description`}
-                accessibilityRole="text"
-            >
-                {product.description}
-            </Text>
+        <>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Image
+                    source={{ uri: product.images[0].url }}
+                    style={styles.image}
+                    accessible={true}
+                    accessibilityLabel={`${product.name} Image`}
+                    accessibilityRole="image"
+                />
+                <Text style={styles.name} accessibilityLabel={`${product.name} Name`} accessibilityRole="header">
+                    {product.name}
+                </Text>
+                <Text style={styles.price} accessibilityLabel={`${product.name} Price`} accessibilityRole="text">
+                    Rs {product.price}
+                </Text>
+                <CustomButton
+                    title="Add to Cart"
+                    onPress={handleAddToCart}
+                    style={styles.button}
+                    buttonTextStyle={styles.buttonText}
+                />
+                <Text
+                    style={styles.description}
+                    accessibilityLabel={`${product.name} Description`}
+                    accessibilityRole="text"
+                >
+                    {product.description}
+                </Text>
 
-            {/* ReviewsRatings component */}
-            <View style={styles.reviewContainer}>
-                <View style={styles.reviewHeaderSection}>
-                    <Text style={styles.reviewHeader}>Reviews</Text>
-                    <View style={styles.rightSection}>
-                        <StarRating rating={product.rating} />
-                        <Text style={styles.ratingText}>{product.numReviews} Ratings</Text>
+                {/* ReviewsRatings component */}
+                <View style={styles.reviewContainer}>
+                    <View style={styles.reviewHeaderSection}>
+                        <Text style={styles.reviewHeader}>Reviews</Text>
+                        <View style={styles.rightSection}>
+                            <StarRating rating={product.rating} />
+                            {/* <Text style={styles.ratingText}>{product.numReviews}</Text> */}
+                        </View>
+                    </View>
+
+                    <View style={styles.reviewList}>
+                        {product.reviews &&
+                            product.reviews.map((review, index) => (
+                                <ReviewsRatings
+                                    key={review._id}
+                                    review={review}
+                                    loggedInUserId={userID}
+                                    ref={reviewItemRef}
+                                    product={product}
+                                />
+                            ))}
                     </View>
                 </View>
-
-                {/* Write Review Input */}
-                {/* <TextInput
-                    style={styles.input}
-                    placeholder="Write your review..."
-                    multiline
-                    value={comment}
-                    onChangeText={(text) => setComment(text)}
-                /> */}
-
-                {/* Post Button */}
-                {/* <TouchableOpacity
-                    style={styles.postBtn}
-                    onPress={handlePostReview}
-                    accessible={true}
-                    accessibilityRole="button"
-                    accessibilityLabel="Post Review"
-                >
-                    <Text style={styles.postBtnText}>Post Review</Text>
-                </TouchableOpacity> */}
-
-                {/* Reviews List */}
-
-                <View style={styles.reviewList}>
-                    {product.reviews &&
-                        product.reviews.map((review, index) => (
-                            <ReviewsRatings key={review._id} review={review} ref={reviewItemRef} />
-                        ))}
-                </View>
-            </View>
-        </ScrollView>
+            </ScrollView>
+            <CartButton accessibilityLabel="Add to Cart" product={product} />
+        </>
     );
 };
 
@@ -97,6 +107,23 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 16,
         marginBottom: 10,
+        marginTop: 15,
+    },
+    button: {
+        padding: 10,
+        borderRadius: 20,
+        alignItems: 'center',
+        marginVertical: 20,
+        backgroundColor: '#5d96f0',
+        marginHorizontal: 10,
+        color: 'black',
+        fontWeight: 'bold',
+        fontSize: 20,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 20,
     },
     reviewContainer: {
         borderWidth: 1,

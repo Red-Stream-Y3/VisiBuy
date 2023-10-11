@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Cart from '../models/cartModel.js';
+import { json } from 'express';
 
 // @desc    Create new cart
 // @route   POST /api/carts
@@ -7,19 +8,14 @@ import Cart from '../models/cartModel.js';
 const addCartItems = asyncHandler(async (req, res) => {
     const { uId, orderItems } = req.body;
 
-    if (orderItems && orderItems.length === 0) {
-        res.status(400);
-        throw new Error('No order items');
-    } else {
-        const cart = new Cart({
-            orderItems,
-            user: uId,
-        });
+    const cart = new Cart({
+        orderItems,
+        user: uId,
+    });
 
-        const createdCart = await cart.save();
+    const createdCart = await cart.save();
 
-        res.status(201).json(createdCart);
-    }
+    res.status(201).json(createdCart);
 });
 
 // @desc    Get cart by ID
@@ -41,21 +37,50 @@ const getCartById = asyncHandler(async (req, res) => {
 // @access  Private
 
 const updateCartById = asyncHandler(async (req, res) => {
+    const cart = await Cart.findById(req.params.id);
     const { orderItems } = req.body;
-    if (orderItems && orderItems.length === 0) {
-        res.status(400);
-        throw new Error('No order items');
-    } else {
-        const cart = await Cart.findById(req.params.id);
-        if (cart) {
-            cart.orderItems = cart.orderItems.concat(orderItems);
+
+    if (cart) {
+        orderItems.forEach((newItem) => {
+            const existingItem = cart.orderItems.find((item) => item.product === newItem.product);
+
+            if (existingItem) {
+                existingItem.quantity += newItem.quantity;
+            } else {
+                cart.orderItems.push(newItem);
+            }
+        });
+
+        try {
             const updatedCart = await cart.save();
             res.json(updatedCart);
-        } else {
-            res.status(404);
-            throw new Error('Cart not found');
+        } catch (error) {
+            res.status(500).json({ error: 'Error updating cart: ' + error.message });
         }
+    } else {
+        res.status(404).json({ error: 'Cart not found' });
     }
 });
 
-export { addCartItems, getCartById, updateCartById };
+// @desc   Empty cart items by ID
+// @route  PATCH /api/carts/:id/empty
+// @access Private
+
+const emptyCartById = asyncHandler(async (req, res) => {
+    const cart = await Cart.findById(req.params.id);
+
+    if (cart) {
+        cart.orderItems = [];
+
+        try {
+            const updatedCart = await cart.save();
+            res.json(updatedCart);
+        } catch (error) {
+            res.status(500).json({ error: 'Error updating cart: ' + error.message });
+        }
+    } else {
+        res.status(404).json({ error: 'Cart not found' });
+    }
+});
+
+export { addCartItems, getCartById, updateCartById, emptyCartById };

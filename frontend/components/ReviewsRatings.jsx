@@ -1,14 +1,60 @@
 import React, { forwardRef } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
-import StarRating from './StarRating';
+import { FontAwesome } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { useToast } from 'react-native-toast-notifications';
+import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
+import { deleteReview } from '../services/ProductServices';
 
-const ReviewsRatings = forwardRef(({ review }, ref) => {
+const ReviewsRatings = forwardRef(({ review, loggedInUserId, product }, ref) => {
+    const isReviewWriter = review.user.toString() === loggedInUserId;
+    const navigation = useNavigation();
+    const toast = useToast();
+    // const reviewId = review._id;
+    // const productId = product._id;
+
+    // console.log(reviewId, productId);
+
+    const handleDeleteReview = async () => {
+        // console.log('Product ID:', productId);
+        // console.log('Review ID:', reviewId);
+
+        try {
+            await deleteReview(product._id, review._id);
+            toast.show('Review deleted!', {
+                type: 'danger',
+                duration: 3000,
+                animationType: 'zoom-in',
+                textStyle: {
+                    fontSize: 30,
+                    color: 'white',
+                },
+                containerStyle: {
+                    height: 60,
+                    paddingHorizontal: 20,
+                    backgroundColor: '#333',
+                },
+                placement: 'bottom',
+            });
+            navigation.goBack();
+        } catch (error) {
+            console.error('Error deleting review:', error);
+        }
+    };
+
     return (
         <View ref={ref} style={styles.container}>
             <Text style={styles.username}>{review.name}</Text>
-            {/* <StarRating rating={review.rating} /> Display the star rating */}
-            <Text style={styles.comment}>{review.comment}</Text>
-            {/* Add any other review details you want to display */}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                <View style={{ flex: 1 }}>
+                    <Text style={styles.comment}>{review.comment}</Text>
+                </View>
+
+                {isReviewWriter && (
+                    <TouchableOpacity onPress={handleDeleteReview}>
+                        <FontAwesome name="trash" size={26} color="red" />
+                    </TouchableOpacity>
+                )}
+            </View>
         </View>
     );
 });
@@ -20,12 +66,15 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         marginBottom: 10,
+        flexDirection: 'column',
     },
     username: {
         fontWeight: 'bold',
     },
     comment: {
         marginTop: 5,
+        marginStart: 5,
+        marginRight: 20,
     },
 });
 

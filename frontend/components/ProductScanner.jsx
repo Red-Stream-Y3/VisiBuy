@@ -1,10 +1,10 @@
-import axios from "axios";
-import { Camera, CameraType } from "expo-camera";
-import { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Button, Modal, Pressable, StyleSheet, Text, ToastAndroid, View } from "react-native";
-import { visionDirectScan } from "../utils/scanUtils";
-import ProductItem from "./ProductItem";
-import { getProductBySearch } from "../services/ProductServices";
+import axios from 'axios';
+import { Camera, CameraType } from 'expo-camera';
+import { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Button, Modal, Pressable, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import { visionDirectScan } from '../utils/scanUtils';
+import ProductItem from './ProductItem';
+import { getProductBySearch } from '../services/ProductServices';
 
 const ProductScanner = (props) => {
     const [type, setType] = useState(CameraType.back);
@@ -17,7 +17,7 @@ const ProductScanner = (props) => {
     let cameraRef = useRef();
 
     const getSearchResult = async () => {
-        if(!result) return;
+        if (!result) return;
         try {
             const searchRes = await getProductBySearch(result.result);
             //console.log(searchRes);
@@ -40,7 +40,7 @@ const ProductScanner = (props) => {
     //check permissions
     if (!permission) {
         return (
-            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <ActivityIndicator size="large" />
             </View>
         );
@@ -49,11 +49,11 @@ const ProductScanner = (props) => {
     const scanProduct = async () => {
         //console.debug("Scanning product...");
 
-        if(!ready) return;
+        if (!ready) return;
 
         setReady(false);
 
-        try{
+        try {
             await cameraRef.current.takePictureAsync({
                 quality: 0.25,
                 base64: true,
@@ -64,38 +64,37 @@ const ProductScanner = (props) => {
                     //console.debug(data.base64?.length || "nothin");
 
                     await visionDirectScan(null, false, data)
-                    .then((res) => {
-                        console.debug(res);
-                        
-                        setResult(res);
-                        setShowModal(true);
+                        .then((res) => {
+                            console.debug(res);
 
-                        if(props?.resultCallback) props.resultCallback(res.result);
+                            setResult(res);
+                            setShowModal(true);
 
-                        /**
-                         * 
-                         * 
-                         * 
-                         * TODO: Do stuff here with the res.result
-                         * 
-                         * 
-                         * /api/v1/products
-                         */
+                            if (props?.resultCallback) props.resultCallback(res.result);
 
-                        setLoading(false);
-                        setReady(true);
+                            /**
+                             *
+                             *
+                             *
+                             * TODO: Do stuff here with the res.result
+                             *
+                             *
+                             * /api/v1/products
+                             */
 
-                        //ToastAndroid.show(res.result, ToastAndroid.SHORT);
-                    })
-                    .catch((err) => {
-                        //console.debug(err);
-                        ToastAndroid.show(err.message, ToastAndroid.SHORT);
-                        cameraRef.current.resumePreview();
-                        setLoading(false);
-                    });
+                            setLoading(false);
+                            setReady(true);
+
+                            //ToastAndroid.show(res.result, ToastAndroid.SHORT);
+                        })
+                        .catch((err) => {
+                            //console.debug(err);
+                            ToastAndroid.show(err.message, ToastAndroid.SHORT);
+                            cameraRef.current.resumePreview();
+                            setLoading(false);
+                        });
                 },
             });
-
         } catch (error) {
             ToastAndroid.show(error.message, ToastAndroid.SHORT);
             setReady(true);
@@ -108,10 +107,12 @@ const ProductScanner = (props) => {
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                 <Text>No access to camera</Text>
                 <Pressable
-                        android_ripple={{ color: '#2480ed' }}
-                        style={styles.button} onPress={() => requestPermission()}>
-                        <Text style={styles.header1}>Grant Access</Text>
-                    </Pressable>
+                    android_ripple={{ color: '#2480ed' }}
+                    style={styles.button}
+                    onPress={() => requestPermission()}
+                >
+                    <Text style={styles.header1}>Grant Access</Text>
+                </Pressable>
             </View>
         );
     } else {
@@ -178,23 +179,24 @@ const ProductScanner = (props) => {
 
 const styles = StyleSheet.create({
     header1: {
-        fontSize: 32,
+        fontSize: 40,
         fontWeight: 'bold',
+        color: 'white',
     },
     button: {
-        backgroundColor: '#24a0ed',
+        backgroundColor: 'blue',
         alignItems: 'center',
-        borderRadius: 5,
+        borderRadius: 10,
         padding: 20,
         height: 'auto',
         width: '50%',
-        marginBottom: 10,
+        marginBottom: 50,
     },
     camera: {
         flex: 1,
         width: '100%',
         alignItems: 'center',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
     },
 });
 
