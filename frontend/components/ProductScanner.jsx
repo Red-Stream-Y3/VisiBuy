@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { Camera, CameraType } from 'expo-camera';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Button, Modal, Pressable, StyleSheet, Text, ToastAndroid, View } from 'react-native';
+import { ActivityIndicator, Modal, Pressable, StyleSheet, Text, View } from 'react-native';
 import { visionDirectScan } from '../utils/scanUtils';
 import ProductItem from './ProductItem';
 import { getProductBySearch } from '../services/ProductServices';
 
-const ProductScanner = (props) => {
+const ProductScanner = ({resultCallback}) => {
     const [type, setType] = useState(CameraType.back);
     const [permission, requestPermission] = Camera.useCameraPermissions('wide-camera');
     const [ready, setReady] = useState(false);
@@ -24,7 +24,7 @@ const ProductScanner = (props) => {
             setSearchResult(searchRes);
         } catch (error) {
             console.debug(error);
-            ToastAndroid.show(error.message, ToastAndroid.SHORT);
+            //ToastAndroid.show(error.message, ToastAndroid.SHORT);
         }
     };
 
@@ -65,12 +65,12 @@ const ProductScanner = (props) => {
 
                     await visionDirectScan(null, false, data)
                         .then((res) => {
-                            console.debug(res);
+                            //console.debug(res);
 
                             setResult(res);
                             setShowModal(true);
 
-                            if (props?.resultCallback) props.resultCallback(res.result);
+                            if (resultCallback) resultCallback(res.result);
 
                             /**
                              *
@@ -89,14 +89,14 @@ const ProductScanner = (props) => {
                         })
                         .catch((err) => {
                             //console.debug(err);
-                            ToastAndroid.show(err.message, ToastAndroid.SHORT);
+                            //ToastAndroid.show(err.message, ToastAndroid.SHORT);
                             cameraRef.current.resumePreview();
                             setLoading(false);
                         });
                 },
             });
         } catch (error) {
-            ToastAndroid.show(error.message, ToastAndroid.SHORT);
+            //ToastAndroid.show(error.message, ToastAndroid.SHORT);
             setReady(true);
             setLoading(false);
         }
@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
     header1: {
         fontSize: 40,
         fontWeight: 'bold',
-        color: 'white',
     },
     button: {
         backgroundColor: 'blue',

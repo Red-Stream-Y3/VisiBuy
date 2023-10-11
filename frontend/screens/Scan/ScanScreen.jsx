@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { Button, StyleSheet, Text, ToastAndroid, View } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import { ProductScanner, Vision } from "../../components";
 
 const ScanScreen = () => {
@@ -7,7 +7,7 @@ const ScanScreen = () => {
     
     return (
         <View style={styles.mainContainer}>
-            <ProductScanner />
+            <ProductScanner resultCallback={()=>{}} />
 
             {/* <Button
                 title="Scan"

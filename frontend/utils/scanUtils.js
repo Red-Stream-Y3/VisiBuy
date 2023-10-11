@@ -18,7 +18,7 @@ export const visionDirectScan = async (filter, cloudLink, image) => new Promise(
     .then(response => {
         
         //check if there is a result
-        if (response.data?.length > 0 && response.data[0].score? >= 0.5) {
+        if (response.data?.length > 0 && response.data[0]?.score >= 0.5) {
             resolve({ result: response.data[0].product?.displayName || 'No results found' });
         } else {
             reject({ message: 'No results found' });
