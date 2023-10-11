@@ -225,24 +225,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        paddingBottom: 10,
     },
     downloadButton: {
-        backgroundColor: '#007bff',
+        paddingHorizontal: 30,
         paddingVertical: 10,
-        paddingHorizontal: 10,
         borderRadius: 5,
-        elevation: 3,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        marginRight: 20,
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: 'blue',
+        marginHorizontal: 20,
     },
     downloadButtonText: {
-        color: '#fff',
-        fontSize: 16,
+        color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 24,
     },
     heading: {
         fontSize: 28,
@@ -266,7 +263,8 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     cardText: {
-        fontSize: 20,
+        fontSize: 24,
+        fontWeight: 'bold',
         marginBottom: 5,
     },
     productCard: {
@@ -277,29 +275,24 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     productName: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
     },
     productDetails: {
-        fontSize: 19,
+        fontSize: 20,
     },
     deliveredButton: {
-        backgroundColor: '#007bff', // Button background color
-        paddingVertical: 10,
-        paddingHorizontal: 10,
+        padding: 20,
         borderRadius: 5,
-        elevation: 3, // For Android elevation/shadow
-        shadowColor: '#000', // For iOS shadow
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 2,
-        margin: 20,
+        alignItems: 'center',
+        marginTop: 10,
+        backgroundColor: 'blue',
+        marginHorizontal: 20,
     },
     deliveredButtonText: {
-        color: '#fff', // Text color
-        fontSize: 16,
+        color: 'white',
         fontWeight: 'bold',
-        textAlign: 'center',
+        fontSize: 24,
     },
 });
 
