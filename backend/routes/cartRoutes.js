@@ -1,5 +1,11 @@
 import express from 'express';
-import { addCartItems, getCartById, updateCartById, emptyCartById } from '../controllers/cartController.js';
+import {
+    addCartItems,
+    getCartById,
+    updateCartById,
+    emptyCartById,
+    removeItemFromCartById,
+} from '../controllers/cartController.js';
 
 const router = express.Router();
 
@@ -19,5 +25,6 @@ router.route('/').post(addCartItems);
 router.route('/:id').get(getCartById);
 router.route('/:id').patch(updateCartById);
 router.route('/:id/empty').patch(emptyCartById);
+router.route('/:id/removeItem').patch(removeItemFromCartById);
 
 export default router;

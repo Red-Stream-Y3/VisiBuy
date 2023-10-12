@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { useNavigation } from '@react-navigation/native';
 import { registerUser } from '../../services/UserServices';
 import { useUser } from '../../context/UserContext';
+import { Vibration } from 'react-native';
 
 const Register = () => {
     const navigation = useNavigation();
@@ -27,7 +28,7 @@ const Register = () => {
             const user = await registerUser({ name, email, password });
 
             setUser(user);
-
+            Vibration.vibrate(250);
             navigation.navigate('Home');
         } catch (error) {
             console.error('Error during registration:', error.message);
@@ -35,6 +36,7 @@ const Register = () => {
     };
 
     const goToLogin = () => {
+        Vibration.vibrate(250);
         navigation.navigate('Login');
     };
 

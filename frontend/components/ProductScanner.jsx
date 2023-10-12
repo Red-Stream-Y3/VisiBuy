@@ -6,7 +6,7 @@ import { visionDirectScan } from '../utils/scanUtils';
 import ProductItem from './ProductItem';
 import { getProductBySearch } from '../services/ProductServices';
 
-const ProductScanner = ({resultCallback}) => {
+const ProductScanner = ({ resultCallback }) => {
     const [type, setType] = useState(CameraType.back);
     const [permission, requestPermission] = Camera.useCameraPermissions('wide-camera');
     const [ready, setReady] = useState(false);
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
     header1: {
         fontSize: 40,
         fontWeight: 'bold',
+        color: 'white',
     },
     button: {
         backgroundColor: 'blue',

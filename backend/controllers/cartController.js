@@ -1,6 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Cart from '../models/cartModel.js';
-import { json } from 'express';
+import e, { json } from 'express';
 
 // @desc    Create new cart
 // @route   POST /api/carts
@@ -38,18 +38,16 @@ const getCartById = asyncHandler(async (req, res) => {
 
 const updateCartById = asyncHandler(async (req, res) => {
     const cart = await Cart.findById(req.params.id);
-    const { orderItems } = req.body;
+    const orderItem = req.body;
 
     if (cart) {
-        orderItems.forEach((newItem) => {
-            const existingItem = cart.orderItems.find((item) => item.product === newItem.product);
-
-            if (existingItem) {
-                existingItem.quantity += newItem.quantity;
-            } else {
-                cart.orderItems.push(newItem);
-            }
-        });
+        const existItemIndex = cart.orderItems.findIndex((x) => x.product.toString() === orderItem.product.toString());
+        console.log(existItemIndex);
+        if (existItemIndex !== -1) {
+            cart.orderItems[existItemIndex].quantity += orderItem.quantity;
+        } else {
+            cart.orderItems.push(orderItem);
+        }
 
         try {
             const updatedCart = await cart.save();
@@ -83,4 +81,42 @@ const emptyCartById = asyncHandler(async (req, res) => {
     }
 });
 
-export { addCartItems, getCartById, updateCartById, emptyCartById };
+// @desc    Remove items from cart by ID and product name
+// @route   PATCH /api/carts/:id/removeItem
+// @access  Private
+
+const removeItemFromCartById = asyncHandler(async (req, res) => {
+    const cartId = req.params.id;
+    const itemName = req.body.name;
+
+    try {
+        const cart = await Cart.findOne({
+            _id: cartId,
+            orderItems: { $elemMatch: { name: { $regex: itemName, $options: 'i' } } },
+        });
+
+        if (!cart) {
+            return res.status(404).json({ error: 'Cart not found' });
+        }
+
+        const existingItem = cart.orderItems.findIndex((item) => item.name.match(new RegExp(itemName, 'i')));
+
+        if (existingItem === -1) {
+            return res.status(404).json({ error: 'Item not found' });
+        } else {
+            if (cart.orderItems[existingItem].quantity > 1) {
+                cart.orderItems[existingItem].quantity -= 1;
+            } else {
+                cart.orderItems.splice(existingItem, 1);
+            }
+        }
+
+        const updatedCart = await cart.save();
+        res.json(updatedCart);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error updating cart: ' + error.message });
+    }
+});
+
+export { addCartItems, getCartById, updateCartById, emptyCartById, removeItemFromCartById };
