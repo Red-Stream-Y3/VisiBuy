@@ -27,7 +27,7 @@ export default function DeliveredOrders() {
         const minutes = String(date.getMinutes()).padStart(2, '0');
         const seconds = String(date.getSeconds()).padStart(2, '0');
 
-        return `${year}-${month}-${day}  ${hours}:${minutes}:${seconds}`;
+        return `${year}-${month}-${day}`;
     };
 
     useEffect(() => {
@@ -61,9 +61,9 @@ export default function DeliveredOrders() {
         navigation.navigate('ReviewScreen', { product });
     };
 
-    const navigateToReviewedProducts = () => {
-        navigation.navigate('ReviewedProducts');
-    };
+    // const navigateToReviewedProducts = () => {
+    //     navigation.navigate('ReviewedProducts');
+    // };
 
     const generatePDF = async () => {
         const html = `<html>
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         backgroundColor: '#fff',
-        padding: 20,
+        padding: 10,
     },
     heading: {
         fontSize: 28,

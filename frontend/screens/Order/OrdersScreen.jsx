@@ -51,7 +51,7 @@ const OrdersScreen = () => {
     }, []);
 
     const navigateToDeliveredOrders = (order) => {
-        navigation.navigate('DeliveredOrders', { order });
+        navigation.navigate('DeliveredOrders');
     };
 
     const generatePDF = async () => {
