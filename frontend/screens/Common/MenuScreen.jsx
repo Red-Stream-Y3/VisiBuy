@@ -2,6 +2,7 @@ import React from 'react';
 import { View, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MenuCard } from '../../components';
+import { Vibration } from 'react-native';
 
 const menuData = [
     {
@@ -12,15 +13,15 @@ const menuData = [
     },
     {
         id: '1',
-        MenuName: 'Search',
-        MenuIcon: 'search',
-        Navigate: 'SearchScreen',
-    },
-    {
-        id: '2',
         MenuName: 'Scan',
         MenuIcon: 'camera',
         Navigate: 'ScanScreen',
+    },
+    {
+        id: '2',
+        MenuName: 'Search',
+        MenuIcon: 'search',
+        Navigate: 'SearchScreen',
     },
     {
         id: '3',
@@ -58,6 +59,7 @@ const MenuScreen = () => {
     const navigation = useNavigation();
 
     const handleMenuPress = (navigate) => {
+        Vibration.vibrate(150);
         navigation.navigate(navigate);
     };
 

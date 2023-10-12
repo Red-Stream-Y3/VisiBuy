@@ -4,6 +4,7 @@ import { searchProducts, getAllProducts } from '../../services/ProductServices';
 import { useNavigation } from '@react-navigation/native';
 import ProductItem from '../../components/ProductItem';
 import { CartButton } from '../../components';
+import { Vibration } from 'react-native';
 
 const NoProductsMessage = () => (
     <View style={styles.noProductsContainer}>
@@ -32,6 +33,7 @@ const SearchScreen = () => {
                 console.error('Error searching products:', error.message);
             }
         }
+        Vibration.vibrate(250);
     };
 
     useEffect(() => {
@@ -88,12 +90,13 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     input: {
-        height: 60,
+        height: 80,
         borderColor: 'gray',
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         fontSize: 20,
+        fontWeight: 'bold',
     },
     searchButton: {
         padding: 20,

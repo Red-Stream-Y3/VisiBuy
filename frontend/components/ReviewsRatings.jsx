@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useToast } from 'react-native-toast-notifications';
 import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { deleteReview } from '../services/ProductServices';
+import { Vibration } from 'react-native';
 
 const ReviewsRatings = forwardRef(({ review, loggedInUserId, product }, ref) => {
     const isReviewWriter = review.user.toString() === loggedInUserId;
@@ -35,6 +36,7 @@ const ReviewsRatings = forwardRef(({ review, loggedInUserId, product }, ref) => 
                 },
                 placement: 'bottom',
             });
+            Vibration.vibrate(250);
             navigation.goBack();
         } catch (error) {
             console.error('Error deleting review:', error);
@@ -51,7 +53,7 @@ const ReviewsRatings = forwardRef(({ review, loggedInUserId, product }, ref) => 
 
                 {isReviewWriter && (
                     <TouchableOpacity onPress={handleDeleteReview}>
-                        <FontAwesome name="trash" size={26} color="red" />
+                        <FontAwesome name="trash" size={30} color="red" />
                     </TouchableOpacity>
                 )}
             </View>
@@ -70,11 +72,13 @@ const styles = StyleSheet.create({
     },
     username: {
         fontWeight: 'bold',
+        fontSize: 20,
+        marginBottom: 5,
+        color: 'gray',
     },
     comment: {
-        marginTop: 5,
-        marginStart: 5,
-        marginRight: 20,
+        fontSize: 24,
+        marginBottom: 5,
     },
 });
 

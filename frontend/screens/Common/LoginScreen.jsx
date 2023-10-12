@@ -6,6 +6,7 @@ import { useUser } from '../../context/UserContext';
 import { useCart } from '../../context/CartContext';
 import { createCart } from '../../services/OrderServices';
 import { loginUser } from '../../services/UserServices';
+import { Vibration } from 'react-native';
 
 const LoginScreen = () => {
     const navigation = useNavigation();
@@ -23,6 +24,7 @@ const LoginScreen = () => {
             setUser(loggedInUser);
 
             await AsyncStorage.setItem('userData', JSON.stringify(loggedInUser));
+            Vibration.vibrate(250);
             navigation.navigate('Home');
         } catch (error) {
             setError('Invalid email or password');
@@ -30,6 +32,7 @@ const LoginScreen = () => {
     };
 
     const goToRegister = () => {
+        Vibration.vibrate(250);
         navigation.navigate('Register');
     };
 

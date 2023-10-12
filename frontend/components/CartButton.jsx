@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useCart } from '../context/CartContext';
 import { useNavigation } from '@react-navigation/native';
+import { Vibration } from 'react-native';
 
 const CartButton = () => {
     const { cart } = useCart();
@@ -14,6 +15,7 @@ const CartButton = () => {
 
     const handleCartClick = () => {
         navigation.navigate('CartScreen');
+        Vibration.vibrate(250);
     };
 
     return (
