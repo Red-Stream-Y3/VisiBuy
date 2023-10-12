@@ -3,6 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useCart } from '../context/CartContext';
 import { useUser } from '../context/UserContext';
 import { productItemStyles } from '../styles/SharedStyles';
+import { Vibration } from 'react-native';
 // import { updateCart } from '../services/OrderServices';
 
 const ProductItem = forwardRef(({ product }, ref) => {
@@ -27,6 +28,8 @@ const ProductItem = forwardRef(({ product }, ref) => {
     const handleAddToCart = () => {
         addToCart(product);
         // updateCart(cartID, cartItems);
+        // vibrate
+        Vibration.vibrate(250);
     };
 
     const getProductQuantity = () => {

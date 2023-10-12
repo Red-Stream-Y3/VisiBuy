@@ -12,6 +12,7 @@ import {
     getOrdersforSeller,
     updateOrderProductsToShipped,
     getDeliveredOrdersByUserId,
+    updateOrderItems,
 } from '../controllers/orderController.js';
 
 const router = express.Router();
@@ -27,5 +28,6 @@ router.route('/user/:id').get(getOrdersByUserId);
 router.route('/seller/products/:id').get(getOrdersforSeller);
 router.route('/:id/shipped').put(updateOrderProductsToShipped);
 router.route('/user/delivered/:id').get(getDeliveredOrdersByUserId);
+router.route('/:id/update').patch(updateOrderItems);
 
 export default router;

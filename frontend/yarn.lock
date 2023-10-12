@@ -7339,7 +7339,7 @@ react-native-toast-notifications@^3.4.0:
 
 react-native-tts@^4.1.0:
   version "4.1.0"
-  resolved "https://registry.npmjs.org/react-native-tts/-/react-native-tts-4.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-tts/-/react-native-tts-4.1.0.tgz#05fa34492bec234bcd64f6ed2bf122c4667d141a"
   integrity sha512-tvf3lQ6u9MqztUie37qoPw5YQPqi0ql1lPhDsBBs/RRA6A/H1J9X9H/qb1A0Hx0ZpjavrEdtVSqQQ2JDZvZCTQ==
 
 react-native-vector-icons@^10.0.0:

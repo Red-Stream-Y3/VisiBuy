@@ -29,6 +29,28 @@ const addOrderItems = asyncHandler(async (req, res) => {
     }
 });
 
+//@desc update order items by order id
+//@route PATCH /api/orders/:id
+//@access Private
+
+const updateOrderItems = asyncHandler(async (req, res) => {
+    const { orderItems, totalPrice } = req.body;
+
+    const order = await Order.findById(req.params.id);
+
+    if (order) {
+        order.orderItems = order.orderItems.concat(orderItems);
+        order.totalPrice = totalPrice;
+
+        const updatedOrder = await order.save();
+
+        res.json(updatedOrder);
+    } else {
+        res.status(404);
+        throw new Error('Order not found');
+    }
+});
+
 // @desc    Get order by ID
 // @route   GET /api/orders/:id
 // @access  Private
@@ -243,4 +265,5 @@ export {
     getOrdersforSeller,
     updateOrderProductsToShipped,
     getDeliveredOrdersByUserId,
+    updateOrderItems,
 };

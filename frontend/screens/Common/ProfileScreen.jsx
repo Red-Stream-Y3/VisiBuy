@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 
 import { useNavigation } from '@react-navigation/native';
 import { useUser } from '../../context/UserContext';
 import { updateUser } from '../../services/UserServices';
+import { Vibration } from 'react-native';
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
@@ -58,7 +59,7 @@ const ProfileScreen = () => {
                 postalCode,
                 phone,
             });
-
+            Vibration.vibrate(250);
             navigation.navigate('Home');
         } catch (error) {
             console.error('Error updating user:', error.message);
@@ -72,6 +73,7 @@ const ProfileScreen = () => {
 
     const handleLogout = () => {
         setUser(null);
+        Vibration.vibrate(250);
         navigation.navigate('Login');
     };
 
